@@ -48,7 +48,7 @@ install() {
     sudo apt-get -y install php7.2-mysql php7.2-mbstring
 
     setTitre "Ajout de permissions sur le binaire"
-    sudo chmod +x bin/console && sudo chmod +x bin/symfony_requirements
+    sudo chmod +x bin/console
 
     if [ "$1" = "dev" ]
     then
