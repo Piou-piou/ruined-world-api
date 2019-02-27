@@ -9,6 +9,7 @@
         "symfony/dotenv": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
+        "symfony/orm-pack": "*",
         "symfony/yaml": "4.2.*"
     },
     "config": {
