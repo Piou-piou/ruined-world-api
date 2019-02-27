@@ -31,7 +31,7 @@ class Base
     protected $points;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="json")
      */
     protected $resources;
 
