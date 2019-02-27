@@ -29,16 +29,6 @@ class UnitGroup
     protected $experience;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    protected $unit_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $unit_movement_id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Unit", inversedBy="unitGroups")
      * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", nullable=false)
      */
@@ -117,52 +107,6 @@ class UnitGroup
     public function getExperience()
     {
         return $this->experience;
-    }
-
-    /**
-     * Set the value of unit_id.
-     *
-     * @param integer $unit_id
-     * @return \Entity\UnitGroup
-     */
-    public function setUnitId($unit_id)
-    {
-        $this->unit_id = $unit_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of unit_id.
-     *
-     * @return integer
-     */
-    public function getUnitId()
-    {
-        return $this->unit_id;
-    }
-
-    /**
-     * Set the value of unit_movement_id.
-     *
-     * @param integer $unit_movement_id
-     * @return \Entity\UnitGroup
-     */
-    public function setUnitMovementId($unit_movement_id)
-    {
-        $this->unit_movement_id = $unit_movement_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of unit_movement_id.
-     *
-     * @return integer
-     */
-    public function getUnitMovementId()
-    {
-        return $this->unit_movement_id;
     }
 
     /**

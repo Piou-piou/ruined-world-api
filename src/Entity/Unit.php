@@ -39,17 +39,6 @@ class Unit
      * @ORM\Column(type="integer")
      */
     protected $defense_level;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $base_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $unit_movement_id;
-
     /**
      * @ORM\OneToMany(targetEntity="UnitGroup", mappedBy="unit")
      * @ORM\JoinColumn(name="id", referencedColumnName="unit_id", nullable=false)
@@ -186,52 +175,6 @@ class Unit
     public function getDefenseLevel()
     {
         return $this->defense_level;
-    }
-
-    /**
-     * Set the value of base_id.
-     *
-     * @param integer $base_id
-     * @return \Entity\Unit
-     */
-    public function setBaseId($base_id)
-    {
-        $this->base_id = $base_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of base_id.
-     *
-     * @return integer
-     */
-    public function getBaseId()
-    {
-        return $this->base_id;
-    }
-
-    /**
-     * Set the value of unit_movement_id.
-     *
-     * @param integer $unit_movement_id
-     * @return \Entity\Unit
-     */
-    public function setUnitMovementId($unit_movement_id)
-    {
-        $this->unit_movement_id = $unit_movement_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of unit_movement_id.
-     *
-     * @return integer
-     */
-    public function getUnitMovementId()
-    {
-        return $this->unit_movement_id;
     }
 
     /**

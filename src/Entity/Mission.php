@@ -45,16 +45,6 @@ class Mission
     protected $in_progress;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    protected $base_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $unit_movement_id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="missions")
      * @ORM\JoinColumn(name="base_id", referencedColumnName="id", nullable=false)
      */
@@ -206,52 +196,6 @@ class Mission
     public function getInProgress()
     {
         return $this->in_progress;
-    }
-
-    /**
-     * Set the value of base_id.
-     *
-     * @param integer $base_id
-     * @return \Entity\Mission
-     */
-    public function setBaseId($base_id)
-    {
-        $this->base_id = $base_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of base_id.
-     *
-     * @return integer
-     */
-    public function getBaseId()
-    {
-        return $this->base_id;
-    }
-
-    /**
-     * Set the value of unit_movement_id.
-     *
-     * @param integer $unit_movement_id
-     * @return \Entity\Mission
-     */
-    public function setUnitMovementId($unit_movement_id)
-    {
-        $this->unit_movement_id = $unit_movement_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of unit_movement_id.
-     *
-     * @return integer
-     */
-    public function getUnitMovementId()
-    {
-        return $this->unit_movement_id;
     }
 
     /**

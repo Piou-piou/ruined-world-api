@@ -30,11 +30,6 @@ class UnitMovement
     protected $type;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    protected $base_id;
-
-    /**
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="unitMovement")
      * @ORM\JoinColumn(name="id", referencedColumnName="unit_movement_id", nullable=false)
      */
@@ -132,29 +127,6 @@ class UnitMovement
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set the value of base_id.
-     *
-     * @param integer $base_id
-     * @return \Entity\UnitMovement
-     */
-    public function setBaseId($base_id)
-    {
-        $this->base_id = $base_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of base_id.
-     *
-     * @return integer
-     */
-    public function getBaseId()
-    {
-        return $this->base_id;
     }
 
     /**

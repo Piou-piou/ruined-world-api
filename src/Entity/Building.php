@@ -30,12 +30,12 @@ class Building
     protected $array_name;
 
     /**
-     * @ORM\Column(name="`level`", type="integer")
+     * @ORM\Column(name="level", type="integer")
      */
     protected $level;
 
     /**
-     * @ORM\Column(name="`case`", type="integer")
+     * @ORM\Column(name="case", type="integer")
      */
     protected $case;
 
@@ -48,12 +48,6 @@ class Building
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $end_construction;
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
-    protected $base_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="buildings")
@@ -220,29 +214,6 @@ class Building
     public function getEndConstruction()
     {
         return $this->end_construction;
-    }
-
-    /**
-     * Set the value of base_id.
-     *
-     * @param integer $base_id
-     * @return \Entity\Building
-     */
-    public function setBaseId($base_id)
-    {
-        $this->base_id = $base_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of base_id.
-     *
-     * @return integer
-     */
-    public function getBaseId()
-    {
-        return $this->base_id;
     }
 
     /**

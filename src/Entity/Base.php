@@ -61,11 +61,6 @@ class Base
     protected $last_check_food;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    protected $user_id;
-
-    /**
      * @ORM\OneToMany(targetEntity="Building", mappedBy="base")
      * @ORM\JoinColumn(name="id", referencedColumnName="base_id", nullable=false)
      */
@@ -308,29 +303,6 @@ class Base
     public function getLastCheckFood()
     {
         return $this->last_check_food;
-    }
-
-    /**
-     * Set the value of user_id.
-     *
-     * @param integer $user_id
-     * @return \Entity\Base
-     */
-    public function setUserId($user_id)
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of user_id.
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->user_id;
     }
 
     /**
