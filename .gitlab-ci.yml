@@ -1,0 +1,5 @@
+stage_deploy:
+    only:
+        - dev
+    script:
+        - ssh -p22 -t $DEV_SRV_USER@$DEV_SRV_URL "cd '$DEV_SRV_FOLDER' && SUDO_PWD='$DEV_SRV_USER_PASSWORD' ./test.sh"
