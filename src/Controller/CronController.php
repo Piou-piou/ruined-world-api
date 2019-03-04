@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
+use App\Service\Utils;
 use Cron\CronExpression;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -11,11 +12,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CronController extends AbstractController
 {
+	/**
+	 * @var Utils
+	 */
+	private $utils;
+	
 	private $crons;
+	
+	/**
+	 * CronController constructor.
+	 * @param Utils $utils
+	 */
+	public function __construct(Utils $utils) {
+		$this->utils = $utils;
+	}
 	
 	/**
 	 * @Route("/cron", name="cron")
 	 * @param Request $request
+	 * @param Utils $utils
 	 * @return Response
 	 * @throws \Exception
 	 */
@@ -32,7 +47,7 @@ class CronController extends AbstractController
 			// start executing crons
 			foreach ($this->crons as $key => $cron) {
 				if (!array_key_exists($key, $json_exec)) {
-					$this->ajoutEntreeJson($key);
+					$this->addJsonEntry($key);
 					$json_exec = $this->getCronFile();
 				}
 				
@@ -45,7 +60,7 @@ class CronController extends AbstractController
 					}
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
-					$this->editEntreeJson($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
+					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
 				}
 			}
 		}
@@ -64,7 +79,7 @@ class CronController extends AbstractController
 		$file = $this->getParameter("data_directory") . "cron/cron.json";
 		
 		if (!is_file($file)) {
-			//$this->get("app.utils")->createRecursiveDirFromRoot('data/cron');
+			$this->utils->createRecursiveDirFromRoot('data/cron');
 			$fs = new Filesystem();
 			$fs->touch($this->getParameter("data_directory") . "cron/cron.json");
 			
@@ -88,7 +103,7 @@ class CronController extends AbstractController
 	 * method that add new entry in config cron file
 	 * @param string $entry
 	 */
-	private function ajoutEntreeJson(string $entry)
+	private function addJsonEntry(string $entry)
 	{
 		$file = $this->getParameter("data_directory") . "cron/cron.json";
 		$crons = json_decode(file_get_contents($file), true);
@@ -97,7 +112,7 @@ class CronController extends AbstractController
 			"next_execution" => null
 		];
 		
-		$this->writeCronJson($crons);
+		$this->writeJsonCron($crons);
 	}
 	
 	/**
@@ -105,14 +120,14 @@ class CronController extends AbstractController
 	 * @param string $entry
 	 * @param string $next_execution
 	 */
-	private function editEntreeJson(string $entry, string $next_execution)
+	private function editJsonEntry(string $entry, string $next_execution)
 	{
-		$json = $this->getFichierCron();
+		$json = $this->getCronFile();
 		
 		if (array_key_exists($entry, $json)) {
 			$json[$entry]["next_execution"] = $next_execution;
 			
-			$this->writeCronJson($json);
+			$this->writeJsonCron($json);
 		}
 	}
 	
@@ -120,11 +135,17 @@ class CronController extends AbstractController
 	 * method that writes the cron.json when we add or edit an entry
 	 * @param array $json
 	 */
-	private function writeCronJson(array $json)
+	private function writeJsonCron(array $json)
 	{
 		$fs = new Filesystem();
 		$file = $this->getParameter("data_directory") . "cron/cron.json";
 		
 		$fs->dumpFile($file, json_encode($json));
+	}
+	
+	
+	// --------------------------------------- UNDER THIS, METHODS OF CRONS ----------------------------------------------------//
+	public function updateResources() {
+		
 	}
 }

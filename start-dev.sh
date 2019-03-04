@@ -28,8 +28,8 @@ setTitre() {
 
 all() {
     composeupdate
-    checkcache
     chmodfiles
+    checkcache
     updatedb
 }
 
