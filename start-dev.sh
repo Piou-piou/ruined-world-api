@@ -2,7 +2,7 @@
 
 production=false
 
-if [ "$2" = "production" ] || [ "$1" = "production" ]
+if [[ "$2" = "production" ]] || [[ "$1" = "production" ]]
 then
     production=true
 fi
@@ -31,6 +31,7 @@ all() {
     checkcache
     chmodfiles
     updatedb
+    dumpenv
 }
 
 checkcache() {
@@ -39,8 +40,8 @@ checkcache() {
     sudo rm -rf var/logs/*
     php bin/console cache:clear --no-warmup
     HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-    sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs var/sessions
-    sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var/cache var/logs var/sessions
+    sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var var/cache var/logs var/sessions
+    sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var var/cache var/logs var/sessions
     php bin/console cache:warmup
 }
 
@@ -72,6 +73,17 @@ updatedb(){
     php bin/console doctrine:schema:update --force
 }
 
+dumpenv() {
+    setTitre "Dump environment file"
+
+    if [[ "$production" = true ]]
+    then
+        composer dump-env prod
+    else
+        composer dump-env dev
+    fi
+}
+
 helpermore(){
     setTitre "Commandes disponibles"
     echo "cache: Vide le cache"
@@ -80,22 +92,22 @@ helpermore(){
     echo "help: Affiche des informations sur les commandes disponibles"
 }
 
-if [ "$1" = "install" ]
-then
-    install $2
-elif [ "$1" = "cache" ]
+if [[ "$1" = "cache" ]]
 then
     checkcache
-elif [ "$1" = "update" ]
+elif [[ "$1" = "update" ]]
 then
     composeupdate
-elif [ "$1" = "doctrine" ]
+elif [[ "$1" = "doctrine" ]]
 then
     updatedb
-elif [ "$1" = "" ] || [ "$1" = "production" ]
+elif [[ "$1" = "dumpenv" ]]
+then
+    dumpenv
+elif [[ "$1" = "" ]] || [[ "$1" = "production" ]]
 then
     all
-elif [ "$1" = "-h" ] || [ "$1" = "help" ] || [ "$1" = "--help" ]
+elif [[ "$1" = "-h" ]] || [[ "$1" = "help" ]] || [[ "$1" = "--help" ]]
 then
     helpermore
 else

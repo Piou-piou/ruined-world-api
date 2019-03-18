@@ -24,6 +24,16 @@ class User
      * @ORM\Column(type="string", length=50)
      */
     protected $pseudo;
+	
+	/**
+	 * @ORM\Column(type="string", length=200)
+	 */
+    protected $token;
+	
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private $endToken;
 
     /**
      * @ORM\Column(name="`password`", type="string", length=255)
@@ -55,13 +65,13 @@ class User
     {
         $this->bases = new ArrayCollection();
     }
-
-    /**
-     * Set the value of id.
-     *
-     * @param integer $id
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Set the value of id.
+	 *
+	 * @param integer $id
+	 * @return User
+	 */
     public function setId($id)
     {
         $this->id = $id;
@@ -78,13 +88,13 @@ class User
     {
         return $this->id;
     }
-
-    /**
-     * Set the value of pseudo.
-     *
-     * @param string $pseudo
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Set the value of pseudo.
+	 *
+	 * @param string $pseudo
+	 * @return User
+	 */
     public function setPseudo($pseudo)
     {
         $this->pseudo = $pseudo;
@@ -101,13 +111,51 @@ class User
     {
         return $this->pseudo;
     }
-
-    /**
-     * Set the value of password.
-     *
-     * @param string $password
-     * @return \Entity\User
-     */
+	
+	/**
+	 * @return mixed
+	 */
+	public function getToken()
+	{
+		return $this->token;
+	}
+	
+	/**
+	 * @param mixed $token
+	 * @return User
+	 */
+	public function setToken($token)
+	{
+		$this->token = $token;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getEndToken()
+	{
+		return $this->endToken;
+	}
+	
+	/**
+	 * @param mixed $endToken
+	 * @return User
+	 */
+	public function setEndToken($endToken)
+	{
+		$this->endToken = $endToken;
+		
+		return $this;
+	}
+	
+	/**
+	 * Set the value of password.
+	 *
+	 * @param string $password
+	 * @return User
+	 */
     public function setPassword($password)
     {
         $this->password = $password;
@@ -124,13 +172,13 @@ class User
     {
         return $this->password;
     }
-
-    /**
-     * Set the value of plain_password.
-     *
-     * @param string $plain_password
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Set the value of plain_password.
+	 *
+	 * @param string $plain_password
+	 * @return User
+	 */
     public function setPlainPassword($plain_password)
     {
         $this->plain_password = $plain_password;
@@ -147,13 +195,13 @@ class User
     {
         return $this->plain_password;
     }
-
-    /**
-     * Set the value of points.
-     *
-     * @param integer $points
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Set the value of points.
+	 *
+	 * @param integer $points
+	 * @return User
+	 */
     public function setPoints($points)
     {
         $this->points = $points;
@@ -170,13 +218,13 @@ class User
     {
         return $this->points;
     }
-
-    /**
-     * Set the value of last_connection.
-     *
-     * @param \DateTime $last_connection
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Set the value of last_connection.
+	 *
+	 * @param \DateTime $last_connection
+	 * @return User
+	 */
     public function setLastConnection($last_connection)
     {
         $this->last_connection = $last_connection;
@@ -193,26 +241,26 @@ class User
     {
         return $this->last_connection;
     }
-
-    /**
-     * Add Base entity to collection (one to many).
-     *
-     * @param \Entity\Base $base
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Add Base entity to collection (one to many).
+	 *
+	 * @param Base $base
+	 * @return User
+	 */
     public function addBase(Base $base)
     {
         $this->bases[] = $base;
 
         return $this;
     }
-
-    /**
-     * Remove Base entity from collection (one to many).
-     *
-     * @param \Entity\Base $base
-     * @return \Entity\User
-     */
+	
+	/**
+	 * Remove Base entity from collection (one to many).
+	 *
+	 * @param Base $base
+	 * @return User
+	 */
     public function removeBase(Base $base)
     {
         $this->bases->removeElement($base);
