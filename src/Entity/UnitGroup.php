@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Entity\UnitGroup
  *
- * @ORM\Entity(repositoryClass="UnitGroupRepository")
+ * @ORM\Entity
  * @ORM\Table(name="unit_group", indexes={@ORM\Index(name="fk_unit_group_unit1_idx", columns={"unit_id"}), @ORM\Index(name="fk_unit_group_unit_movement1_idx", columns={"unit_movement_id"})})
  */
 class UnitGroup

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\UnitMovement
  *
- * @ORM\Entity(repositoryClass="UnitMovementRepository")
+ * @ORM\Entity
  * @ORM\Table(name="unit_movement", indexes={@ORM\Index(name="fk_unit_movement_base1_idx", columns={"base_id"})})
  */
 class UnitMovement

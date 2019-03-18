@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Entity\Building
  *
- * @ORM\Entity(repositoryClass="BuildingRepository")
+ * @ORM\Entity
  * @ORM\Table(name="building", indexes={@ORM\Index(name="fk_building_base1_idx", columns={"base_id"})})
  */
 class Building

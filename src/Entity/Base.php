@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\Base
  *
- * @ORM\Entity(repositoryClass="BaseRepository")
+ * @ORM\Entity
  * @ORM\Table(name="base", indexes={@ORM\Index(name="fk_base_user_idx", columns={"user_id"})})
  */
 class Base
@@ -51,12 +51,12 @@ class Base
     protected $last_update_resources;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $last_check_mission;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $last_check_food;
 
