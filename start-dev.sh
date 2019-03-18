@@ -2,7 +2,7 @@
 
 production=false
 
-if [ "$2" = "production" ] || [ "$1" = "production" ]
+if [[ "$2" = "production" ]] || [[ "$1" = "production" ]]
 then
     production=true
 fi
@@ -28,9 +28,10 @@ setTitre() {
 
 all() {
     composeupdate
-    chmodfiles
     checkcache
+    chmodfiles
     updatedb
+    dumpenv
 }
 
 checkcache() {
@@ -72,6 +73,17 @@ updatedb(){
     php bin/console doctrine:schema:update --force
 }
 
+dumpenv() {
+    setTitre "Dump environment file"
+
+    if [[ "$production" = true ]]
+    then
+        composer dump-env prod
+    else
+        composer dump-env dev
+    fi
+}
+
 helpermore(){
     setTitre "Commandes disponibles"
     echo "cache: Vide le cache"
@@ -80,22 +92,22 @@ helpermore(){
     echo "help: Affiche des informations sur les commandes disponibles"
 }
 
-if [ "$1" = "install" ]
-then
-    install $2
-elif [ "$1" = "cache" ]
+if [[ "$1" = "cache" ]]
 then
     checkcache
-elif [ "$1" = "update" ]
+elif [[ "$1" = "update" ]]
 then
     composeupdate
-elif [ "$1" = "doctrine" ]
+elif [[ "$1" = "doctrine" ]]
 then
     updatedb
-elif [ "$1" = "" ] || [ "$1" = "production" ]
+elif [[ "$1" = "dumpenv" ]]
+then
+    dumpenv
+elif [[ "$1" = "" ]] || [[ "$1" = "production" ]]
 then
     all
-elif [ "$1" = "-h" ] || [ "$1" = "help" ] || [ "$1" = "--help" ]
+elif [[ "$1" = "-h" ]] || [[ "$1" = "help" ]] || [[ "$1" = "--help" ]]
 then
     helpermore
 else
