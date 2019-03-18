@@ -30,7 +30,6 @@ class CronController extends AbstractController
 	/**
 	 * @Route("/cron", name="cron")
 	 * @param Request $request
-	 * @param Utils $utils
 	 * @return Response
 	 * @throws \Exception
 	 */
@@ -69,7 +68,7 @@ class CronController extends AbstractController
 	}
 	
 	/**
-	 * return the json file with all crons in it. If not exist, we create it add put cron llike this :
+	 * return the json file with all crons in it. If not exist, we create it add put cron like this :
 	 * key => nameOfMethodToExecute
 	 * [last_execution = null]
 	 * @return mixed|string
@@ -146,6 +145,6 @@ class CronController extends AbstractController
 	
 	// --------------------------------------- UNDER THIS, METHODS OF CRONS ----------------------------------------------------//
 	public function updateResources() {
-		
+	
 	}
 }
