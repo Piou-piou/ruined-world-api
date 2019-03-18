@@ -13,6 +13,9 @@
         "symfony/orm-pack": "*",
         "symfony/yaml": "4.2.*"
     },
+  "require-dev": {
+      "symfony/web-profiler-bundle": "^4.2.4"
+  },
     "config": {
         "preferred-install": {
             "*": "dist"
