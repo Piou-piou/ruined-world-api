@@ -102,7 +102,7 @@ class Base
      * Set the value of id.
      *
      * @param integer $id
-     * @return \Entity\Base
+     * @return Base
      */
     public function setId($id)
     {
@@ -125,7 +125,7 @@ class Base
      * Set the value of name.
      *
      * @param string $name
-     * @return \Entity\Base
+     * @return Base
      */
     public function setName($name)
     {
@@ -148,7 +148,7 @@ class Base
      * Set the value of points.
      *
      * @param integer $points
-     * @return \Entity\Base
+     * @return Base
      */
     public function setPoints($points)
     {
@@ -171,7 +171,7 @@ class Base
      * Set the value of resources.
      *
      * @param string $resources
-     * @return \Entity\Base
+     * @return Base
      */
     public function setResources($resources)
     {
@@ -194,7 +194,7 @@ class Base
      * Set the value of posx.
      *
      * @param integer $posx
-     * @return \Entity\Base
+     * @return Base
      */
     public function setPosx($posx)
     {
@@ -217,7 +217,7 @@ class Base
      * Set the value of posy.
      *
      * @param integer $posy
-     * @return \Entity\Base
+     * @return Base
      */
     public function setPosy($posy)
     {
@@ -240,7 +240,7 @@ class Base
      * Set the value of last_update_resources.
      *
      * @param \DateTime $last_update_resources
-     * @return \Entity\Base
+     * @return Base
      */
     public function setLastUpdateResources($last_update_resources)
     {
@@ -263,7 +263,7 @@ class Base
      * Set the value of last_check_mission.
      *
      * @param \DateTime $last_check_mission
-     * @return \Entity\Base
+     * @return Base
      */
     public function setLastCheckMission($last_check_mission)
     {
@@ -286,7 +286,7 @@ class Base
      * Set the value of last_check_food.
      *
      * @param \DateTime $last_check_food
-     * @return \Entity\Base
+     * @return Base
      */
     public function setLastCheckFood($last_check_food)
     {
@@ -308,8 +308,8 @@ class Base
     /**
      * Add Building entity to collection (one to many).
      *
-     * @param \Entity\Building $building
-     * @return \Entity\Base
+     * @param Building $building
+     * @return Base
      */
     public function addBuilding(Building $building)
     {
@@ -321,8 +321,8 @@ class Base
     /**
      * Remove Building entity from collection (one to many).
      *
-     * @param \Entity\Building $building
-     * @return \Entity\Base
+     * @param Building $building
+     * @return Base
      */
     public function removeBuilding(Building $building)
     {
@@ -344,8 +344,8 @@ class Base
     /**
      * Add Mission entity to collection (one to many).
      *
-     * @param \Entity\Mission $mission
-     * @return \Entity\Base
+     * @param Mission $mission
+     * @return Base
      */
     public function addMission(Mission $mission)
     {
@@ -357,8 +357,8 @@ class Base
     /**
      * Remove Mission entity from collection (one to many).
      *
-     * @param \Entity\Mission $mission
-     * @return \Entity\Base
+     * @param Mission $mission
+     * @return Base
      */
     public function removeMission(Mission $mission)
     {
@@ -380,8 +380,8 @@ class Base
     /**
      * Add Unit entity to collection (one to many).
      *
-     * @param \Entity\Unit $unit
-     * @return \Entity\Base
+     * @param Unit $unit
+     * @return Base
      */
     public function addUnit(Unit $unit)
     {
@@ -393,8 +393,8 @@ class Base
     /**
      * Remove Unit entity from collection (one to many).
      *
-     * @param \Entity\Unit $unit
-     * @return \Entity\Base
+     * @param Unit $unit
+     * @return Base
      */
     public function removeUnit(Unit $unit)
     {
@@ -416,8 +416,8 @@ class Base
     /**
      * Add UnitMovement entity to collection (one to many).
      *
-     * @param \Entity\UnitMovement $unitMovement
-     * @return \Entity\Base
+     * @param UnitMovement $unitMovement
+     * @return Base
      */
     public function addUnitMovement(UnitMovement $unitMovement)
     {
@@ -429,8 +429,8 @@ class Base
     /**
      * Remove UnitMovement entity from collection (one to many).
      *
-     * @param \Entity\UnitMovement $unitMovement
-     * @return \Entity\Base
+     * @param UnitMovement $unitMovement
+     * @return Base
      */
     public function removeUnitMovement(UnitMovement $unitMovement)
     {
@@ -452,8 +452,8 @@ class Base
     /**
      * Set User entity (many to one).
      *
-     * @param \Entity\User $user
-     * @return \Entity\Base
+     * @param User $user
+     * @return Base
      */
     public function setUser(User $user = null)
     {
@@ -465,7 +465,7 @@ class Base
     /**
      * Get User entity (many to one).
      *
-     * @return \Entity\User
+     * @return User
      */
     public function getUser()
     {

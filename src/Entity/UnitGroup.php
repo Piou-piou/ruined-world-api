@@ -44,7 +44,7 @@ class UnitGroup
      * Set the value of id.
      *
      * @param integer $id
-     * @return \Entity\UnitGroup
+     * @return UnitGroup
      */
     public function setId($id)
     {
@@ -67,7 +67,7 @@ class UnitGroup
      * Set the value of name.
      *
      * @param string $name
-     * @return \Entity\UnitGroup
+     * @return UnitGroup
      */
     public function setName($name)
     {
@@ -90,7 +90,7 @@ class UnitGroup
      * Set the value of experience.
      *
      * @param integer $experience
-     * @return \Entity\UnitGroup
+     * @return UnitGroup
      */
     public function setExperience($experience)
     {
@@ -112,8 +112,8 @@ class UnitGroup
     /**
      * Set Unit entity (many to one).
      *
-     * @param \Entity\Unit $unit
-     * @return \Entity\UnitGroup
+     * @param Unit $unit
+     * @return UnitGroup
      */
     public function setUnit(Unit $unit = null)
     {
@@ -125,7 +125,7 @@ class UnitGroup
     /**
      * Get Unit entity (many to one).
      *
-     * @return \Entity\Unit
+     * @return Unit
      */
     public function getUnit()
     {
@@ -135,8 +135,8 @@ class UnitGroup
     /**
      * Set UnitMovement entity (many to one).
      *
-     * @param \Entity\UnitMovement $unitMovement
-     * @return \Entity\UnitGroup
+     * @param UnitMovement $unitMovement
+     * @return UnitGroup
      */
     public function setUnitMovement(UnitMovement $unitMovement = null)
     {
@@ -148,7 +148,7 @@ class UnitGroup
     /**
      * Get UnitMovement entity (many to one).
      *
-     * @return \Entity\UnitMovement
+     * @return UnitMovement
      */
     public function getUnitMovement()
     {

@@ -66,7 +66,7 @@ class Unit
      * Set the value of id.
      *
      * @param integer $id
-     * @return \Entity\Unit
+     * @return Unit
      */
     public function setId($id)
     {
@@ -89,7 +89,7 @@ class Unit
      * Set the value of name.
      *
      * @param string $name
-     * @return \Entity\Unit
+     * @return Unit
      */
     public function setName($name)
     {
@@ -112,7 +112,7 @@ class Unit
      * Set the value of array_name.
      *
      * @param string $array_name
-     * @return \Entity\Unit
+     * @return Unit
      */
     public function setArrayName($array_name)
     {
@@ -135,7 +135,7 @@ class Unit
      * Set the value of assault_level.
      *
      * @param integer $assault_level
-     * @return \Entity\Unit
+     * @return Unit
      */
     public function setAssaultLevel($assault_level)
     {
@@ -158,7 +158,7 @@ class Unit
      * Set the value of defense_level.
      *
      * @param integer $defense_level
-     * @return \Entity\Unit
+     * @return Unit
      */
     public function setDefenseLevel($defense_level)
     {
@@ -180,8 +180,8 @@ class Unit
     /**
      * Add UnitGroup entity to collection (one to many).
      *
-     * @param \Entity\UnitGroup $unitGroup
-     * @return \Entity\Unit
+     * @param UnitGroup $unitGroup
+     * @return Unit
      */
     public function addUnitGroup(UnitGroup $unitGroup)
     {
@@ -193,8 +193,8 @@ class Unit
     /**
      * Remove UnitGroup entity from collection (one to many).
      *
-     * @param \Entity\UnitGroup $unitGroup
-     * @return \Entity\Unit
+     * @param UnitGroup $unitGroup
+     * @return Unit
      */
     public function removeUnitGroup(UnitGroup $unitGroup)
     {
@@ -216,8 +216,8 @@ class Unit
     /**
      * Set Base entity (many to one).
      *
-     * @param \Entity\Base $base
-     * @return \Entity\Unit
+     * @param Base $base
+     * @return Unit
      */
     public function setBase(Base $base = null)
     {
@@ -229,7 +229,7 @@ class Unit
     /**
      * Get Base entity (many to one).
      *
-     * @return \Entity\Base
+     * @return Base
      */
     public function getBase()
     {
@@ -239,8 +239,8 @@ class Unit
     /**
      * Set UnitMovement entity (many to one).
      *
-     * @param \Entity\UnitMovement $unitMovement
-     * @return \Entity\Unit
+     * @param UnitMovement $unitMovement
+     * @return Unit
      */
     public function setUnitMovement(UnitMovement $unitMovement = null)
     {
@@ -252,7 +252,7 @@ class Unit
     /**
      * Get UnitMovement entity (many to one).
      *
-     * @return \Entity\UnitMovement
+     * @return UnitMovement
      */
     public function getUnitMovement()
     {
