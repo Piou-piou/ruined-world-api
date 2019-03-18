@@ -471,4 +471,119 @@ class Base
     {
         return $this->user;
     }
+	
+	/**
+	 * @return int
+	 */
+	public function getElectricity(): int
+	{
+		if (is_array($this->resources) && array_key_exists("electricity", $this->resources)) {
+			return $this->resources["electricity"];
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * @param int $electricity
+	 * @return Base
+	 */
+	public function setElectricity(int $electricity): Base
+	{
+		$this->resources["electricity"] = $electricity;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getFuel(): int
+	{
+		if (is_array($this->resources) && array_key_exists("fuel", $this->resources)) {
+			return $this->resources["fuel"];
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * @param int $fuel
+	 * @return Base
+	 */
+	public function setFuel(int $fuel): Base
+	{
+		$this->resources["fuel"] = $fuel;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getIron(): int
+	{
+		if (is_array($this->resources) && array_key_exists("iron", $this->resources)) {
+			return $this->resources["iron"];
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * @param int $iron
+	 * @return Base
+	 */
+	public function setIron(int $iron): Base
+	{
+		$this->resources["iron"] = $iron;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getWater(): int
+	{
+		if (is_array($this->resources) && array_key_exists("water", $this->resources)) {
+			return $this->resources["water"];
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * @param int $water
+	 * @return Base
+	 */
+	public function setWater(int $water): Base
+	{
+		$this->resources["water"] = $water;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getFood(): int
+	{
+		if (is_array($this->resources) && array_key_exists("food", $this->resources)) {
+			return $this->resources["food"];
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * @param int $food
+	 * @return Base
+	 */
+	public function setFood(int $food): Base
+	{
+		$this->resources["food"] = $food;
+		
+		return $this;
+	}
 }
