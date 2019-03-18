@@ -65,8 +65,14 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "firebase/php-jwt": {
+        "version": "v5.0.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "mtdowling/cron-expression": {
+        "version": "v1.2.1"
     },
     "ocramius/package-versions": {
         "version": "1.4.0"
@@ -149,11 +155,20 @@
     "symfony/http-kernel": {
         "version": "v4.2.2"
     },
+    "symfony/inflector": {
+        "version": "v4.2.4"
+    },
     "symfony/orm-pack": {
         "version": "v1.0.6"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
+    },
+    "symfony/polyfill-php72": {
+        "version": "v1.10.0"
+    },
+    "symfony/property-access": {
+        "version": "v4.2.4"
     },
     "symfony/routing": {
         "version": "4.2",
@@ -164,14 +179,54 @@
             "ref": "5374e24d508ba8fd6ba9eb15170255fdb778316a"
         }
     },
+    "symfony/serializer": {
+        "version": "v4.2.4"
+    },
     "symfony/stopwatch": {
         "version": "v4.2.3"
+    },
+    "symfony/twig-bridge": {
+        "version": "v4.2.4"
+    },
+    "symfony/twig-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "369b5b29dc52b2c190002825ae7ec24ab6f962dd"
+        },
+        "files": [
+            "./config/packages/twig.yaml",
+            "./config/routes/dev/twig.yaml",
+            "./templates/base.html.twig"
+        ]
+    },
+    "symfony/var-dumper": {
+        "version": "v4.2.4"
     },
     "symfony/var-exporter": {
         "version": "v4.2.2"
     },
+    "symfony/web-profiler-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "6bdfa1a95f6b2e677ab985cd1af2eae35d62e0f6"
+        },
+        "files": [
+            "./config/packages/dev/web_profiler.yaml",
+            "./config/packages/test/web_profiler.yaml",
+            "./config/routes/dev/web_profiler.yaml"
+        ]
+    },
     "symfony/yaml": {
         "version": "v4.2.2"
+    },
+    "twig/twig": {
+        "version": "v2.7.2"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"

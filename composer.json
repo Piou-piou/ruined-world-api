@@ -12,6 +12,8 @@
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
         "symfony/orm-pack": "*",
+        "symfony/property-access": "^4.2.4",
+        "symfony/serializer": "^4.2.4",
         "symfony/yaml": "4.2.*"
     },
   "require-dev": {

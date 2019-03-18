@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CronController extends AbstractController
@@ -62,6 +63,8 @@ class CronController extends AbstractController
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
 				}
 			}
+		} else {
+			throw new AccessDeniedHttpException("You haven't got access to this page");
 		}
 		
 		return new Response();
