@@ -29,6 +29,11 @@ class User
 	 * @ORM\Column(type="string", length=200)
 	 */
     protected $token;
+	
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private $endToken;
 
     /**
      * @ORM\Column(name="`password`", type="string", length=255)
@@ -117,10 +122,32 @@ class User
 	
 	/**
 	 * @param mixed $token
+	 * @return User
 	 */
-	public function setToken($token): void
+	public function setToken($token)
 	{
 		$this->token = $token;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getEndToken()
+	{
+		return $this->endToken;
+	}
+	
+	/**
+	 * @param mixed $endToken
+	 * @return User
+	 */
+	public function setEndToken($endToken)
+	{
+		$this->endToken = $endToken;
+		
+		return $this;
 	}
 	
 	/**
