@@ -74,12 +74,12 @@ updatedb(){
 }
 
 dumpenv() {
-    setTitre "Dump environment file"
-
     if [[ "$production" = true ]]
     then
+        setTitre "Dump environment file (mode production)"
         composer dump-env prod
     else
+        setTitre "Dump environment file (mode dev)"
         composer dump-env dev
     fi
 }
