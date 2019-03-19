@@ -5,10 +5,15 @@ namespace App\Service;
 use App\Entity\Base;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Globals
 {
+	/**
+	 * @var ContainerInterface
+	 */
+	private $container;
 	
 	/**
 	 * @var EntityManagerInterface
@@ -20,8 +25,9 @@ class Globals
 	 */
 	private $session;
 	
-	public function __construct(EntityManagerInterface $em, SessionInterface $session)
+	public function __construct(ContainerInterface $container, EntityManagerInterface $em, SessionInterface $session)
 	{
+		$this->container = $container;
 		$this->em = $em;
 		$this->session = $session;
 	}
@@ -50,5 +56,15 @@ class Globals
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * method that return the array of the building's config json file
+	 * @return mixed
+	 */
+	public function getBuildingsConfig() {
+		$buildings = json_decode(file_get_contents($this->container->getParameter("game_data_directory")."buildings.json"), true);
+		
+		return $buildings;
 	}
 }

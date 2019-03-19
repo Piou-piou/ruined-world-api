@@ -1,0 +1,27 @@
+{
+  "water_station": {
+    "name": "water station",
+    "max_level": 50,
+    "default_production": 100,
+    "resources_build": {
+      "electricity": 165,
+      "fuel": 225,
+      "iron": 210,
+      "water": 60
+    },
+    "to_build": {}
+  },
+  "warehouse": {
+    "name": "warehouse",
+    "max_level": 50,
+    "default_storage": 1000,
+    "max_storage": 500000,
+    "resources_build": {
+      "electricity": 705,
+      "fuel": 740,
+      "iron": 695,
+      "water": 635
+    },
+    "to_build": {}
+  }
+}
