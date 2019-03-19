@@ -62,8 +62,9 @@ class Globals
 	 * method that return the array of the building's config json file
 	 * @return mixed
 	 */
-	public function getBuildingsConfig() {
-		$buildings = json_decode(file_get_contents($this->container->getParameter("game_data_directory")."buildings.json"), true);
+	public function getBuildingsConfig()
+	{
+		$buildings = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "buildings.json"), true);
 		
 		return $buildings;
 	}
