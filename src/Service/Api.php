@@ -111,7 +111,7 @@ class Api
 		$string = "abcdefghijklmnopqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789";
 		$token = "";
 		srand((double)microtime() * 1000000);
-		for ($i = 0 ; $i < $length ; $i++) {
+		for ($i = 0; $i < $length; $i++) {
 			$token .= $string[rand() % strlen($string)];
 		}
 		
@@ -124,7 +124,8 @@ class Api
 	 * @param string $type
 	 * @return mixed
 	 */
-	public function serializeObject($object, $type = "json") {
+	public function serializeObject($object, $type = "json")
+	{
 		$serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
 		
 		return $serializer->serialize($object, $type);
