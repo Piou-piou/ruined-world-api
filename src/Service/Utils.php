@@ -30,7 +30,7 @@ class Utils
 	public function createRecursiveDirFromRoot($path)
 	{
 		$fs = new Filesystem();
-		$root_dir = $this->container->get("kernel")->getProjectDir()."/";
+		$root_dir = $this->container->get("kernel")->getProjectDir() . "/";
 		$new_path = $root_dir;
 		$folders = explode("/", $path);
 		

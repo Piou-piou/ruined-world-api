@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Entity\Mission
  *
- * @ORM\Entity(repositoryClass="MissionRepository")
+ * @ORM\Entity
  * @ORM\Table(name="mission", indexes={@ORM\Index(name="fk_mission_base1_idx", columns={"base_id"}), @ORM\Index(name="fk_mission_unit_movement1_idx", columns={"unit_movement_id"})})
  */
 class Mission
@@ -64,7 +64,7 @@ class Mission
      * Set the value of id.
      *
      * @param integer $id
-     * @return \Entity\Mission
+     * @return Mission
      */
     public function setId($id)
     {
@@ -87,7 +87,7 @@ class Mission
      * Set the value of name.
      *
      * @param string $name
-     * @return \Entity\Mission
+     * @return Mission
      */
     public function setName($name)
     {
@@ -110,7 +110,7 @@ class Mission
      * Set the value of description.
      *
      * @param string $description
-     * @return \Entity\Mission
+     * @return Mission
      */
     public function setDescription($description)
     {
@@ -133,7 +133,7 @@ class Mission
      * Set the value of points.
      *
      * @param integer $points
-     * @return \Entity\Mission
+     * @return Mission
      */
     public function setPoints($points)
     {
@@ -156,7 +156,7 @@ class Mission
      * Set the value of duration.
      *
      * @param integer $duration
-     * @return \Entity\Mission
+     * @return Mission
      */
     public function setDuration($duration)
     {
@@ -179,7 +179,7 @@ class Mission
      * Set the value of in_progress.
      *
      * @param boolean $in_progress
-     * @return \Entity\Mission
+     * @return Mission
      */
     public function setInProgress($in_progress)
     {
@@ -201,8 +201,8 @@ class Mission
     /**
      * Set Base entity (many to one).
      *
-     * @param \Entity\Base $base
-     * @return \Entity\Mission
+     * @param Base $base
+     * @return Mission
      */
     public function setBase(Base $base = null)
     {
@@ -214,7 +214,7 @@ class Mission
     /**
      * Get Base entity (many to one).
      *
-     * @return \Entity\Base
+     * @return Base
      */
     public function getBase()
     {
@@ -224,8 +224,8 @@ class Mission
     /**
      * Set UnitMovement entity (many to one).
      *
-     * @param \Entity\UnitMovement $unitMovement
-     * @return \Entity\Mission
+     * @param UnitMovement $unitMovement
+     * @return Mission
      */
     public function setUnitMovement(UnitMovement $unitMovement = null)
     {
@@ -237,7 +237,7 @@ class Mission
     /**
      * Get UnitMovement entity (many to one).
      *
-     * @return \Entity\UnitMovement
+     * @return UnitMovement
      */
     public function getUnitMovement()
     {

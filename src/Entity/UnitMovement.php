@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\UnitMovement
  *
- * @ORM\Entity(repositoryClass="UnitMovementRepository")
+ * @ORM\Entity
  * @ORM\Table(name="unit_movement", indexes={@ORM\Index(name="fk_unit_movement_base1_idx", columns={"base_id"})})
  */
 class UnitMovement
@@ -64,7 +64,7 @@ class UnitMovement
      * Set the value of id.
      *
      * @param integer $id
-     * @return \Entity\UnitMovement
+     * @return UnitMovement
      */
     public function setId($id)
     {
@@ -87,7 +87,7 @@ class UnitMovement
      * Set the value of end_date.
      *
      * @param \DateTime $end_date
-     * @return \Entity\UnitMovement
+     * @return UnitMovement
      */
     public function setEndDate($end_date)
     {
@@ -110,7 +110,7 @@ class UnitMovement
      * Set the value of type.
      *
      * @param integer $type
-     * @return \Entity\UnitMovement
+     * @return UnitMovement
      */
     public function setType($type)
     {
@@ -132,8 +132,8 @@ class UnitMovement
     /**
      * Add Mission entity to collection (one to many).
      *
-     * @param \Entity\Mission $mission
-     * @return \Entity\UnitMovement
+     * @param Mission $mission
+     * @return UnitMovement
      */
     public function addMission(Mission $mission)
     {
@@ -145,8 +145,8 @@ class UnitMovement
     /**
      * Remove Mission entity from collection (one to many).
      *
-     * @param \Entity\Mission $mission
-     * @return \Entity\UnitMovement
+     * @param Mission $mission
+     * @return UnitMovement
      */
     public function removeMission(Mission $mission)
     {
@@ -168,8 +168,8 @@ class UnitMovement
     /**
      * Add Unit entity to collection (one to many).
      *
-     * @param \Entity\Unit $unit
-     * @return \Entity\UnitMovement
+     * @param Unit $unit
+     * @return UnitMovement
      */
     public function addUnit(Unit $unit)
     {
@@ -181,8 +181,8 @@ class UnitMovement
     /**
      * Remove Unit entity from collection (one to many).
      *
-     * @param \Entity\Unit $unit
-     * @return \Entity\UnitMovement
+     * @param Unit $unit
+     * @return UnitMovement
      */
     public function removeUnit(Unit $unit)
     {
@@ -204,8 +204,8 @@ class UnitMovement
     /**
      * Add UnitGroup entity to collection (one to many).
      *
-     * @param \Entity\UnitGroup $unitGroup
-     * @return \Entity\UnitMovement
+     * @param UnitGroup $unitGroup
+     * @return UnitMovement
      */
     public function addUnitGroup(UnitGroup $unitGroup)
     {
@@ -217,8 +217,8 @@ class UnitMovement
     /**
      * Remove UnitGroup entity from collection (one to many).
      *
-     * @param \Entity\UnitGroup $unitGroup
-     * @return \Entity\UnitMovement
+     * @param UnitGroup $unitGroup
+     * @return UnitMovement
      */
     public function removeUnitGroup(UnitGroup $unitGroup)
     {
@@ -240,8 +240,8 @@ class UnitMovement
     /**
      * Set Base entity (many to one).
      *
-     * @param \Entity\Base $base
-     * @return \Entity\UnitMovement
+     * @param Base $base
+     * @return UnitMovement
      */
     public function setBase(Base $base = null)
     {
@@ -253,7 +253,7 @@ class UnitMovement
     /**
      * Get Base entity (many to one).
      *
-     * @return \Entity\Base
+     * @return Base
      */
     public function getBase()
     {

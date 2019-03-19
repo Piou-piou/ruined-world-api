@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Entity\Building
  *
- * @ORM\Entity(repositoryClass="BuildingRepository")
+ * @ORM\Entity
  * @ORM\Table(name="building", indexes={@ORM\Index(name="fk_building_base1_idx", columns={"base_id"})})
  */
 class Building
@@ -59,7 +59,7 @@ class Building
      * Set the value of id.
      *
      * @param integer $id
-     * @return \Entity\Building
+     * @return Building
      */
     public function setId($id)
     {
@@ -82,7 +82,7 @@ class Building
      * Set the value of name.
      *
      * @param string $name
-     * @return \Entity\Building
+     * @return Building
      */
     public function setName($name)
     {
@@ -105,7 +105,7 @@ class Building
      * Set the value of array_name.
      *
      * @param string $array_name
-     * @return \Entity\Building
+     * @return Building
      */
     public function setArrayName($array_name)
     {
@@ -128,7 +128,7 @@ class Building
      * Set the value of level.
      *
      * @param integer $level
-     * @return \Entity\Building
+     * @return Building
      */
     public function setLevel($level)
     {
@@ -151,7 +151,7 @@ class Building
      * Set the value of case.
      *
      * @param integer $case
-     * @return \Entity\Building
+     * @return Building
      */
     public function setCase($case)
     {
@@ -174,7 +174,7 @@ class Building
      * Set the value of in_construction.
      *
      * @param boolean $in_construction
-     * @return \Entity\Building
+     * @return Building
      */
     public function setInConstruction($in_construction)
     {
@@ -197,7 +197,7 @@ class Building
      * Set the value of end_construction.
      *
      * @param \DateTime $end_construction
-     * @return \Entity\Building
+     * @return Building
      */
     public function setEndConstruction($end_construction)
     {
@@ -219,8 +219,8 @@ class Building
     /**
      * Set Base entity (many to one).
      *
-     * @param \Entity\Base $base
-     * @return \Entity\Building
+     * @param Base $base
+     * @return Building
      */
     public function setBase(Base $base = null)
     {
@@ -232,7 +232,7 @@ class Building
     /**
      * Get Base entity (many to one).
      *
-     * @return \Entity\Base
+     * @return Base
      */
     public function getBase()
     {
