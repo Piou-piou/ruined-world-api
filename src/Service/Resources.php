@@ -39,8 +39,8 @@ class Resources
 	private $max_garner_storage;
 	
 	/**
- * @var int
- */
+	 * @var int
+	 */
 	private $electricity_production;
 	
 	/**
@@ -195,9 +195,9 @@ class Resources
 			}
 			
 			if ($level === 0) {
-				$this->$class_property = (int) $default_element;
+				$this->$class_property = (int)$default_element;
 			} else {
-				$this->$class_property = (int) round(($max_element * $level) / $max_level);
+				$this->$class_property = (int)round(($max_element * $level) / $max_level);
 			}
 		}
 		
