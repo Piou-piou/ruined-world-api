@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\User
  *
- * @ORM\Entity(repositoryClass="UserRepository")
+ * @ORM\Entity
  * @ORM\Table(name="`user`")
  */
 class User
@@ -41,7 +41,7 @@ class User
     protected $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $plain_password;
 

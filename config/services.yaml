@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     data_directory: '%kernel.project_dir%/data/'
+    game_data_directory: '%kernel.project_dir%/game_data/'
     cron:
         updateResources: "* * * * *"
 

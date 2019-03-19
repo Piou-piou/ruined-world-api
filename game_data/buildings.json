@@ -1,0 +1,67 @@
+{
+  "electricity_station": {
+    "name": "electricity station",
+    "max_level": 50,
+    "default_production": 100,
+    "max_production": 5000,
+    "resources_build": {
+      "electricity": 60,
+      "fuel": 225,
+      "iron": 165,
+      "water": 210
+    },
+    "to_build": {}
+  },
+  "fuel_station": {
+    "name": "fuel station",
+    "max_level": 50,
+    "default_production": 100,
+    "max_production": 5000,
+    "resources_build": {
+      "electricity": 210,
+      "fuel": 60,
+      "iron": 225,
+      "water": 165
+    },
+    "to_build": {}
+  },
+  "iron_station": {
+    "name": "iron station",
+    "max_level": 50,
+    "default_production": 100,
+    "max_production": 5000,
+    "resources_build": {
+      "electricity": 165,
+      "fuel": 210,
+      "iron": 60,
+      "water": 225
+    },
+    "to_build": {}
+  },
+  "water_station": {
+    "name": "water station",
+    "max_level": 50,
+    "default_production": 100,
+    "max_production": 5000,
+    "resources_build": {
+      "electricity": 165,
+      "fuel": 225,
+      "iron": 210,
+      "water": 60
+    },
+    "to_build": {}
+  },
+  "warehouse": {
+    "name": "warehouse",
+    "max_level": 50,
+    "default_storage": 1000,
+    "max_storage": 500000,
+    "resources_build": {
+      "electricity": 705,
+      "fuel": 740,
+      "iron": 695,
+      "water": 635
+    },
+    "to_build": {}
+  }
+}
