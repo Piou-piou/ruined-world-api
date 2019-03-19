@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Base;
+use App\Service\Resources;
 use App\Service\Utils;
 use Cron\CronExpression;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,14 +21,21 @@ class CronController extends AbstractController
 	 */
 	private $utils;
 	
+	/**
+	 * @var Resources
+	 */
+	private $resources;
+	
 	private $crons;
 	
 	/**
 	 * CronController constructor.
 	 * @param Utils $utils
+	 * @param Resources $resources
 	 */
-	public function __construct(Utils $utils) {
+	public function __construct(Utils $utils, Resources $resources) {
 		$this->utils = $utils;
+		$this->resources = $resources;
 	}
 	
 	/**
@@ -147,7 +157,32 @@ class CronController extends AbstractController
 	
 	
 	// --------------------------------------- UNDER THIS, METHODS OF CRONS ----------------------------------------------------//
-	public function updateResources() {
 	
+	/**
+	 * method that update resources of a base based on resources produced by hour. This method is called every minute
+	 * @throws \Exception
+	 */
+	public function updateResources() {
+		$em = $this->getDoctrine()->getManager();
+		
+		$bases = $em->getRepository(Base::class)->findAll();
+		$session = new Session();
+		
+		foreach ($bases as $base) {
+			$session->set("current_base", $base);
+			$session->set("token", $base->getUser()->getToken());
+			
+			$now = new \DateTime();
+			$last_update_resources = $base->getLastUpdateResources();
+			$diff = $now->getTimestamp()-$last_update_resources->getTimestamp();
+			
+			$this->resources->addResource("electricity", round((100/3600)*$diff));
+			$this->resources->addResource("fuel", round((100/3600)*$diff));
+			$this->resources->addResource("iron", round((100/3600)*$diff));
+			$this->resources->addResource("water", round((100/3600)*$diff));
+			
+			$base->setLastUpdateResources($now);
+			$em->flush();
+		}
 	}
 }
