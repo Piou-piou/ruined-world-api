@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Base;
 use App\Service\Globals;
+use App\Service\Resources;
 use App\Service\Utils;
 use Cron\CronExpression;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
