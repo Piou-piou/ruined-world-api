@@ -169,6 +169,7 @@ class CronController extends AbstractController
 		
 		$bases = $em->getRepository(Base::class)->findAll();
 		$session = new Session();
+		$resources = $this->resources;
 		
 		foreach ($bases as $base) {
 			$session->set("current_base", $base);
@@ -178,10 +179,10 @@ class CronController extends AbstractController
 			$last_update_resources = $base->getLastUpdateResources();
 			$diff = $now->getTimestamp() - $last_update_resources->getTimestamp();
 			
-			$this->resources->addResource("electricity", round((100 / 3600) * $diff));
-			$this->resources->addResource("fuel", round((100 / 3600) * $diff));
-			$this->resources->addResource("iron", round((100 / 3600) * $diff));
-			$this->resources->addResource("water", round((100 / 3600) * $diff));
+			$resources->addResource("electricity", round(($resources->getElectricityProduction() / 3600) * $diff));
+			$resources->addResource("fuel", round(($resources->getFuelProduction() / 3600) * $diff));
+			$resources->addResource("iron", round(($resources->getIronProduction() / 3600) * $diff));
+			$resources->addResource("water", round(($resources->getWaterProduction() / 3600) * $diff));
 			
 			$base->setLastUpdateResources($now);
 			$em->flush();
