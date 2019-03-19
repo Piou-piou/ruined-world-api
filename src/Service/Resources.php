@@ -39,6 +39,26 @@ class Resources
 	private $max_garner_storage;
 	
 	/**
+ * @var int
+ */
+	private $electricity_production;
+	
+	/**
+	 * @var int
+	 */
+	private $fuel_production;
+	
+	/**
+	 * @var int
+	 */
+	private $iron_production;
+	
+	/**
+	 * @var int
+	 */
+	private $water_production;
+	
+	/**
 	 * Resources constructor.
 	 * @param EntityManagerInterface $em
 	 * @param SessionInterface $session
@@ -98,7 +118,7 @@ class Resources
 	 */
 	public function getWarehouseCapacity(): int
 	{
-		return $this->getStorageCapacity("warehouse", "max_warehouse_storage");
+		return $this->getStorageCapacityOrProduction("warehouse", "max_warehouse_storage");
 	}
 	
 	/**
@@ -107,16 +127,53 @@ class Resources
 	 */
 	public function getGarnerCapacity(): int
 	{
-		return $this->getStorageCapacity("garner", "max_garner_storage");
+		return $this->getStorageCapacityOrProduction("garner", "max_garner_storage");
+	}
+	
+	/**
+	 * method that return production per hour of electricity station
+	 * @return mixed
+	 */
+	public function getElectricityProduction()
+	{
+		return $this->getStorageCapacityOrProduction("electricity_station", "electricity_production", false);
+	}
+	
+	/**
+	 * method that return production per hour of fuel station
+	 * @return mixed
+	 */
+	public function getFuelProduction()
+	{
+		return $this->getStorageCapacityOrProduction("fuel_station", "fuel_production", false);
+	}
+	
+	/**
+	 * method that return production per hour of iron station
+	 * @return mixed
+	 */
+	public function getIronProduction()
+	{
+		return $this->getStorageCapacityOrProduction("iron_station", "iron_production", false);
+	}
+	
+	/**
+	 * method that return production per hour of water station
+	 * @return mixed
+	 */
+	public function getWaterProduction()
+	{
+		return $this->getStorageCapacityOrProduction("water_station", "water_production", false);
 	}
 	
 	/**
 	 * methd that get the maximum capacity of a specific building (like warehouse of garner)
 	 * @param string $building_array_name
 	 * @param string $class_property (can be max_warehouse_storage or max_garner_storage)
+	 * @param bool $is_storage
 	 * @return mixed
 	 */
-	private function getStorageCapacity(string $building_array_name, string $class_property)
+	private function getStorageCapacityOrProduction(string $building_array_name, string $class_property, bool $is_storage = true)
 	{
 		if ($this->$class_property === null) {
 			$level = 0;
@@ -127,14 +184,20 @@ class Resources
 			
 			if ($building) $level = $building->getLevel();
 			
-			$default_storage = $this->globals->getBuildingsConfig()[$building_array_name]["default_storage"];
-			$max_storage = $this->globals->getBuildingsConfig()[$building_array_name]["max_storage"];
 			$max_level = $this->globals->getBuildingsConfig()[$building_array_name]["max_level"];
 			
-			if ($level === 0) {
-				$this->$class_property = (int)$default_storage;
+			if ($is_storage === true) {
+				$default_element = $this->globals->getBuildingsConfig()[$building_array_name]["default_storage"];
+				$max_element = $this->globals->getBuildingsConfig()[$building_array_name]["max_storage"];
 			} else {
-				$this->$class_property = (int)round(($max_storage * $level) / $max_level);
+				$default_element = $this->globals->getBuildingsConfig()[$building_array_name]["default_production"];
+				$max_element = $this->globals->getBuildingsConfig()[$building_array_name]["max_production"];
+			}
+			
+			if ($level === 0) {
+				$this->$class_property = (int) $default_element;
+			} else {
+				$this->$class_property = (int) round(($max_element * $level) / $max_level);
 			}
 		}
 		
