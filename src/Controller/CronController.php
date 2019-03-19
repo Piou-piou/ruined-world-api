@@ -33,7 +33,8 @@ class CronController extends AbstractController
 	 * @param Utils $utils
 	 * @param Resources $resources
 	 */
-	public function __construct(Utils $utils, Resources $resources) {
+	public function __construct(Utils $utils, Resources $resources)
+	{
 		$this->utils = $utils;
 		$this->resources = $resources;
 	}
@@ -162,7 +163,8 @@ class CronController extends AbstractController
 	 * method that update resources of a base based on resources produced by hour. This method is called every minute
 	 * @throws \Exception
 	 */
-	public function updateResources() {
+	public function updateResources()
+	{
 		$em = $this->getDoctrine()->getManager();
 		
 		$bases = $em->getRepository(Base::class)->findAll();
@@ -174,12 +176,12 @@ class CronController extends AbstractController
 			
 			$now = new \DateTime();
 			$last_update_resources = $base->getLastUpdateResources();
-			$diff = $now->getTimestamp()-$last_update_resources->getTimestamp();
+			$diff = $now->getTimestamp() - $last_update_resources->getTimestamp();
 			
-			$this->resources->addResource("electricity", round((100/3600)*$diff));
-			$this->resources->addResource("fuel", round((100/3600)*$diff));
-			$this->resources->addResource("iron", round((100/3600)*$diff));
-			$this->resources->addResource("water", round((100/3600)*$diff));
+			$this->resources->addResource("electricity", round((100 / 3600) * $diff));
+			$this->resources->addResource("fuel", round((100 / 3600) * $diff));
+			$this->resources->addResource("iron", round((100 / 3600) * $diff));
+			$this->resources->addResource("water", round((100 / 3600) * $diff));
 			
 			$base->setLastUpdateResources($now);
 			$em->flush();
