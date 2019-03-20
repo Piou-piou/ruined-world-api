@@ -59,6 +59,11 @@ class Base
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $last_check_food;
+	
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $archived;
 
     /**
      * @ORM\OneToMany(targetEntity="Building", mappedBy="base")
@@ -304,6 +309,22 @@ class Base
     {
         return $this->last_check_food;
     }
+	
+	/**
+	 * @return mixed
+	 */
+	public function getArchived()
+	{
+		return $this->archived;
+	}
+	
+	/**
+	 * @param mixed $archived
+	 */
+	public function setArchived($archived): void
+	{
+		$this->archived = $archived;
+	}
 
     /**
      * Add Building entity to collection (one to many).

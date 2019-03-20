@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Base;
+use App\Entity\User;
 use App\Service\Globals;
 use App\Service\Resources;
 use App\Service\Utils;
@@ -72,11 +73,11 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					if ($next_exec === null) {
+//					if ($next_exec === null) {
 						$this->$key();
-					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
-						$this->$key();
-					}
+//					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
+//						$this->$key();
+//					}
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
@@ -171,7 +172,7 @@ class CronController extends AbstractController
 	 * method that update resources of a base based on resources produced by hour. This method is called every minute
 	 * @throws \Exception
 	 */
-	public function updateResources()
+	private function updateResources()
 	{
 		$em = $this->getDoctrine()->getManager();
 		
@@ -198,5 +199,38 @@ class CronController extends AbstractController
 			$this->session->remove("current_base");
 			$this->session->remove("token");
 		}
+	}
+	
+	/**
+	 * method to archive a user that hasn't connected to the game for a certain time
+	 * this will archive all his bases too
+	 * @throws \Exception
+	 */
+	private function archiveUsers()
+	{
+		$em = $this->getDoctrine()->getManager();
+		
+		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days"));
+		
+		/**
+		 * @var $user User
+		 */
+		foreach ($users as $user) {
+			$user->setArchived(true);
+			$user->setHolidays(false);
+			$bases = $user->getBases();
+			
+			/**
+			 * @var $base Base
+			 */
+			foreach ($bases as $base) {
+				$base->setArchived(true);
+				$em->persist($base);
+			}
+			
+			$em->persist($user);
+		}
+		
+		$em->flush();
 	}
 }
