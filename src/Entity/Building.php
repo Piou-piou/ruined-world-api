@@ -40,7 +40,7 @@ class Building
     protected $case;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" : 0})
      */
     protected $in_construction;
 

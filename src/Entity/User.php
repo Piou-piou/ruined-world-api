@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\User
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="`user`")
  */
 class User
@@ -54,6 +54,16 @@ class User
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $last_connection;
+	
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $holidays;
+	
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $archived;
 
     /**
      * @ORM\OneToMany(targetEntity="Base", mappedBy="user")
@@ -241,6 +251,44 @@ class User
     {
         return $this->last_connection;
     }
+	
+	/**
+	 * @return mixed
+	 */
+	public function getHolidays()
+	{
+		return $this->holidays;
+	}
+	
+	/**
+	 * @param mixed $holidays
+	 * @return User
+	 */
+	public function setHolidays($holidays)
+	{
+		$this->holidays = $holidays;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getArchived()
+	{
+		return $this->archived;
+	}
+	
+	/**
+	 * @param mixed $archived
+	 * @return User
+	 */
+	public function setArchived($archived)
+	{
+		$this->archived = $archived;
+		
+		return $this;
+	}
 	
 	/**
 	 * Add Base entity to collection (one to many).
