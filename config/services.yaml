@@ -10,8 +10,8 @@ parameters:
     max_holidays_days: 40
     cron:
         updateResources: "* * * * *"
-        archiveUsers: "00 00 * * *"
-        disableHolidaysMode: "00 00 * * *"
+        archiveUsers: "0 0 * * *"
+        disableHolidaysMode: "0 0 * * *"
 
 services:
     # default configuration for services in *this* file

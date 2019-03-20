@@ -73,11 +73,11 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					//					if ($next_exec === null) {
-					$this->$key();
-					//					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
-					//						$this->$key();
-					//					}
+					if ($next_exec === null) {
+						$this->$key();
+					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
+						$this->$key();
+					}
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
@@ -176,7 +176,7 @@ class CronController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		
-		$bases = $em->getRepository(Base::class)->findAll();
+		$bases = $em->getRepository(Base::class)->findByBaseUserNotHolidays();
 		
 		foreach ($bases as $base) {
 			$this->session->set("current_base", $base);
@@ -240,7 +240,7 @@ class CronController extends AbstractController
 	private function disableHolidaysMode()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days"));
+		$users = $em->getRepository(User::class)->findByUserEndHolidays($this->getParameter("max_inactivation_days"));
 		
 		/**
 		 * @var $user User
