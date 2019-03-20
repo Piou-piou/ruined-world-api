@@ -73,11 +73,11 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-//					if ($next_exec === null) {
-						$this->$key();
-//					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
-//						$this->$key();
-//					}
+					//					if ($next_exec === null) {
+					$this->$key();
+					//					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
+					//						$this->$key();
+					//					}
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
@@ -209,7 +209,6 @@ class CronController extends AbstractController
 	private function archiveUsers()
 	{
 		$em = $this->getDoctrine()->getManager();
-		
 		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days"));
 		
 		/**
@@ -228,6 +227,27 @@ class CronController extends AbstractController
 				$em->persist($base);
 			}
 			
+			$em->persist($user);
+		}
+		
+		$em->flush();
+	}
+	
+	/**
+	 * method to disable holidays mode of user and set last connection date to today
+	 * @throws \Exception
+	 */
+	private function disableHolidaysMode()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days"));
+		
+		/**
+		 * @var $user User
+		 */
+		foreach ($users as $user) {
+			$user->setHolidays(false);
+			$user->setLastConnection(new \DateTime());
 			$em->persist($user);
 		}
 		
