@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 
 class UserRepository extends EntityRepository
@@ -23,7 +24,7 @@ class UserRepository extends EntityRepository
 			u.archived = false
 		");
 		
-		$query->setParameter("max_inactivation_days", $now);
+		$query->setParameter("max_inactivation_days", $now, Type::DATETIME);
 		
 		return $query->getResult();
 	}
@@ -44,7 +45,7 @@ class UserRepository extends EntityRepository
 			u.holidays = true
 		");
 		
-		$query->setParameter("max_holidays_days", $now);
+		$query->setParameter("max_holidays_days", $now, Type::DATETIME);
 		
 		return $query->getResult();
 	}
