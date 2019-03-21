@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -23,9 +24,9 @@ class Api
 	private $em;
 	
 	/**
-	 * @var array
+	 * @var SessionInterface
 	 */
-	private $jwtInfos;
+	private $session;
 	
 	/**
 	 * @var User
@@ -36,29 +37,13 @@ class Api
 	 * Api constructor.
 	 * @param ContainerInterface $container
 	 * @param EntityManagerInterface $em
+	 * @param SessionInterface $session
 	 */
-	public function __construct(ContainerInterface $container, EntityManagerInterface $em)
+	public function __construct(ContainerInterface $container, EntityManagerInterface $em, SessionInterface $session)
 	{
 		$this->container = $container;
 		$this->em = $em;
-	}
-	
-	/**
-	 * method that return current user
-	 * @return mixed
-	 */
-	public function getUser()
-	{
-		return $this->user;
-	}
-	
-	/**
-	 * method that return jwt infos
-	 * @return mixed
-	 */
-	public function getJwtInfos()
-	{
-		return $this->jwtInfos;
+		$this->session = $session;
 	}
 	
 	/**
@@ -77,14 +62,16 @@ class Api
 			return false;
 		}
 		
-		$user = $em->getRepository(User::class)->findOneBy(["token" => $token]);
+		$this->user = $em->getRepository(User::class)->findOneBy(["token" => $token]);
 		
-		if (!$user) {
+		if (!$this->user) {
 			return false;
 		}
 		
-		$this->getToken($user);
-		$this->jwtInfos = $jwt;
+		$this->getToken($this->user);
+		
+		$this->session->set("jwt_infos", $jwt);
+		$this->session->set("user", $this->user);
 		
 		return true;
 	}
@@ -126,6 +113,7 @@ class Api
 		$this->em->flush();
 		
 		$this->user = $user;
+		$this->session->set("user", $this->user);
 		
 		return $token;
 	}
