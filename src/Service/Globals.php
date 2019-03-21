@@ -44,26 +44,30 @@ class Globals
 	 * if no parameters in request test if the sessions already exists.
 	 * if nothing exist send false else true
 	 * @param string|null $token
-	 * @param string|null $jwt
+	 * @param string|null $infos
 	 * @return bool
 	 */
-	private function setBaseAndToken(?string $token, ?string $jwt): bool
+	private function setBaseAndToken(?string $token, ?string $infos): bool
 	{
-		if ($token !== null && $jwt !== null) {
-			$json = Jwt::decode($jwt, $token);
+		if ($token !== null && $infos !== null) {
+			$json = Jwt::decode($infos, $token);
 			
 			if ($json !== false) {
 				$user = $this->em->getRepository(User::class)->findOneBy(["token" => $token]);
 				
-				if (!$user) return false;
+				if (!$user) {
+					return false;
+				}
 				
 				$current_base = $this->em->getRepository(Base::class)->findOneBy([
-					"id" => $json["id_base"],
-					"user" => $user
+					"guid" => $json->guid_base,
+					"user" => $user,
 				]);
 				$this->em->refresh($current_base);
 				$this->session->set("current_base", $current_base);
 				$this->session->set("token", $token);
+				
+				return true;
 			}
 			
 			return false;
@@ -81,7 +85,9 @@ class Globals
 	 */
 	public function getCurrentBase($force_refresh = false)
 	{
-		if ($this->setBaseAndToken($this->request->get("token"), $this->request->get("jwt")) === false) return false;
+		if ($this->setBaseAndToken($this->request->get("token"), $this->request->get("infos")) === false) {
+			return false;
+		}
 		
 		if ($this->session->has("current_base") === true && $this->session->has("token") === true) {
 			if ($force_refresh) {
