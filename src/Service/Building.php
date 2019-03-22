@@ -18,6 +18,7 @@ class Building
 	
 	/**
 	 * Building constructor.
+	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 */
 	public function __construct(EntityManagerInterface $em, Globals $globals)
