@@ -81,7 +81,7 @@ class Globals
 	/**
 	 * method that return current base entity
 	 * @param bool $force_refresh
-	 * @return mixed|object
+	 * @return mixed|Base
 	 */
 	public function getCurrentBase($force_refresh = false)
 	{

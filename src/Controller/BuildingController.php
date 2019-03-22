@@ -46,7 +46,13 @@ class BuildingController extends AbstractController
 		$end_construction = $now->add(new \DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel() + 1) . "S"));
 		$building->setEndConstruction($end_construction);
 		
-		// TODO : withdraw resources to construct the building
+		if ($building_service->testWithdrawResourcesToBuild($infos->array_name) === false) {
+			return new JsonResponse([
+				"success" => false,
+				"message" => "You haven't enough resources",
+				"token" => $session->get("user")->getToken(),
+			]);
+		}
 		
 		$em->persist($building);
 		$em->flush();

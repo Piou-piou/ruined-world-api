@@ -17,14 +17,21 @@ class Building
 	private $globals;
 	
 	/**
+	 * @var Resources
+	 */
+	private $resources;
+	
+	/**
 	 * Building constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
+	 * @param Resources $resources
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
 	{
 		$this->globals = $globals;
 		$this->em = $em;
+		$this->resources = $resources;
 	}
 	
 	/**
@@ -62,5 +69,32 @@ class Building
 		}
 		
 		$this->em->flush();
+	}
+	
+	/**
+	 * test if base contain necessary resources to build the building if not return false else withdraw resources
+	 * and return true
+	 * @param string $array_name
+	 * @return bool
+	 */
+	public function testWithdrawResourcesToBuild(string $array_name)
+	{
+		$base = $this->globals->getCurrentBase(true);
+		$resources = $this->resources;
+		$resources_tobuild = $resources->getResourcesToBuild($array_name);
+		
+		$rest_electricity = $base->getElectricity() - $resources_tobuild["electricity"];
+		$rest_fuel = $base->getFuel() - $resources_tobuild["fuel"];
+		$rest_iron = $base->getIron() - $resources_tobuild["iron"];
+		$rest_water = $base->getWater() - $resources_tobuild["water"];
+		
+		if ($rest_electricity < 0 || $rest_fuel < 0 || $rest_iron < 0 || $rest_water < 0) return false;
+		
+		$resources->withdrawResource("electricity", $resources_tobuild["electricity"]);
+		$resources->withdrawResource("fuel", $resources_tobuild["fuel"]);
+		$resources->withdrawResource("iron", $resources_tobuild["iron"]);
+		$resources->withdrawResource("water", $resources_tobuild["water"]);
+		
+		return true;
 	}
 }
