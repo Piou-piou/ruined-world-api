@@ -11,6 +11,7 @@ parameters:
     route_rights_exluded: ["cron"]
     cron:
         updateResources: "* * * * *"
+        endConstructions: "* * * * *"
         archiveUsers: "0 0 * * *"
         disableHolidaysMode: "0 0 * * *"
 

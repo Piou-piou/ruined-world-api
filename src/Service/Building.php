@@ -2,8 +2,15 @@
 
 namespace App\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 class Building
 {
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
+	
 	/**
 	 * @var Globals
 	 */
@@ -13,9 +20,10 @@ class Building
 	 * Building constructor.
 	 * @param Globals $globals
 	 */
-	public function __construct(Globals $globals)
+	public function __construct(EntityManagerInterface $em, Globals $globals)
 	{
 		$this->globals = $globals;
+		$this->em = $em;
 	}
 	
 	/**
@@ -33,5 +41,25 @@ class Building
 		} else {
 			return (int)round($building_config["construction_time"] * $level);
 		}
+	}
+	
+	/**
+	 * method that end all construction that are terminated
+	 */
+	public function endConstructionBuildingsInBase()
+	{
+		$buildings = $this->em->getRepository(\App\Entity\Building::class)->finByBuildingInConstruction($this->globals->getCurrentBase());
+		
+		/**
+		 * @var $building \App\Entity\Building
+		 */
+		foreach ($buildings as $building) {
+			$building->setLevel($building->getLevel() + 1);
+			$building->setInConstruction(false);
+			$building->setEndConstruction(null);
+			$this->em->persist($building);
+		}
+		
+		$this->em->flush();
 	}
 }

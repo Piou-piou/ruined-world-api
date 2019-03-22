@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Base;
+use App\Entity\Building;
 use App\Entity\User;
 use App\Service\Globals;
 use App\Service\Resources;
@@ -33,6 +34,11 @@ class CronController extends AbstractController
 	 */
 	private $globals;
 	
+	/**
+	 * @var \App\Service\Building
+	 */
+	private $building;
+	
 	private $crons;
 	
 	/**
@@ -40,12 +46,14 @@ class CronController extends AbstractController
 	 * @param Utils $utils
 	 * @param SessionInterface $session
 	 * @param Globals $globals
+	 * @param \App\Service\Building $building
 	 */
-	public function __construct(Utils $utils, SessionInterface $session, Globals $globals)
+	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building)
 	{
 		$this->utils = $utils;
 		$this->session = $session;
 		$this->globals = $globals;
+		$this->building = $building;
 	}
 	
 	/**
@@ -57,7 +65,7 @@ class CronController extends AbstractController
 	public function cron(Request $request)
 	{
 		$ip = $request->server->get('REMOTE_ADDR');
-		$allowed_ip = ["127.0.0.1", "91.165.47.238"];
+		$allowed_ip = ["127.0.0.1", "91.165.47.238", "90.100.133.37"];
 		
 		if (in_array($ip, $allowed_ip)) {
 			$this->crons = $this->getParameter("cron");
@@ -109,7 +117,7 @@ class CronController extends AbstractController
 			
 			foreach ($this->crons as $key => $cron) {
 				$crons[$key] = [
-					"next_execution" => null
+					"next_execution" => null,
 				];
 			}
 			
@@ -131,7 +139,7 @@ class CronController extends AbstractController
 		$crons = json_decode(file_get_contents($file), true);
 		
 		$crons[$entry] = [
-			"next_execution" => null
+			"next_execution" => null,
 		];
 		
 		$this->writeJsonCron($crons);
@@ -252,5 +260,18 @@ class CronController extends AbstractController
 		}
 		
 		$em->flush();
+	}
+	
+	private function endConstructions()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+		
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+			
+			$this->building->endConstructionBuildingsInBase();
+		}
 	}
 }
