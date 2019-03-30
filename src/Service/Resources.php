@@ -95,14 +95,14 @@ class Resources
 	/**
 	 * method called to withdraw resource
 	 * @param string $resource
-	 * @param int $value_to_add
+	 * @param int $value_to_del
 	 */
-	public function withdrawResource(string $resource, int $value_to_add)
+	public function withdrawResource(string $resource, int $value_to_del)
 	{
 		$getter = "get" . ucfirst($resource);
 		$setter = "set" . ucfirst($resource);
 		
-		$new_resource = $this->base->$getter() + $value_to_add;
+		$new_resource = $this->base->$getter() - $value_to_del;
 		
 		if ($new_resource < 0) {
 			$new_resource = 0;
@@ -179,10 +179,12 @@ class Resources
 			$level = 0;
 			$building = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
 				"base" => $this->base,
-				"array_name" => $building_array_name
+				"array_name" => $building_array_name,
 			]);
 			
-			if ($building) $level = $building->getLevel();
+			if ($building) {
+				$level = $building->getLevel();
+			}
 			
 			$max_level = $this->globals->getBuildingsConfig()[$building_array_name]["max_level"];
 			
@@ -202,5 +204,32 @@ class Resources
 		}
 		
 		return $this->$class_property;
+	}
+	
+	/**
+	 * method that send resources that are needed to build a building
+	 * @param string $array_name
+	 * @return array
+	 */
+	public function getResourcesToBuild(string $array_name): array
+	{
+		$resource_tobuild = $this->globals->getBuildingsConfig()[$array_name]["resources_build"];
+		$level = 0;
+		
+		$building = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
+			"base" => $this->globals->getCurrentBase(),
+			"array_name" => $array_name,
+		]);
+		
+		if ($building) {
+			$level = $building->getLevel();
+		}
+		
+		return [
+			"electricity" => (int)round($resource_tobuild["electricity"] * ($level + 1)),
+			"fuel" => (int)round($resource_tobuild["fuel"] * ($level + 1)),
+			"iron" => (int)round($resource_tobuild["iron"] * ($level + 1)),
+			"water" => (int)round($resource_tobuild["water"] * ($level + 1)),
+		];
 	}
 }

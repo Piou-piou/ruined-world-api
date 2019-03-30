@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Entity\Building
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\BuildingRepository")
  * @ORM\Table(name="building", indexes={@ORM\Index(name="fk_building_base1_idx", columns={"base_id"})})
  */
 class Building
@@ -32,12 +32,12 @@ class Building
     /**
      * @ORM\Column(name="level", type="integer")
      */
-    protected $level;
+    protected $level = 0;
 
     /**
-     * @ORM\Column(name="case", type="integer")
+     * @ORM\Column(name="location", type="integer")
      */
-    protected $case;
+    protected $location;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : 0})
@@ -146,16 +146,16 @@ class Building
     {
         return $this->level;
     }
-
-    /**
-     * Set the value of case.
-     *
-     * @param integer $case
-     * @return Building
-     */
-    public function setCase($case)
+	
+	/**
+	 * Set the value of case.
+	 *
+	 * @param $location
+	 * @return Building
+	 */
+    public function setLocation($location)
     {
-        $this->case = $case;
+        $this->location = $location;
 
         return $this;
     }
@@ -165,9 +165,9 @@ class Building
      *
      * @return integer
      */
-    public function getCase()
+    public function getLocation()
     {
-        return $this->case;
+        return $this->location;
     }
 
     /**

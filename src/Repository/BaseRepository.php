@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 class BaseRepository extends EntityRepository
 {
 	/**
+	 * method that send base of users that aren't in holidays mode
 	 * @return mixed
 	 * @throws \Exception
 	 */

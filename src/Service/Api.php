@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use PiouPiou\RibsAdminBundle\Entity\Account;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -23,26 +23,37 @@ class Api
 	 */
 	private $em;
 	
-	private $infoJwt;
+	/**
+	 * @var SessionInterface
+	 */
+	private $session;
+	
+	/**
+	 * @var User
+	 */
+	private $user;
 	
 	/**
 	 * Api constructor.
 	 * @param ContainerInterface $container
 	 * @param EntityManagerInterface $em
+	 * @param SessionInterface $session
 	 */
-	public function __construct(ContainerInterface $container, EntityManagerInterface $em)
+	public function __construct(ContainerInterface $container, EntityManagerInterface $em, SessionInterface $session)
 	{
 		$this->container = $container;
 		$this->em = $em;
+		$this->session = $session;
 	}
 	
 	/**
 	 * @param string $infos_jwt
 	 * @param string $token
-	 * @return Account|bool
+	 * @return bool
 	 * this method is used to test jwt and if the user is ok else send false
+	 * @throws \Exception
 	 */
-	public function userIslogged(string $infos_jwt, string $token)
+	public function userIslogged(string $infos_jwt, string $token): bool
 	{
 		$em = $this->em;
 		$jwt = Jwt::decode($infos_jwt, $token);
@@ -51,15 +62,18 @@ class Api
 			return false;
 		}
 		
-		$this->infoJwt = $jwt;
+		$this->user = $em->getRepository(User::class)->findOneBy(["token" => $token]);
 		
-		$user = $em->getRepository(User::class)->findOneBy(["token" => $token]);
-		
-		if (!$user) {
+		if (!$this->user) {
 			return false;
 		}
 		
-		return $user;
+		$this->getToken($this->user);
+		
+		$this->session->set("jwt_infos", $jwt);
+		$this->session->set("user", $this->user);
+		
+		return true;
 	}
 	
 	/**
@@ -97,6 +111,9 @@ class Api
 		
 		$this->em->persist($user);
 		$this->em->flush();
+		
+		$this->user = $user;
+		$this->session->set("user", $this->user);
 		
 		return $token;
 	}
