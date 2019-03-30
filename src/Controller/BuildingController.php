@@ -42,6 +42,14 @@ class BuildingController extends AbstractController
 			$building->setBase($base);
 		}
 		
+		if ($building->getInConstruction() === true) {
+			return new JsonResponse([
+				"success" => false,
+				"message" => "A building is already in construction in your base.",
+				"token" => $session->get("user")->getToken(),
+			]);
+		}
+		
 		$building->setInConstruction(true);
 		$end_construction = $now->add(new \DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel() + 1) . "S"));
 		$building->setEndConstruction($end_construction);
