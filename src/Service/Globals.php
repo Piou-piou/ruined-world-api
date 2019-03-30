@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Base;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -43,34 +42,28 @@ class Globals
 	 * method that set session for base and token base on request parameters
 	 * if no parameters in request test if the sessions already exists.
 	 * if nothing exist send false else true
-	 * @param string|null $token
-	 * @param string|null $infos
 	 * @return bool
 	 */
-	private function setBaseAndToken(?string $token, ?string $infos): bool
+	private function setBaseAndToken(): bool
 	{
-		if ($token !== null && $infos !== null) {
-			$json = Jwt::decode($infos, $token);
+		$infos = null;
+		$user = null;
+		
+		if ($this->session->has("jwt_infos") && $this->session->has("user")) {
+			$infos = $this->session->get("jwt_infos");
+			$user = $this->session->get("user");
+		}
+		
+		if ($user !== null && $infos !== null) {
+			$current_base = $this->em->getRepository(Base::class)->findOneBy([
+				"guid" => $infos->guid_base,
+				"user" => $user,
+			]);
+			$this->em->refresh($current_base);
+			$this->session->set("current_base", $current_base);
+			$this->session->set("token", $user->getToken());
 			
-			if ($json !== false) {
-				$user = $this->em->getRepository(User::class)->findOneBy(["token" => $token]);
-				
-				if (!$user) {
-					return false;
-				}
-				
-				$current_base = $this->em->getRepository(Base::class)->findOneBy([
-					"guid" => $json->guid_base,
-					"user" => $user,
-				]);
-				$this->em->refresh($current_base);
-				$this->session->set("current_base", $current_base);
-				$this->session->set("token", $token);
-				
-				return true;
-			}
-			
-			return false;
+			return true;
 		} else if (!$this->session->has("current_base") && !$this->session->has("token")) {
 			return false;
 		}
@@ -85,7 +78,7 @@ class Globals
 	 */
 	public function getCurrentBase($force_refresh = false)
 	{
-		if ($this->setBaseAndToken($this->request->get("token"), $this->request->get("infos")) === false) {
+		if ($this->setBaseAndToken() === false) {
 			return false;
 		}
 		
