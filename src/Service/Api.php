@@ -45,14 +45,14 @@ class Api
 		$this->em = $em;
 		$this->session = $session;
 	}
-	
-	/**
-	 * @param string $infos_jwt
-	 * @param string $token
-	 * @return bool
-	 * this method is used to test jwt and if the user is ok else send false
-	 * @throws \Exception
-	 */
+
+    /**
+     * @param string $infos_jwt
+     * @param string $token
+     * @return bool
+     * this method is used to test jwt and if the user is ok else send false
+     * @throws \Exception
+     */
 	public function userIslogged(string $infos_jwt, string $token): bool
 	{
 		$em = $this->em;
