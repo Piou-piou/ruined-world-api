@@ -7,6 +7,7 @@ use App\Service\Api;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LoginController extends AbstractController
@@ -53,6 +54,23 @@ class LoginController extends AbstractController
         return new JsonResponse([
             "success" => false,
             "message" => "bad identifiant and/or password"
+        ]);
+    }
+
+    /**
+     * method that test if user steel logged and send token or new token if it was expired
+     * @Route("/api/users/test-token", name="api_tets_token", methods={"POST"})
+     * @param Request $request
+     * @param Api $api
+     * @param Session $session
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function testUserToken(Request $request, Api $api, Session $session): JsonResponse
+    {
+        return new JsonResponse([
+            "success" => $api->userIslogged($request->get("infos"), $request->get("token")),
+            "token" => $api->getToken($session->get("user"))
         ]);
     }
 }
