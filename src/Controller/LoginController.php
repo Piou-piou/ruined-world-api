@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class LoginController extends AbstractController
 {
@@ -18,26 +19,25 @@ class LoginController extends AbstractController
      * @Route("/api/users/authenticate", name="api_login", methods={"POST"})
      * @param Request $request
      * @param Api $api
+     * @param EncoderFactoryInterface $encoder
      * @return JsonResponse
      * @throws \Exception
      */
-    public function login(Request $request, Api $api): JsonResponse
+    public function login(Request $request, Api $api, EncoderFactoryInterface $encoder): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
 
         /**
-         * @var User $account
+         * @var User $user
          */
-        $account = $em->getRepository(User::class)->findOneBy([
-            "pseudo" => $request->get("username"),
+        $user = $em->getRepository(User::class)->findOneBy([
+            "pseudo" => $request->get("pseudo"),
         ]);
 
-        if ($account) {
-            $encoder = $this->get("security.password_encoder");
+        if ($user) {
+            if ($encoder->getEncoder($user)->isPasswordValid($user->getPassword(), $request->get("password"), '') === true) {
 
-            if ($encoder->isPasswordValid($account, $request->get("password")) === true) {
-
-                if ($account->getisActive() == false) {
+                if ($user->getArchived() == false) {
                     return new JsonResponse([
                         "success" => false,
                         "message" => "You account is disabled"
@@ -46,7 +46,7 @@ class LoginController extends AbstractController
 
                 return new JsonResponse([
                     "success" => true,
-                    "token" => $api->getToken($account)
+                    "token" => $api->getToken($user)
                 ]);
             }
         }
