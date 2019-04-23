@@ -37,7 +37,7 @@ class LoginController extends AbstractController
         if ($user) {
             if ($encoder->getEncoder($user)->isPasswordValid($user->getPassword(), $request->get("password"), '') === true) {
 
-                if ($user->getArchived() == false) {
+                if ($user->getArchived() == true) {
                     return new JsonResponse([
                         "success" => false,
                         "message" => "You account is disabled"
@@ -68,8 +68,17 @@ class LoginController extends AbstractController
      */
     public function testUserToken(Request $request, Api $api, Session $session): JsonResponse
     {
+        $test_logged = $api->userIslogged($request->get("infos"), $request->get("token"));
+
+        if ($test_logged === false) {
+            return new JsonResponse([
+                "success" => $test_logged,
+                "error_message" => "Your account were archived, you can't play anymore"
+            ]);
+        }
+
         return new JsonResponse([
-            "success" => $api->userIslogged($request->get("infos"), $request->get("token")),
+            "success" => $test_logged,
             "token" => $api->getToken($session->get("user"))
         ]);
     }

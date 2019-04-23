@@ -57,13 +57,16 @@ class Api
 	{
 		$em = $this->em;
 		$jwt = Jwt::decode($infos_jwt, $token);
-		
+
 		if ($jwt === false) {
 			return false;
 		}
-		
-		$this->user = $em->getRepository(User::class)->findOneBy(["token" => $token]);
-		
+
+		$this->user = $em->getRepository(User::class)->findOneBy([
+		    "token" => $token,
+            "archived" => false
+        ]);
+
 		if (!$this->user) {
 			return false;
 		}
@@ -72,7 +75,7 @@ class Api
 		
 		$this->session->set("jwt_infos", $jwt);
 		$this->session->set("user", $this->user);
-		
+
 		return true;
 	}
 	
