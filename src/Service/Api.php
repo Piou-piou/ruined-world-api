@@ -45,25 +45,28 @@ class Api
 		$this->em = $em;
 		$this->session = $session;
 	}
-	
-	/**
-	 * @param string $infos_jwt
-	 * @param string $token
-	 * @return bool
-	 * this method is used to test jwt and if the user is ok else send false
-	 * @throws \Exception
-	 */
+
+    /**
+     * @param string $infos_jwt
+     * @param string $token
+     * @return bool
+     * this method is used to test jwt and if the user is ok else send false
+     * @throws \Exception
+     */
 	public function userIslogged(string $infos_jwt, string $token): bool
 	{
 		$em = $this->em;
 		$jwt = Jwt::decode($infos_jwt, $token);
-		
+
 		if ($jwt === false) {
 			return false;
 		}
-		
-		$this->user = $em->getRepository(User::class)->findOneBy(["token" => $token]);
-		
+
+		$this->user = $em->getRepository(User::class)->findOneBy([
+		    "token" => $token,
+            "archived" => false
+        ]);
+
 		if (!$this->user) {
 			return false;
 		}
@@ -72,7 +75,7 @@ class Api
 		
 		$this->session->set("jwt_infos", $jwt);
 		$this->session->set("user", $this->user);
-		
+
 		return true;
 	}
 	
