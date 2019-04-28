@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Base;
 use App\Service\Api;
 use App\Service\Globals;
+use App\Service\Resources;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -42,17 +43,25 @@ class BaseController extends AbstractController
 	 * @Route("/api/base/", name="base", methods={"POST"})
 	 * @param Session $session
 	 * @param Globals $globals
+	 * @param Api $api
+	 * @param Resources $resources
 	 * @return JsonResponse
-	 * @throws \Exception
 	 */
-	public function sendInfos(Session $session, Globals $globals, Api $api): JsonResponse
+	public function sendInfos(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
 		
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
-			"base" => $api->serializeObject($base)
+			"base" => $api->serializeObject($base),
+			"resources_infos" => [
+				"max_storage" => $resources->getWarehouseCapacity(),
+				"electricity_production" => $resources->getElectricityProduction(),
+				"iron_production" => $resources->getIronProduction(),
+				"fuel_production" => $resources->getFuelProduction(),
+				"water_production" => $resources->getWaterProduction(),
+			]
 		]);
 	}
 }
