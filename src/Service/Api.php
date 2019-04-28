@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -146,8 +147,12 @@ class Api
 	 */
 	public function serializeObject($object, $type = "json")
 	{
-		$serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
+		$serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
 		
-		return $serializer->serialize($object, $type);
+		return $serializer->serialize($object, $type, [
+			'circular_reference_handler' => function ($object) {
+				return $object->getId();
+			}
+		]);
 	}
 }
