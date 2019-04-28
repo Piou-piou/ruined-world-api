@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Base;
+use App\Service\Api;
 use App\Service\Globals;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,10 @@ class BaseController extends AbstractController
 	 */
 	public function getMainBase(Session $session): JsonResponse
 	{
-		$main_base = $this->getDoctrine()->getRepository(Base::class)->findOneBy(["user" => $session->get("user")], ["id" => "desc"]);
+		$main_base = $this->getDoctrine()->getRepository(Base::class)->findOneBy([
+			"user" => $session->get("user"),
+			"archived" => false
+		], ["id" => "asc"]);
 		$guid_base = null;
 		$success = false;
 		
@@ -41,14 +45,14 @@ class BaseController extends AbstractController
 	 * @return JsonResponse
 	 * @throws \Exception
 	 */
-	public function sendInfos(Session $session, Globals $globals): JsonResponse
+	public function sendInfos(Session $session, Globals $globals, Api $api): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
 		
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
-			"base" => $base
+			"base" => $api->serializeObject($base)
 		]);
 	}
 }
