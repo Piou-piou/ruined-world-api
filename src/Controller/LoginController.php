@@ -59,7 +59,7 @@ class LoginController extends AbstractController
 
     /**
      * method that test if user steel logged and send token or new token if it was expired
-     * @Route("/api/users/test-token", name="api_tets_token", methods={"POST"})
+     * @Route("/api/users/test-token", name="api_test_token", methods={"POST"})
      * @param Request $request
      * @param Api $api
      * @param Session $session

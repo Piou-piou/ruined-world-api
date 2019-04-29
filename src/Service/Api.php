@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -47,10 +48,10 @@ class Api
 	}
 
     /**
+     * this method is used to test jwt and if the user is ok else send false
      * @param string $infos_jwt
      * @param string $token
      * @return bool
-     * this method is used to test jwt and if the user is ok else send false
      * @throws \Exception
      */
 	public function userIslogged(string $infos_jwt, string $token): bool
@@ -80,9 +81,9 @@ class Api
 	}
 	
 	/**
+     * method that return the token for a user
 	 * @param User $user
 	 * @return string
-	 * method that return the token for a user
 	 * @throws \Exception
 	 */
 	public function getToken(User $user): string
@@ -122,9 +123,9 @@ class Api
 	}
 	
 	/**
+     * generate a token for api
 	 * @param int $length
 	 * @return string
-	 * generate a token for api
 	 */
 	private function generateToken(int $length = 200): string
 	{
@@ -146,8 +147,12 @@ class Api
 	 */
 	public function serializeObject($object, $type = "json")
 	{
-		$serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
+		$serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
 		
-		return $serializer->serialize($object, $type);
+		return $serializer->serialize($object, $type, [
+			'circular_reference_handler' => function ($object) {
+				return $object->getId();
+			}
+		]);
 	}
 }
