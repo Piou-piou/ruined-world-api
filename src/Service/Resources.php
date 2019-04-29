@@ -205,12 +205,12 @@ class Resources
 		
 		return $this->$class_property;
 	}
-	
-	/**
-	 * method that send resources that are needed to build a building
-	 * @param string $array_name
-	 * @return array
-	 */
+
+    /**
+     * method that send resources that are needed to build a building
+     * @param string $array_name
+     * @return array
+     */
 	public function getResourcesToBuild(string $array_name): array
 	{
 		$resource_tobuild = $this->globals->getBuildingsConfig()[$array_name]["resources_build"];
