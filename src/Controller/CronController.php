@@ -261,7 +261,10 @@ class CronController extends AbstractController
 		
 		$em->flush();
 	}
-	
+
+    /**
+     * method to finish all construction that end date was before current date
+     */
 	private function endConstructions()
 	{
 		$em = $this->getDoctrine()->getManager();
