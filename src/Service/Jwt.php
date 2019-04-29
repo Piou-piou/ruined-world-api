@@ -7,10 +7,10 @@ use \Firebase\JWT\JWT as JsonWebToken;
 class Jwt
 {
 	/**
+     * encode an array in jwt
 	 * @param array $values
 	 * @param string $token
 	 * @return string
-	 * encode an array in jwt
 	 */
 	public static function encode(array $values, string $token)
 	{
@@ -18,10 +18,10 @@ class Jwt
 	}
 	
 	/**
+     * encode a jwt in array
 	 * @param string $encoded_json
 	 * @param string $token
 	 * @return bool|object
-	 * encode a jwt in array
 	 */
 	public static function decode(string $encoded_json, string $token)
 	{
