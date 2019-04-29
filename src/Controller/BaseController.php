@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BaseController extends AbstractController
 {
     /**
+     * mzthod that send the main base of a user if nop toekn of guid_base set in front
      * @Route("/api/main-base/", name="main_base", methods={"POST"})
      * @param Session $session
      * @return JsonResponse
@@ -40,6 +41,7 @@ class BaseController extends AbstractController
     }
 
     /**
+     * method that send all infos about the current base
      * @Route("/api/base/", name="base", methods={"POST"})
      * @param Session $session
      * @param Globals $globals
@@ -66,6 +68,7 @@ class BaseController extends AbstractController
     }
 
     /**
+     * method that send actual resources of the base
      * @Route("/api/refresh-resources/", name="refresh_resources", methods={"POST"})
      * @param Session $session
      * @param Globals $globals
