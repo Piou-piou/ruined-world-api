@@ -27,12 +27,13 @@ class BuildingRepository extends EntityRepository
 		
 		return $query->getOneOrNullResult();
 	}
-	
-	/**
-	 * method that return all ended construciton building that are in construction now
-	 * @param Base $base
-	 * @return mixed
-	 */
+
+    /**
+     * method that return all ended construciton building that are in construction now
+     * @param Base $base
+     * @return mixed
+     * @throws \Exception
+     */
 	public function finByBuildingInConstruction(Base $base)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT bu FROM App:Building bu
