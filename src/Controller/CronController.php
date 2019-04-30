@@ -195,14 +195,21 @@ class CronController extends AbstractController
 			$now = new \DateTime();
 			$last_update_resources = $base->getLastUpdateResources();
 			$diff = $now->getTimestamp() - $last_update_resources->getTimestamp();
-			
-			$resources->addResource("electricity", round(($resources->getElectricityProduction() / 3600) * $diff));
-			$resources->addResource("fuel", round(($resources->getFuelProduction() / 3600) * $diff));
-			$resources->addResource("iron", round(($resources->getIronProduction() / 3600) * $diff));
-			$resources->addResource("water", round(($resources->getWaterProduction() / 3600) * $diff));
-			
-			$base->setLastUpdateResources($now);
-			$em->flush();
+
+			$new_elec = round(($resources->getElectricityProduction() / 3600) * $diff);
+			$new_fuel = round(($resources->getFuelProduction() / 3600) * $diff);
+			$new_iron = round(($resources->getIronProduction() / 3600) * $diff);
+			$new_water = round(($resources->getWaterProduction() / 3600) * $diff);
+
+			if ($new_elec > 0 || $new_fuel > 0 || $new_iron > 0 || $new_water > 0) {
+                $resources->addResource("electricity", $new_elec);
+                $resources->addResource("fuel", $new_fuel);
+                $resources->addResource("iron", $new_iron);
+                $resources->addResource("water", $new_water);
+
+                $base->setLastUpdateResources($now);
+                $em->flush();
+            }
 			
 			$this->session->remove("current_base");
 			$this->session->remove("token");
