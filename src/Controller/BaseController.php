@@ -53,6 +53,12 @@ class BaseController extends AbstractController
     {
         $base = $globals->getCurrentBase();
 
+        if ($base === false) {
+            return new JsonResponse([
+                "success" => false
+            ]);
+        }
+
         return new JsonResponse([
             "success" => true,
             "token" => $session->get("user")->getToken(),

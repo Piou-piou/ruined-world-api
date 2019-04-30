@@ -53,8 +53,8 @@ class Globals
 			$infos = $this->session->get("jwt_infos");
 			$user = $this->session->get("user");
 		}
-		
-		if ($user !== null && $infos !== null) {
+
+		if ($user !== null && $infos !== null && $infos->guid_base !== null) {
 			$current_base = $this->em->getRepository(Base::class)->findOneBy([
 				"guid" => $infos->guid_base,
 				"user" => $user,
