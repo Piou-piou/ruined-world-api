@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityRepository;
 
 class UserRepository extends EntityRepository
 {
-    /**
-     * method to get users that hasn't connected to the game for a certain time and that are not archived yet
-     * @param int $max_inactivation_days
-     * @return mixed
-     * @throws \Exception
-     */
+	/**
+	 * method to get users that hasn't connected to the game for a certain time and that are not archived yet
+	 * @param int $max_inactivation_days
+	 * @return mixed
+	 * @throws \Exception
+	 */
 	public function findByUserToArchive(int $max_inactivation_days)
 	{
 		$now = new \DateTime();
