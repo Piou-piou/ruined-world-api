@@ -72,8 +72,11 @@ class Api
 			return false;
 		}
 		
-		$this->getToken($this->user);
+		$this->user->setLastConnection(new \DateTime());
+		$em->persist($this->user);
+		$em->flush();
 		
+		$this->getToken($this->user);
 		$this->session->set("jwt_infos", $jwt);
 		$this->session->set("user", $this->user);
 		
