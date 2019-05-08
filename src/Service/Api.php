@@ -46,28 +46,28 @@ class Api
 		$this->em = $em;
 		$this->session = $session;
 	}
-
-    /**
-     * this method is used to test jwt and if the user is ok else send false
-     * @param string $infos_jwt
-     * @param string $token
-     * @return bool
-     * @throws \Exception
-     */
+	
+	/**
+	 * this method is used to test jwt and if the user is ok else send false
+	 * @param string $infos_jwt
+	 * @param string $token
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public function userIslogged(string $infos_jwt, string $token): bool
 	{
 		$em = $this->em;
 		$jwt = Jwt::decode($infos_jwt, $token);
-
+		
 		if ($jwt === false) {
 			return false;
 		}
-
+		
 		$this->user = $em->getRepository(User::class)->findOneBy([
-		    "token" => $token,
-            "archived" => false
-        ]);
-
+			"token" => $token,
+			"archived" => false,
+		]);
+		
 		if (!$this->user) {
 			return false;
 		}
@@ -76,12 +76,12 @@ class Api
 		
 		$this->session->set("jwt_infos", $jwt);
 		$this->session->set("user", $this->user);
-
+		
 		return true;
 	}
 	
 	/**
-     * method that return the token for a user
+	 * method that return the token for a user
 	 * @param User $user
 	 * @return string
 	 * @throws \Exception
@@ -123,7 +123,7 @@ class Api
 	}
 	
 	/**
-     * generate a token for api
+	 * generate a token for api
 	 * @param int $length
 	 * @return string
 	 */
@@ -152,7 +152,7 @@ class Api
 		return $serializer->serialize($object, $type, [
 			'circular_reference_handler' => function ($object) {
 				return $object->getId();
-			}
+			},
 		]);
 	}
 }
