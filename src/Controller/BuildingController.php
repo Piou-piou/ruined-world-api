@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Building;
+use App\Service\Api;
 use App\Service\Globals;
+use App\Service\Resources;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -18,7 +21,7 @@ class BuildingController extends AbstractController
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building_service
 	 * @return JsonResponse
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NonUniqueResultException
 	 * @throws \Exception
 	 */
 	public function buildOrUpgrade(SessionInterface $session, Globals $globals, \App\Service\Building $building_service): JsonResponse
@@ -68,6 +71,37 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
+		]);
+	}
+
+	/**
+	 * @Route("/buildings/show/", name="building_show", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @param Api $api
+	 * @param Resources $resources
+	 * @param \App\Service\Building $building_service
+	 * @return JsonResponse
+	 * @throws NonUniqueResultException
+	 */
+	public function sendBuildingInfo(SessionInterface $session, Globals $globals, Api $api, Resources $resources, \App\Service\Building $building_service): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+		$building = $em->getRepository(Building::class)->findByBuildingInBase($infos->array_name, $globals->getCurrentBase());
+
+		if (!$building) {
+			return new JsonResponse([
+				"success" => false,
+				"message" => "This building doesn't exist in your base.",
+				"token" => $session->get("user")->getToken(),
+			]);
+		}
+
+		return new JsonResponse([
+			"building" => $api->serializeObject($building),
+			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
+			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
 		]);
 	}
 }
