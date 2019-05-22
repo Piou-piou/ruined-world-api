@@ -75,7 +75,7 @@ class BuildingController extends AbstractController
 	}
 
 	/**
-	 * @Route("/buildings/show/", name="building_show", methods={"POST"})
+	 * @Route("/api/buildings/show/", name="building_show", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
 	 * @param Api $api
