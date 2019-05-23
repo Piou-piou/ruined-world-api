@@ -31,6 +31,7 @@ class BuildingController extends AbstractController
 		$now = new \DateTime();
 		$building_config = $globals->getBuildingsConfig()[$infos->array_name];
 		$base = $globals->getCurrentBase();
+		$buildings_in_construction = $em->getRepository(Building::class)->finByBuildingInConstruction($base);
 		
 		/**
 		 * @var $building Building
@@ -45,7 +46,7 @@ class BuildingController extends AbstractController
 			$building->setBase($base);
 		}
 		
-		if ($building->getInConstruction() === true) {
+		if (count($buildings_in_construction) > 0) {
 			return new JsonResponse([
 				"success" => false,
 				"message" => "A building is already in construction in your base.",
