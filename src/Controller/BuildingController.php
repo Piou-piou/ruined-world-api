@@ -16,7 +16,7 @@ class BuildingController extends AbstractController
 {
 	/**
 	 * method to build or upgrade a building of a base
-	 * @Route("/buildings/build/", name="build_building", methods={"POST"})
+	 * @Route("/api/buildings/build/", name="build_building", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building_service
