@@ -105,4 +105,36 @@ class BuildingController extends AbstractController
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
 		]);
 	}
+	
+	/**
+	 * @Route("/api/buildings/in-construction/", name="building_in_construction", methods={"POST"})
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+	public function sendInConstructionBuildingsBase(Globals $globals): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$buildings = $em->getRepository(Building::class)->finByBuildingInConstruction($globals->getCurrentBase());
+		$now = new \DateTime();
+		$return_buildings = [];
+		
+		if (count($buildings) > 0) {
+			/** @var Building $building */
+			foreach ($buildings as $building) {
+				$end_construction = \DateTime::createFromFormat("Y-m-d H:i:s", $building->getEndConstruction());
+				$remaining_time = $end_construction->getTimestamp() - $now->getTimestamp();
+				
+				$return_buildings[] = [
+					"name" => $building->getName(),
+					"endConstruction" => $remaining_time
+				];
+			}
+		}
+		
+		return new JsonResponse([
+			"success" => true,
+			"buildings" => $return_buildings,
+		]);
+	}
 }
