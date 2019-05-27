@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Base;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 class BuildingRepository extends EntityRepository
 {
@@ -13,7 +14,7 @@ class BuildingRepository extends EntityRepository
 	 * @param string $array_name
 	 * @param Base $base
 	 * @return mixed
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NonUniqueResultException
 	 */
 	public function findByBuildingInBase(string $array_name, Base $base)
 	{
@@ -29,7 +30,7 @@ class BuildingRepository extends EntityRepository
 	}
 	
 	/**
-	 * method that return all ended construciton building that are in construction now and must end it
+	 * method that return all ended construction building that are in construction now and must end it
 	 * @param Base $base
 	 * @return mixed
 	 * @throws \Exception
@@ -48,7 +49,7 @@ class BuildingRepository extends EntityRepository
 	}
 	
 	/**
-	 * method that return all ended construciton building that are in construction now and must end it
+	 * method that return all ended construction building that are in construction now and must end it
 	 * @param Base $base
 	 * @return mixed
 	 * @throws \Exception
