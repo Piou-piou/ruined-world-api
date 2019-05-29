@@ -122,8 +122,7 @@ class BuildingController extends AbstractController
 		if (count($buildings) > 0) {
 			/** @var Building $building */
 			foreach ($buildings as $building) {
-				$end_construction = \DateTime::createFromFormat("Y-m-d H:i:s", $building->getEndConstruction());
-				$remaining_time = $end_construction->getTimestamp() - $now->getTimestamp();
+				$remaining_time = $building->getEndConstruction()->getTimestamp() - $now->getTimestamp();
 				
 				$return_buildings[] = [
 					"name" => $building->getName(),
