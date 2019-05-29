@@ -116,17 +116,14 @@ class BuildingController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$buildings = $em->getRepository(Building::class)->finByBuildingInConstruction($globals->getCurrentBase());
-		$now = new \DateTime();
 		$return_buildings = [];
 		
 		if (count($buildings) > 0) {
 			/** @var Building $building */
 			foreach ($buildings as $building) {
-				$remaining_time = $building->getEndConstruction()->getTimestamp() - $now->getTimestamp();
-				
 				$return_buildings[] = [
 					"name" => $building->getName(),
-					"endConstruction" => $remaining_time
+					"endConstruction" => $building->getEndConstruction()->getTimestamp()
 				];
 			}
 		}
