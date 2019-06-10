@@ -109,4 +109,37 @@ class Globals
 		
 		return $buildings;
 	}
+	
+	/**
+	 * method that return the array of the construction's coefs json file
+	 * @return mixed
+	 */
+	public function getCoefForConstruction()
+	{
+		$coef_construction = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "coef_for_construction.json"), true);
+		
+		return $coef_construction;
+	}
+	
+	/**
+	 * method that return the array of the production's coefs json file
+	 * @return mixed
+	 */
+	public function getCoefForProduction()
+	{
+		$coef_production = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "coef_for_production.json"), true);
+
+		return $coef_production;
+	}
+	
+	/**
+	 * method that return the array of the storage's coefs json file
+	 * @return mixed
+	 */
+	public function getCoefForStorage()
+	{
+		$coef_storage = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "coef_for_storage.json"), true);
+		
+		return $coef_storage;
+	}
 }

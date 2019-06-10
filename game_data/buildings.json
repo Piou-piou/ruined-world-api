@@ -3,13 +3,12 @@
     "name": "electricity station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 100,
-    "max_production": 5000,
+    "default_production": 50,
     "resources_build": {
-      "electricity": 60,
-      "fuel": 225,
-      "iron": 165,
-      "water": 210
+      "electricity": 22,
+      "fuel": 50,
+      "iron": 42,
+      "water": 62
     },
     "to_build": {}
   },
@@ -17,13 +16,12 @@
     "name": "fuel station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 100,
-    "max_production": 5000,
+    "default_production": 50,
     "resources_build": {
-      "electricity": 210,
-      "fuel": 60,
-      "iron": 225,
-      "water": 165
+      "electricity": 42,
+      "fuel": 22,
+      "iron": 62,
+      "water": 50
     },
     "to_build": {}
   },
@@ -31,13 +29,12 @@
     "name": "iron station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 100,
-    "max_production": 5000,
+    "default_production": 50,
     "resources_build": {
-      "electricity": 165,
-      "fuel": 210,
-      "iron": 60,
-      "water": 225
+      "electricity": 50,
+      "fuel": 62,
+      "iron": 22,
+      "water": 42
     },
     "to_build": {}
   },
@@ -45,13 +42,12 @@
     "name": "water station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 100,
-    "max_production": 5000,
+    "default_production": 50,
     "resources_build": {
-      "electricity": 165,
-      "fuel": 225,
-      "iron": 210,
-      "water": 60
+      "electricity": 62,
+      "fuel": 42,
+      "iron": 50,
+      "water": 22
     },
     "to_build": {}
   },
@@ -60,12 +56,11 @@
     "max_level": 50,
     "construction_time": 1800,
     "default_storage": 1000,
-    "max_storage": 500000,
     "resources_build": {
-      "electricity": 705,
-      "fuel": 740,
-      "iron": 695,
-      "water": 635
+      "electricity": 150,
+      "fuel": 180,
+      "iron": 135,
+      "water": 110
     },
     "to_build": {}
   }
