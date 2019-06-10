@@ -44,7 +44,6 @@ class BuildingController extends AbstractController
 			$building->setArrayName($infos->array_name);
 			$building->setLocation($infos->case);
 			$building->setBase($base);
-			$building->setLevel(1);
 		}
 		
 		if (count($buildings_in_construction) > 0) {
@@ -139,10 +138,11 @@ class BuildingController extends AbstractController
 	
 	/**
 	 * @Route("/api/buildings/list-to-build/", name="list_building_to_build", methods={"POST"})
+	 * @param \App\Service\Building $building_service
 	 * @param Globals $globals
 	 * @return JsonResponse
 	 */
-	public function sendBuildingToBuild(Globals $globals): JsonResponse
+	public function sendBuildingToBuild(Globals $globals, \App\Service\Building $building_service, Resources $resources): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$buildings = $em->getRepository(Building::class)->finByBuildingArrayNameInBase($globals->getCurrentBase());
@@ -150,10 +150,17 @@ class BuildingController extends AbstractController
 		$return_buildings = [];
 		
 		if (count($buildings) > 0) {
-			foreach ($buildings_config as $key => $building_config) {
-				if (!array_key_exists($key, $buildings)) {
+			foreach ($buildings_config as $building_config) {
+				$array_name = $building_config["array_name"];
+				
+				if (!array_key_exists($array_name, $buildings)) {
 					if (count($building_config["to_build"]) === 0) {
-						$return_buildings[] = $building_config;
+						$return_buildings[$array_name] = [
+							"name" => $building_config["name"],
+							"array_name" => $array_name,
+							"construction_time" => $building_service->getConstructionTime($array_name, 0),
+							"resources_build" => $resources->getResourcesToBuild($array_name)
+						];
 					} else {
 						$add_building = true;
 						foreach ($building_config["to_build"] as $key_build => $to_build) {
@@ -163,7 +170,7 @@ class BuildingController extends AbstractController
 						}
 						
 						if ($add_building === true) {
-							$return_buildings[] = $building_config;
+							$return_buildings[$array_name] = $building_config;
 						}
 					}
 				}
@@ -173,6 +180,7 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"buildings" => $return_buildings,
+			"nb_buildings" => count($return_buildings)
 		]);
 	}
 }
