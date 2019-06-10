@@ -23,7 +23,6 @@ class Utils
 	
 	/**
 	 * method that create a tree of folders on each slash
-	 *
 	 * @param $path
 	 * @return string
 	 */

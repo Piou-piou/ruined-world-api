@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Base;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -26,7 +27,7 @@ class Globals
 	private $session;
 	
 	/**
-	 * @var \Symfony\Component\HttpFoundation\Request|null
+	 * @var Request|null
 	 */
 	private $request;
 	

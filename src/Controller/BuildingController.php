@@ -76,6 +76,7 @@ class BuildingController extends AbstractController
 	}
 
 	/**
+	 * method to send detail infos about a building
 	 * @Route("/api/buildings/show/", name="building_show", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
@@ -107,6 +108,7 @@ class BuildingController extends AbstractController
 	}
 	
 	/**
+	 * method to send in construction buildings in base
 	 * @Route("/api/buildings/in-construction/", name="building_in_construction", methods={"POST"})
 	 * @param Globals $globals
 	 * @return JsonResponse
