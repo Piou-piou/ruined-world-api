@@ -135,4 +135,43 @@ class BuildingController extends AbstractController
 			"buildings" => $return_buildings,
 		]);
 	}
+	
+	/**
+	 * @Route("/api/buildings/list-to-build/", name="list_building_to_build", methods={"POST"})
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendBuildingToBuild(Globals $globals): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$buildings = $em->getRepository(Building::class)->finByBuildingArrayNameInBase($globals->getCurrentBase());
+		$buildings_config = $globals->getBuildingsConfig();
+		$return_buildings = [];
+		
+		if (count($buildings) > 0) {
+			foreach ($buildings_config as $key => $building_config) {
+				if (!array_key_exists($key, $buildings)) {
+					if (count($building_config["to_build"]) === 0) {
+						$return_buildings[] = $building_config;
+					} else {
+						$add_building = true;
+						foreach ($building_config["to_build"] as $key_build => $to_build) {
+							if (!array_key_exists($key_build, $buildings) || $buildings[$key_build] < $to_build) {
+								$add_building = false;
+							}
+						}
+						
+						if ($add_building === true) {
+							$return_buildings[] = $building_config;
+						}
+					}
+				}
+			}
+		}
+		
+		return new JsonResponse([
+			"success" => true,
+			"buildings" => $return_buildings,
+		]);
+	}
 }

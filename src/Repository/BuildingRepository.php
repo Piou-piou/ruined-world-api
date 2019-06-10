@@ -65,4 +65,37 @@ class BuildingRepository extends EntityRepository
 		
 		return $query->getResult();
 	}
+	
+	/**
+	 * methods that return array_name of building of the base
+	 * @param Base $base
+	 * @return array
+	 */
+	public function finByBuildingArrayNameInBase(Base $base)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT bu.array_name, bu.level, bu.in_construction FROM App:Building bu
+			JOIN App:Base ba WITH bu.base = ba AND bu.base = :base
+			ORDER BY bu.array_name
+		");
+		
+		$query->setParameter("base", $base, Type::OBJECT);
+		$results = $query->getArrayResult();
+		
+		if (count($results) > 0) {
+			$return_results = [];
+			foreach ($results as $result) {
+				$level = $result["level"];
+				if ($result["in_construction"] === true) {
+					$level = $level - 1;
+				}
+				if ($level > 0) {
+					$return_results[$result["array_name"]] = $level;
+				}
+			}
+			
+			return $return_results;
+		}
+		
+		return [];
+	}
 }
