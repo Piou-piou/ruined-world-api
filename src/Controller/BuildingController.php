@@ -55,7 +55,7 @@ class BuildingController extends AbstractController
 		}
 		
 		$building->setInConstruction(true);
-		$end_construction = $now->add(new \DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel() + 1) . "S"));
+		$end_construction = $now->add(new \DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
 		$building->setEndConstruction($end_construction);
 		
 		if ($building_service->testWithdrawResourcesToBuild($infos->array_name) === false) {

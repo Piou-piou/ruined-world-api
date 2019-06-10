@@ -42,6 +42,7 @@ class Building
 	 */
 	public function getConstructionTime(string $array_name, int $level): int
 	{
+		$level = $level + 1;
 		$building_config = $this->globals->getBuildingsConfig()[$array_name];
 		
 		if ($level === 0) {
