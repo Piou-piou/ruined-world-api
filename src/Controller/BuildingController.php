@@ -137,6 +137,7 @@ class BuildingController extends AbstractController
 	}
 	
 	/**
+	 * method that send all building that are possible to build
 	 * @Route("/api/buildings/list-to-build/", name="list_building_to_build", methods={"POST"})
 	 * @param \App\Service\Building $building_service
 	 * @param Globals $globals
