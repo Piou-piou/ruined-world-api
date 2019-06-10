@@ -44,6 +44,7 @@ class BuildingController extends AbstractController
 			$building->setArrayName($infos->array_name);
 			$building->setLocation($infos->case);
 			$building->setBase($base);
+			$building->setLevel(1);
 		}
 		
 		if (count($buildings_in_construction) > 0) {
