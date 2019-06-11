@@ -93,6 +93,22 @@
     },
     "to_build": {}
   },
+  "market": {
+    "name": "Market",
+    "array_name": "market",
+    "max_level": 50,
+    "construction_time": 2000,
+    "default_trader": 1,
+    "resources_build": {
+      "electricity": 165,
+      "fuel": 180,
+      "iron": 150,
+      "water": 200
+    },
+    "to_build": {
+      "warehouse": 1
+    }
+  },
   "water_station": {
     "name": "water station",
     "array_name": "water_station",
