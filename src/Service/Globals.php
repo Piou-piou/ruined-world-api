@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Base;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -26,7 +27,7 @@ class Globals
 	private $session;
 	
 	/**
-	 * @var \Symfony\Component\HttpFoundation\Request|null
+	 * @var Request|null
 	 */
 	private $request;
 	
@@ -107,5 +108,38 @@ class Globals
 		$buildings = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "buildings.json"), true);
 		
 		return $buildings;
+	}
+	
+	/**
+	 * method that return the array of the construction's coefs json file
+	 * @return mixed
+	 */
+	public function getCoefForConstruction()
+	{
+		$coef_construction = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "coef_for_construction.json"), true);
+		
+		return $coef_construction;
+	}
+	
+	/**
+	 * method that return the array of the production's coefs json file
+	 * @return mixed
+	 */
+	public function getCoefForProduction()
+	{
+		$coef_production = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "coef_for_production.json"), true);
+
+		return $coef_production;
+	}
+	
+	/**
+	 * method that return the array of the storage's coefs json file
+	 * @return mixed
+	 */
+	public function getCoefForStorage()
+	{
+		$coef_storage = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "coef_for_storage.json"), true);
+		
+		return $coef_storage;
 	}
 }

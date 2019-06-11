@@ -186,20 +186,19 @@ class Resources
 				$level = $building->getLevel();
 			}
 			
-			$max_level = $this->globals->getBuildingsConfig()[$building_array_name]["max_level"];
-			
 			if ($is_storage === true) {
 				$default_element = $this->globals->getBuildingsConfig()[$building_array_name]["default_storage"];
-				$max_element = $this->globals->getBuildingsConfig()[$building_array_name]["max_storage"];
+				$coef = $this->globals->getCoefForStorage()[$level];
 			} else {
 				$default_element = $this->globals->getBuildingsConfig()[$building_array_name]["default_production"];
-				$max_element = $this->globals->getBuildingsConfig()[$building_array_name]["max_production"];
+				$level = $level + 1;
+				$coef = $this->globals->getCoefForProduction()[$level];
 			}
 			
 			if ($level === 0) {
 				$this->$class_property = (int)$default_element;
 			} else {
-				$this->$class_property = (int)round(($max_element * $level) / $max_level);
+				$this->$class_property = (int)round($default_element * $level * (float)$coef);
 			}
 		}
 		
@@ -214,6 +213,7 @@ class Resources
 	public function getResourcesToBuild(string $array_name): array
 	{
 		$resource_tobuild = $this->globals->getBuildingsConfig()[$array_name]["resources_build"];
+		$coef = $this->globals->getCoefForConstruction();
 		$level = 0;
 		
 		$building = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
@@ -226,10 +226,10 @@ class Resources
 		}
 		
 		return [
-			"electricity" => (int)round($resource_tobuild["electricity"] * ($level + 1)),
-			"fuel" => (int)round($resource_tobuild["fuel"] * ($level + 1)),
-			"iron" => (int)round($resource_tobuild["iron"] * ($level + 1)),
-			"water" => (int)round($resource_tobuild["water"] * ($level + 1)),
+			"electricity" => (int)round($resource_tobuild["electricity"] * ($level + 1) * ((double)$coef[$level+1])),
+			"fuel" => (int)round($resource_tobuild["fuel"] * ($level + 1) * ((double)$coef[$level+1])),
+			"iron" => (int)round($resource_tobuild["iron"] * ($level + 1) * ((double)$coef[$level+1])),
+			"water" => (int)round($resource_tobuild["water"] * ($level + 1) * ((double)$coef[$level+1])),
 		];
 	}
 }

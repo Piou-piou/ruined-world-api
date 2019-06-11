@@ -42,6 +42,7 @@ class Building
 	 */
 	public function getConstructionTime(string $array_name, int $level): int
 	{
+		$level = $level + 1;
 		$building_config = $this->globals->getBuildingsConfig()[$array_name];
 		
 		if ($level === 0) {
@@ -56,7 +57,7 @@ class Building
 	 */
 	public function endConstructionBuildingsInBase()
 	{
-		$buildings = $this->em->getRepository(\App\Entity\Building::class)->finByBuildingInConstruction($this->globals->getCurrentBase());
+		$buildings = $this->em->getRepository(\App\Entity\Building::class)->finByBuildingInConstructionEnded($this->globals->getCurrentBase());
 		
 		/**
 		 * @var $building \App\Entity\Building
