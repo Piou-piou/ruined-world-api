@@ -27,6 +27,25 @@
     },
     "to_build": {}
   },
+  "garner": {
+    "name": "Garner",
+    "array_name": "garner",
+    "max_level": 50,
+    "construction_time": 1800,
+    "default_storage": 50,
+    "resources_build": {
+      "electricity": 110,
+      "fuel": 150,
+      "iron": 180,
+      "water": 135
+    },
+    "to_build": {
+      "electricity_station": 3,
+      "fuel_station": 3,
+      "iron_station": 3,
+      "water_station": 3
+    }
+  },
   "iron_station": {
     "name": "iron station",
     "array_name": "iron_station",
