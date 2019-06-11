@@ -1,4 +1,20 @@
 {
+  "barrack": {
+    "name": "Barrack",
+    "array_name": "barrack",
+    "max_level": 50,
+    "construction_time": 2700,
+    "reduction_time": 1,
+    "resources_build": {
+      "electricity": 375,
+      "fuel": 350,
+      "iron": 400,
+      "water": 320
+    },
+    "to_build": {
+      "garner": 2
+    }
+  },
   "electricity_station": {
     "name": "electricity station",
     "array_name": "electricity_station",
