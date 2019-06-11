@@ -15,6 +15,23 @@
       "garner": 2
     }
   },
+  "bunker": {
+    "name": "Bunker",
+    "array_name": "bunker",
+    "max_level": 50,
+    "construction_time": 2300,
+    "protected_resources": 1,
+    "resources_build": {
+      "electricity": 950,
+      "fuel": 900,
+      "iron": 1000,
+      "water": 975
+    },
+    "to_build": {
+      "garner": 3,
+      "warehouse": 3
+    }
+  },
   "electricity_station": {
     "name": "electricity station",
     "array_name": "electricity_station",
