@@ -90,6 +90,7 @@ class BuildingController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
+		$buildings_config = $globals->getBuildingsConfig();
 		$building = $em->getRepository(Building::class)->findByBuildingInBase($infos->array_name, $globals->getCurrentBase());
 
 		if (!$building) {
@@ -102,6 +103,7 @@ class BuildingController extends AbstractController
 
 		return new JsonResponse([
 			"building" => $api->serializeObject($building),
+			"explanation" => $buildings_config[$infos->array_name]["explanation"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
 		]);
@@ -159,6 +161,7 @@ class BuildingController extends AbstractController
 						$return_buildings[$array_name] = [
 							"name" => $building_config["name"],
 							"array_name" => $array_name,
+							"explanation" => $building_config["explanation"],
 							"construction_time" => $building_service->getConstructionTime($array_name, 0),
 							"resources_build" => $resources->getResourcesToBuild($array_name)
 						];
@@ -171,7 +174,13 @@ class BuildingController extends AbstractController
 						}
 						
 						if ($add_building === true) {
-							$return_buildings[$array_name] = $building_config;
+							$return_buildings[$array_name] = [
+								"name" => $building_config["name"],
+								"array_name" => $array_name,
+								"explanation" => $building_config["explanation"],
+								"construction_time" => $building_service->getConstructionTime($array_name, 0),
+								"resources_build" => $resources->getResourcesToBuild($array_name)
+							];
 						}
 					}
 				}
