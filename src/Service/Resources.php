@@ -186,19 +186,17 @@ class Resources
 				$level = $building->getLevel();
 			}
 			
+			$default_power = $this->globals->getBuildingsConfig()[$building_array_name]["default_power"];
 			if ($is_storage === true) {
-				$default_element = $this->globals->getBuildingsConfig()[$building_array_name]["default_storage"];
 				$coef = $this->globals->getCoefForStorage()[$level];
 			} else {
-				$default_element = $this->globals->getBuildingsConfig()[$building_array_name]["default_production"];
-				$level = $level + 1;
 				$coef = $this->globals->getCoefForProduction()[$level];
 			}
 			
 			if ($level === 0) {
-				$this->$class_property = (int)$default_element;
+				$this->$class_property = (int)$default_power;
 			} else {
-				$this->$class_property = (int)round($default_element * $level * (float)$coef);
+				$this->$class_property = (int)round($default_power * $level * (float)$coef);
 			}
 		}
 		

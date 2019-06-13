@@ -4,7 +4,7 @@
     "array_name": "barrack",
     "max_level": 50,
     "construction_time": 2700,
-    "reduction_time": 1,
+    "default_power": 1,
     "resources_build": {
       "electricity": 375,
       "fuel": 350,
@@ -20,7 +20,7 @@
     "array_name": "bunker",
     "max_level": 50,
     "construction_time": 2300,
-    "protected_resources": 1,
+    "default_power": 1,
     "resources_build": {
       "electricity": 950,
       "fuel": 900,
@@ -37,7 +37,7 @@
     "array_name": "electricity_station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 50,
+    "default_power": 50,
     "resources_build": {
       "electricity": 22,
       "fuel": 50,
@@ -51,7 +51,7 @@
     "array_name": "fuel_station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 50,
+    "default_power": 50,
     "resources_build": {
       "electricity": 42,
       "fuel": 22,
@@ -65,7 +65,7 @@
     "array_name": "garner",
     "max_level": 50,
     "construction_time": 1800,
-    "default_storage": 50,
+    "default_power": 50,
     "resources_build": {
       "electricity": 110,
       "fuel": 150,
@@ -84,7 +84,7 @@
     "array_name": "iron_station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 50,
+    "default_power": 50,
     "resources_build": {
       "electricity": 50,
       "fuel": 62,
@@ -98,7 +98,7 @@
     "array_name": "market",
     "max_level": 50,
     "construction_time": 2000,
-    "default_trader": 1,
+    "default_power": 1,
     "resources_build": {
       "electricity": 165,
       "fuel": 180,
@@ -114,7 +114,7 @@
     "array_name": "water_station",
     "max_level": 50,
     "construction_time": 60,
-    "default_production": 50,
+    "default_power": 50,
     "resources_build": {
       "electricity": 62,
       "fuel": 42,
@@ -128,7 +128,7 @@
     "array_name": "warehouse",
     "max_level": 50,
     "construction_time": 1800,
-    "default_storage": 1000,
+    "default_power": 1000,
     "resources_build": {
       "electricity": 150,
       "fuel": 180,
