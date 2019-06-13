@@ -5,6 +5,7 @@
     "max_level": 50,
     "construction_time": 2700,
     "default_power": 1,
+    "explanation": "La caserne te permets de recruter des unités pour te protéger des attaques et attaquer/piller d'autres bases. Chaque amélioration diminue les temps de recrutement.",
     "resources_build": {
       "electricity": 375,
       "fuel": 350,
@@ -21,6 +22,7 @@
     "max_level": 50,
     "construction_time": 2300,
     "default_power": 1,
+    "explanation": "Le bunker te permets de protéger tes ressources contre le pillage d'autres joueurs. Chaque amélioration augmente le pourcentage de ressources protégées.",
     "resources_build": {
       "electricity": 950,
       "fuel": 900,
@@ -38,6 +40,7 @@
     "max_level": 50,
     "construction_time": 60,
     "default_power": 50,
+    "explanation": "La statoin électrique permet produire de l'exeltricité et de la tocker dans les batteries. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
       "electricity": 22,
       "fuel": 50,
@@ -52,6 +55,7 @@
     "max_level": 50,
     "construction_time": 60,
     "default_power": 50,
+    "explanation": "La statoin de pétrole permet l'extraction du pétrole de la terre. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
       "electricity": 42,
       "fuel": 22,
@@ -66,6 +70,7 @@
     "max_level": 50,
     "construction_time": 1800,
     "default_power": 50,
+    "explanation": "Le grenier permet le stockage de la nourriture que tes soldats ramènent des expéditions. Chaque amélioration augmente sa capacité de stockage.",
     "resources_build": {
       "electricity": 110,
       "fuel": 150,
@@ -85,6 +90,7 @@
     "max_level": 50,
     "construction_time": 60,
     "default_power": 50,
+    "explanation": "La statoin de fer permet l'extraction de fer de la terre. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
       "electricity": 50,
       "fuel": 62,
@@ -99,6 +105,7 @@
     "max_level": 50,
     "construction_time": 2000,
     "default_power": 1,
+    "explanation": "Le marché te permets d'échanger des ressources avec les autres bases. Chaque amélioration augmente le nombre de marchans disponibles.",
     "resources_build": {
       "electricity": 165,
       "fuel": 180,
@@ -115,6 +122,7 @@
     "max_level": 50,
     "construction_time": 60,
     "default_power": 50,
+    "explanation": "La statoin d'eau permet l'extraction de l'eau de la terre. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
       "electricity": 62,
       "fuel": 42,
@@ -129,6 +137,7 @@
     "max_level": 50,
     "construction_time": 1800,
     "default_power": 1000,
+    "explanation": "L'entrepôt permet le stockage du fer, du fuel, de l'eau et des batteries que tu récoltes en attendant qu`ils soient utilisés. Chaque amélioration augmente sa capacité de stockage.",
     "resources_build": {
       "electricity": 150,
       "fuel": 180,
