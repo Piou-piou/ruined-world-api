@@ -42,10 +42,10 @@
     "default_power": 50,
     "explanation": "La statoin électrique permet produire de l'exeltricité et de la tocker dans les batteries. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
-      "electricity": 22,
-      "fuel": 50,
-      "iron": 42,
-      "water": 62
+      "electricity": 60,
+      "fuel": 225,
+      "iron": 165,
+      "water": 210
     },
     "to_build": {}
   },
@@ -57,10 +57,10 @@
     "default_power": 50,
     "explanation": "La statoin de pétrole permet l'extraction du pétrole de la terre. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
-      "electricity": 42,
-      "fuel": 22,
-      "iron": 62,
-      "water": 50
+      "electricity": 210,
+      "fuel": 60,
+      "iron": 225,
+      "water": 165
     },
     "to_build": {}
   },
@@ -92,10 +92,10 @@
     "default_power": 50,
     "explanation": "La statoin de fer permet l'extraction de fer de la terre. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
-      "electricity": 50,
-      "fuel": 62,
-      "iron": 22,
-      "water": 42
+      "electricity": 165,
+      "fuel": 210,
+      "iron": 60,
+      "water": 225
     },
     "to_build": {}
   },
@@ -124,10 +124,10 @@
     "default_power": 50,
     "explanation": "La statoin d'eau permet l'extraction de l'eau de la terre. Chaque amélioration augmente sa production par heure.",
     "resources_build": {
-      "electricity": 62,
-      "fuel": 42,
-      "iron": 50,
-      "water": 22
+      "electricity": 165,
+      "fuel": 225,
+      "iron": 210,
+      "water": 60
     },
     "to_build": {}
   },
@@ -139,10 +139,10 @@
     "default_power": 1000,
     "explanation": "L'entrepôt permet le stockage du fer, du fuel, de l'eau et des batteries que tu récoltes en attendant qu`ils soient utilisés. Chaque amélioration augmente sa capacité de stockage.",
     "resources_build": {
-      "electricity": 150,
-      "fuel": 180,
-      "iron": 135,
-      "water": 110
+      "electricity": 705,
+      "fuel": 740,
+      "iron": 695,
+      "water": 635
     },
     "to_build": {}
   }
