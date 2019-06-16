@@ -39,10 +39,10 @@
     "construction_time": 60,
     "default_production": 50,
     "resources_build": {
-      "electricity": 22,
-      "fuel": 50,
-      "iron": 42,
-      "water": 62
+      "electricity": 60,
+      "fuel": 225,
+      "iron": 165,
+      "water": 210
     },
     "to_build": {}
   },
@@ -53,10 +53,10 @@
     "construction_time": 60,
     "default_production": 50,
     "resources_build": {
-      "electricity": 42,
-      "fuel": 22,
-      "iron": 62,
-      "water": 50
+      "electricity": 210,
+      "fuel": 60,
+      "iron": 225,
+      "water": 165
     },
     "to_build": {}
   },
@@ -86,10 +86,10 @@
     "construction_time": 60,
     "default_production": 50,
     "resources_build": {
-      "electricity": 50,
-      "fuel": 62,
-      "iron": 22,
-      "water": 42
+      "electricity": 165,
+      "fuel": 210,
+      "iron": 60,
+      "water": 225
     },
     "to_build": {}
   },
@@ -116,10 +116,10 @@
     "construction_time": 60,
     "default_production": 50,
     "resources_build": {
-      "electricity": 62,
-      "fuel": 42,
-      "iron": 50,
-      "water": 22
+      "electricity": 165,
+      "fuel": 225,
+      "iron": 210,
+      "water": 60
     },
     "to_build": {}
   },
@@ -130,10 +130,10 @@
     "construction_time": 1800,
     "default_storage": 1000,
     "resources_build": {
-      "electricity": 150,
-      "fuel": 180,
-      "iron": 135,
-      "water": 110
+      "electricity": 705,
+      "fuel": 740,
+      "iron": 695,
+      "water": 635
     },
     "to_build": {}
   }
