@@ -6,6 +6,8 @@
     "construction_time": 2700,
     "default_power": 1,
     "explanation": "La caserne te permets de recruter des unités pour te protéger des attaques et attaquer/piller d'autres bases. Chaque amélioration diminue les temps de recrutement.",
+    "explanation_current_power": "Le temps de recrutement est actuellement réduit de [[to_replace]]%.",
+    "explanation_next_power": "Le temps de recrutement sera réduit de : [[to_replace]]% au prochain niveau.",
     "resources_build": {
       "electricity": 375,
       "fuel": 350,
@@ -23,6 +25,8 @@
     "construction_time": 2300,
     "default_power": 1,
     "explanation": "Le bunker te permets de protéger tes ressources contre le pillage d'autres joueurs. Chaque amélioration augmente le pourcentage de ressources protégées.",
+    "explanation_current_power": "Le bunker peut actuellement dissimuler [[to_replace]]% de vos ressources.",
+    "explanation_next_power": "Le bunker pourra dissimuler [[to_replace]]% de vos ressources au niveau suivant.",
     "resources_build": {
       "electricity": 950,
       "fuel": 900,
@@ -41,6 +45,8 @@
     "construction_time": 60,
     "default_power": 50,
     "explanation": "La statoin électrique permet produire de l'exeltricité et de la tocker dans les batteries. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La station électrique produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La station électrique produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 60,
       "fuel": 225,
@@ -56,6 +62,8 @@
     "construction_time": 60,
     "default_power": 50,
     "explanation": "La statoin de pétrole permet l'extraction du pétrole de la terre. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La statoin de pétrole produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La statoin de pétrole produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 210,
       "fuel": 60,
@@ -71,6 +79,8 @@
     "construction_time": 1800,
     "default_power": 50,
     "explanation": "Le grenier permet le stockage de la nourriture que tes soldats ramènent des expéditions. Chaque amélioration augmente sa capacité de stockage.",
+    "explanation_current_power": "La capacité de stockage est actuellement de [[to_replace]] unités.",
+    "explanation_next_power": "Le capacité de stockage sera de [[to_replace]] unités au prochain niveau.",
     "resources_build": {
       "electricity": 110,
       "fuel": 150,
@@ -91,6 +101,8 @@
     "construction_time": 60,
     "default_power": 50,
     "explanation": "La statoin de fer permet l'extraction de fer de la terre. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La statoin de fer produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La statoin de fer produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 165,
       "fuel": 210,
@@ -106,6 +118,8 @@
     "construction_time": 2000,
     "default_power": 1,
     "explanation": "Le marché te permets d'échanger des ressources avec les autres bases. Chaque amélioration augmente le nombre de marchans disponibles.",
+    "explanation_current_power": "Le marché dispose de [[to_replace]] marchands actuellement.",
+    "explanation_next_power": "Le marché disposera de [[to_replace]] marchands au niveau suivant.",
     "resources_build": {
       "electricity": 165,
       "fuel": 180,
@@ -123,6 +137,8 @@
     "construction_time": 60,
     "default_power": 50,
     "explanation": "La statoin d'eau permet l'extraction de l'eau de la terre. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La statoin d'eau produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La statoin d'eau produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 165,
       "fuel": 225,
@@ -138,6 +154,8 @@
     "construction_time": 1800,
     "default_power": 1000,
     "explanation": "L'entrepôt permet le stockage du fer, du fuel, de l'eau et des batteries que tu récoltes en attendant qu`ils soient utilisés. Chaque amélioration augmente sa capacité de stockage.",
+    "explanation_current_power": "La capacité de stockage est actuellement de [[to_replace]] unités.",
+    "explanation_next_power": "Le capacité de stockage sera de [[to_replace]] unités au prochain niveau.",
     "resources_build": {
       "electricity": 705,
       "fuel": 740,
