@@ -62,7 +62,7 @@ class Building
 	{
 		$building_config = $this->globals->getBuildingsConfig()[$array_name];
 		$explanation_current = str_replace("[[to_replace]]", $this->getCurrentPower($array_name, $level), $building_config["explanation_current_power"]);
-		$explanation_next = str_replace("[[to_replace]]", $this->getCurrentPower($array_name, $level+1), $building_config["explanation_current_power"]);
+		$explanation_next = str_replace("[[to_replace]]", $this->getCurrentPower($array_name, $level+1), $building_config["explanation_next_power"]);
 
 		return [
 			"current" => $explanation_current,
