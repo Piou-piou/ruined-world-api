@@ -90,6 +90,7 @@ class BuildingController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
+		$buildings_config = $globals->getBuildingsConfig();
 		$building = $em->getRepository(Building::class)->findByBuildingInBase($infos->array_name, $globals->getCurrentBase());
 
 		if (!$building) {
@@ -100,8 +101,13 @@ class BuildingController extends AbstractController
 			]);
 		}
 
+		$explanation_string = $building_service->getExplanationStringPower($infos->array_name, $building->getLevel());
+
 		return new JsonResponse([
 			"building" => $api->serializeObject($building),
+			"explanation" => $buildings_config[$infos->array_name]["explanation"],
+			"explanation_current_power" => $explanation_string["current"],
+			"explanation_next_power" => $explanation_string["next"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
 		]);
@@ -153,12 +159,16 @@ class BuildingController extends AbstractController
 		if (count($buildings) > 0) {
 			foreach ($buildings_config as $building_config) {
 				$array_name = $building_config["array_name"];
+				$explanation_string = $building_service->getExplanationStringPower($array_name, 0);
 				
 				if (!array_key_exists($array_name, $buildings)) {
 					if (count($building_config["to_build"]) === 0) {
 						$return_buildings[$array_name] = [
 							"name" => $building_config["name"],
 							"array_name" => $array_name,
+							"explanation" => $building_config["explanation"],
+							"explanation_current_power" => $explanation_string["current"],
+							"explanation_next_power" => $explanation_string["next"],
 							"construction_time" => $building_service->getConstructionTime($array_name, 0),
 							"resources_build" => $resources->getResourcesToBuild($array_name)
 						];
@@ -171,7 +181,15 @@ class BuildingController extends AbstractController
 						}
 						
 						if ($add_building === true) {
-							$return_buildings[$array_name] = $building_config;
+							$return_buildings[$array_name] = [
+								"name" => $building_config["name"],
+								"array_name" => $array_name,
+								"explanation" => $building_config["explanation"],
+								"explanation_current_power" => $explanation_string["current"],
+								"explanation_next_power" => $explanation_string["next"],
+								"construction_time" => $building_service->getConstructionTime($array_name, 0),
+								"resources_build" => $resources->getResourcesToBuild($array_name)
+							];
 						}
 					}
 				}
