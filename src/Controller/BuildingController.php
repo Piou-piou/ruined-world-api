@@ -104,6 +104,8 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"building" => $api->serializeObject($building),
 			"explanation" => $buildings_config[$infos->array_name]["explanation"],
+			"explanation_current_power" => $buildings_config[$infos->array_name]["explanation_current_power"],
+			"explanation_next_power" => $buildings_config[$infos->array_name]["explanation_next_power"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
 		]);
@@ -162,6 +164,8 @@ class BuildingController extends AbstractController
 							"name" => $building_config["name"],
 							"array_name" => $array_name,
 							"explanation" => $building_config["explanation"],
+							"explanation_current_power" => $building_config["explanation_current_power"],
+							"explanation_next_power" => $building_config["explanation_next_power"],
 							"construction_time" => $building_service->getConstructionTime($array_name, 0),
 							"resources_build" => $resources->getResourcesToBuild($array_name)
 						];
@@ -178,6 +182,8 @@ class BuildingController extends AbstractController
 								"name" => $building_config["name"],
 								"array_name" => $array_name,
 								"explanation" => $building_config["explanation"],
+								"explanation_current_power" => $building_config["explanation_current_power"],
+								"explanation_next_power" => $building_config["explanation_next_power"],
 								"construction_time" => $building_service->getConstructionTime($array_name, 0),
 								"resources_build" => $resources->getResourcesToBuild($array_name)
 							];
