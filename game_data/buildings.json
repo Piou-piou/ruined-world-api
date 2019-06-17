@@ -40,6 +40,23 @@
       "warehouse": 3
     }
   },
+  "command_center": {
+    "name": "Command center",
+    "array_name": "command_center",
+    "max_level": 1,
+    "construction_time": 0,
+    "default_power": 0,
+    "power_type": "reduction",
+    "explanation": "",
+    "explanation_current_power": "",
+    "explanation_next_power": "",
+    "resources_build": {
+      "electricity": 0,
+      "fuel": 0,
+      "iron": 0,
+      "water": 0
+    }
+  },
   "electricity_station": {
     "name": "electricity station",
     "array_name": "electricity_station",
