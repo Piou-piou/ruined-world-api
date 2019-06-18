@@ -38,4 +38,18 @@ class BaseRepository extends EntityRepository
 
 		return $query->getResult();
 	}
+	
+	/**
+	 * method that find bases to send to map with only necessary infos
+	 * @return mixed
+	 */
+	public function findByBasesForMap()
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT b.name, b.points, b.posx, b.posy, b.archived, u.pseudo, u.guid
+			FROM App:Base b
+			JOIN App:User u WITH b.user = u
+		");
+		
+		return $query->getResult();
+	}
 }
