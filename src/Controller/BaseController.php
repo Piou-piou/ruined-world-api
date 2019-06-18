@@ -92,4 +92,47 @@ class BaseController extends AbstractController
 			"water" => $base->getWater(),
 		]);
 	}
+
+	/**
+	 * method that change the current base name
+	 * @Route("/api/base/change-name/", name="change_base_name", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function changeName(Session $session, Globals $globals): JsonResponse
+	{
+		$base = $globals->getCurrentBase();
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+		$base_name = isset($infos->base_name) && $infos->base_name ? $infos->base_name : null;
+		$return_infos = [
+			"success" => false,
+			"error_message" => "Le nom de la base ne peut pas être vide"
+		];
+
+		if ($base_name) {
+			$base_exist = $em->getRepository(Base::class)->findOneBy([
+				"name" => $base_name,
+				"archived" => false
+			]);
+
+			if ($base_exist) {
+				$return_infos = [
+					"success" => false,
+					"error_message" => "Une base existe déjà avec ce nom, merci d'en choisir un autre"
+				];
+			} else {
+				$base->setName($base_name);
+				$em->persist($base);
+				$em->flush();
+				$return_infos = [
+					"success" => true,
+					"success_message" => "Le nom de la base a été changé"
+				];
+			}
+		}
+
+		return new JsonResponse($return_infos);
+	}
 }
