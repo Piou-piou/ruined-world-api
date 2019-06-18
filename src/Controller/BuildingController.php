@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Building;
 use App\Service\Api;
 use App\Service\Globals;
+use App\Service\Point;
 use App\Service\Resources;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,11 +21,11 @@ class BuildingController extends AbstractController
 	 * @param SessionInterface $session
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building_service
+	 * @param Point $point
 	 * @return JsonResponse
 	 * @throws NonUniqueResultException
-	 * @throws \Exception
 	 */
-	public function buildOrUpgrade(SessionInterface $session, Globals $globals, \App\Service\Building $building_service): JsonResponse
+	public function buildOrUpgrade(SessionInterface $session, Globals $globals, \App\Service\Building $building_service, Point $point): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
@@ -68,6 +69,7 @@ class BuildingController extends AbstractController
 		
 		$em->persist($building);
 		$em->flush();
+		$point->addPoints("building_construction");
 		
 		return new JsonResponse([
 			"success" => true,
