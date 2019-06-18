@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Base;
 use Doctrine\ORM\EntityRepository;
 
 class BaseRepository extends EntityRepository
@@ -18,6 +19,23 @@ class BaseRepository extends EntityRepository
 			WHERE u.holidays = false
 		");
 		
+		return $query->getResult();
+	}
+
+	/**
+	 * method that find base that have same name as base_name and different of base passed
+	 * @param Base $base
+	 * @param $base_name
+	 * @return int
+	 */
+	public function findByBaseNameExist(Base $base, string $base_name)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT b FROM App:Base b
+			WHERE b.archived = false AND b.name = :base_name AND b.id != :base_id
+		");
+		$query->setParameter("base_name", $base_name);
+		$query->setParameter("base_id", $base->getId());
+
 		return $query->getResult();
 	}
 }
