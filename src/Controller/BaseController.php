@@ -112,12 +112,9 @@ class BaseController extends AbstractController
 		];
 
 		if ($base_name) {
-			$base_exist = $em->getRepository(Base::class)->findOneBy([
-				"name" => $base_name,
-				"archived" => false
-			]);
+			$base_exist = $em->getRepository(Base::class)->findByBaseNameExist($base, $base_name);
 
-			if ($base_exist) {
+			if (count($base_exist) > 0) {
 				$return_infos = [
 					"success" => false,
 					"error_message" => "Une base existe déjà avec ce nom, merci d'en choisir un autre"
@@ -128,6 +125,7 @@ class BaseController extends AbstractController
 				$em->flush();
 				$return_infos = [
 					"success" => true,
+					"base_name" => $base_name,
 					"success_message" => "Le nom de la base a été changé"
 				];
 			}
