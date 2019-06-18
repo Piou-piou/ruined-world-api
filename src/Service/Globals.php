@@ -142,4 +142,15 @@ class Globals
 		
 		return $coef_storage;
 	}
+	
+	/**
+	 * method that return the array of the points to win/loose based on a given name
+	 * @return mixed
+	 */
+	public function getPointsConfig()
+	{
+		$points = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "points.json"), true);
+		
+		return $points;
+	}
 }
