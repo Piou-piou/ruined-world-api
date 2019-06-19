@@ -133,4 +133,26 @@ class BaseController extends AbstractController
 
 		return new JsonResponse($return_infos);
 	}
+	
+	/**
+	 * @Route("/api/bases-map/", name="bases_map", methods={"POST"})
+	 * @return JsonResponse
+	 */
+	public function sendBasesForMap(Session $session): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findByBasesForMap();
+		$player_bases = $em->getRepository(Base::class)->findBy(["user" => $session->get("user"), "archived" => false]);
+		$guids_player_bases = [];
+
+		foreach ($player_bases as $player_base) {
+			$guids_player_bases[] = $player_base->getGuid();
+		}
+		
+		return new JsonResponse([
+			"success" => true,
+			"guids_player_bases" => $guids_player_bases,
+			"bases" => $bases
+		]);
+	}
 }
