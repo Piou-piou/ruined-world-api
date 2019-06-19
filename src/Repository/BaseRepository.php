@@ -45,7 +45,7 @@ class BaseRepository extends EntityRepository
 	 */
 	public function findByBasesForMap()
 	{
-		$query = $this->getEntityManager()->createQuery("SELECT b.name, b.points, b.posx, b.posy, b.archived, u.pseudo, u.guid
+		$query = $this->getEntityManager()->createQuery("SELECT b.guid, b.name, b.points, b.posx, b.posy, b.archived, u.pseudo
 			FROM App:Base b
 			JOIN App:User u WITH b.user = u
 		");

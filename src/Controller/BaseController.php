@@ -142,11 +142,16 @@ class BaseController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$bases = $em->getRepository(Base::class)->findByBasesForMap();
-		//$player_bases = $em->getRepository(Base::class)->findBy
+		$player_bases = $em->getRepository(Base::class)->findBy(["user" => $session->get("user"), "archived" => false]);
+		$guids_player_bases = [];
+
+		foreach ($player_bases as $player_base) {
+			$guids_player_bases[] = $player_base->getGuid();
+		}
 		
 		return new JsonResponse([
 			"success" => true,
-			"guid_player" => $session->get("user")->getGuid(),
+			"guids_player_bases" => $guids_player_bases,
 			"bases" => $bases
 		]);
 	}
