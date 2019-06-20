@@ -105,15 +105,20 @@ class Globals
 	 * @param Base $second_base
 	 * @param int $speed
 	 * @param bool $to_hms
-	 * @return int
+	 * @return mixed
 	 */
-	public function getTimeToTravel(Base $first_base, Base $second_base, int $speed = 1, $to_hms = false): int
+	public function getTimeToTravel(Base $first_base, Base $second_base, int $speed = 1, $to_hms = false)
 	{
 		$multiplicator_time = $this->getGeneralConfig()["multiplicator_travel_time"];
 		$posx_calc = abs(($first_base->getPosx()-$second_base->getPosx())*$multiplicator_time);
 		$posy_calc = abs(($first_base->getPosy()-$second_base->getPosy())*$multiplicator_time);
+		$time = ($posx_calc+$posy_calc)/$speed;
 
-		return ($posx_calc+$posy_calc)/$speed;
+		if ($to_hms) {
+			return Utils::secondsToHms($time);
+		}
+
+		return $time;
 	}
 
 	/**

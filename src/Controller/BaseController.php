@@ -171,7 +171,7 @@ class BaseController extends AbstractController
 		$infos = $session->get("jwt_infos");
 
 		$other_base = $em->getRepository(Base::class)->findOneBy(["guid" => $infos->guid_other_base]);
-		$travel_time = $globals->getTimeToTravel($base, $other_base);
+		$travel_time = $globals->getTimeToTravel($base, $other_base, 1, true);
 
 		return new JsonResponse([
 			"success" => true,
