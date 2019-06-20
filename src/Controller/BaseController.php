@@ -133,9 +133,10 @@ class BaseController extends AbstractController
 
 		return new JsonResponse($return_infos);
 	}
-	
+
 	/**
 	 * @Route("/api/bases-map/", name="bases_map", methods={"POST"})
+	 * @param Session $session
 	 * @return JsonResponse
 	 */
 	public function sendBasesForMap(Session $session): JsonResponse
@@ -153,6 +154,28 @@ class BaseController extends AbstractController
 			"success" => true,
 			"guids_player_bases" => $guids_player_bases,
 			"bases" => $bases
+		]);
+	}
+
+	/**
+	 * method that send time to travel between current base of a player and an other base
+	 * @Route("/api/base/travel-time/", name="base_travel_time", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendTimeToTravelToBase(Session $session, Globals $globals): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$base = $globals->getCurrentBase();
+		$infos = $session->get("jwt_infos");
+
+		$other_base = $em->getRepository(Base::class)->findOneBy(["guid" => $infos->guid_other_base]);
+		$travel_time = $globals->getTimeToTravel($base, $other_base);
+
+		return new JsonResponse([
+			"success" => true,
+			"travel_time" => $travel_time
 		]);
 	}
 }
