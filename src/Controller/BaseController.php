@@ -72,6 +72,33 @@ class BaseController extends AbstractController
 			],
 		]);
 	}
+
+	/**
+	 * @Route("/api/base/player/", name="base_player", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param Api $api
+	 * @return JsonResponse
+	 */
+	public function sendInfosAboutABase(Session $session, Globals $globals, Api $api): JsonResponse
+	{
+		$infos = $session->get("jwt_infos");
+		$base = $this->getDoctrine()->getRepository(Base::class)->findOneBy(["guid" => $infos->guid_other_base]);
+
+		if ($base) {
+			return new JsonResponse([
+				"success" => true,
+				"token" => $session->get("user")->getToken(),
+				"base" => $api->serializeObject($base),
+				"travel_time" => $globals->getTimeToTravel($globals->getCurrentBase(), $base, 1, true)
+			]);
+		} else {
+			return new JsonResponse([
+				"success" => false,
+				"error_message" => "Aucune base n'existe à ces positions"
+			]);
+		}
+	}
 	
 	/**
 	 * method that send actual resources of the base
