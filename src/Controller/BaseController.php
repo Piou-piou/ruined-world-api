@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BaseController extends AbstractController
 {
 	/**
-	 * method that send the main base of a user if nop toekn of guid_base set in front
+	 * method that send the main base of a user if no token of guid_base set in front
 	 * @Route("/api/main-base/", name="main_base", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
@@ -49,7 +49,7 @@ class BaseController extends AbstractController
 	 * @param Resources $resources
 	 * @return JsonResponse
 	 */
-	public function sendInfos(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
+	public function sendInfosCurrentBase(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
 		
