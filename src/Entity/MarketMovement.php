@@ -35,6 +35,11 @@ class MarketMovement
     protected $type;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    protected $resources;
+
+    /**
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $base_id_dest;
@@ -135,6 +140,25 @@ class MarketMovement
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResources()
+    {
+        return $this->resources;
+    }
+
+    /**
+     * @param mixed $resources
+     * @return MarketMovement
+     */
+    public function setResources($resources)
+    {
+        $this->resources = $resources;
+
+        return $this;
     }
 
     /**
