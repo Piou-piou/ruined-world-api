@@ -74,8 +74,35 @@ class Market
         return $trader_max - $trader_inmove;
     }
 
-    public function testIfEnoughTrader()
+    /**
+     * get trader number for resources in parameter
+     * @param array $resources
+     * @return float
+     */
+    public function getTraderToTransport(array $resources): float
     {
+        $resources_per_trader = $this->globals->getBuildingsConfig()["market"]["resources_per_trader"];
+        $resources_to_move = 0;
 
+        foreach ($resources as $resource) {
+            $resources_to_move += $resource;
+        }
+
+        return ceil($resources_to_move / $resources_per_trader);
+    }
+
+    /**
+     * method to test if base has enough trader to transport resources
+     * @param array $resources
+     * @return bool
+     */
+    public function testIfEnoughTrader(array $resources): bool
+    {
+        $trader_to_transport = $this->getTraderToTransport($resources);
+        if ($trader_to_transport > $this->getTraderNumberInBase()) {
+            return false;
+        }
+
+        return true;
     }
 }
