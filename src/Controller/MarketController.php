@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Base;
 use App\Entity\MarketMovement;
 use App\Service\Globals;
+use App\Service\Market;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -12,21 +13,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MarketController extends AbstractController
 {
-    /**
-     * method to send some resources to an other base
-     * @Route("/api/market/send-resources/", name="merket_send_resource", methods={"POST"})
-     * @param Session $session
-     * @param Globals $globals
-     * @return JsonResponse
-     * @throws \Exception
-     */
-    public function sendResources(Session $session, Globals $globals): JsonResponse
+	/**
+	 * method to send some resources to an other base
+	 * @Route("/api/market/send-resources/", name="merket_send_resource", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param Market $market
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+    public function sendResources(Session $session, Globals $globals, Market $market): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
         $today = new \DateTime();
         $base = $globals->getCurrentBase();
         $infos = $session->get("jwt_infos");
-
         $other_base = $em->getRepository(Base::class)->findOneBy(["posx" => $infos->posx, "posy" => $infos->posy, "archived" => false]);
 
         if (!$other_base) {
@@ -35,6 +36,14 @@ class MarketController extends AbstractController
                 "error_message" => "Aucune base trouvée aux positions " . $infos->posx . ", " . $infos->posy
             ]);
         }
+        
+        $enough_traders = $market->testIfEnoughTrader($infos->resources);
+        if (!$enough_traders) {
+			return new JsonResponse([
+				"success" => false,
+				"error_message" => "VOus n'avez pas assez de marchand disponible dans votre base pour ce transport"
+			]);
+		}
 
         $travel_time = $globals->getTimeToTravel($base, $other_base, 1);
         $end_date = $today->add(new \DateInterval("PT".$travel_time."S"));
@@ -45,6 +54,7 @@ class MarketController extends AbstractController
         $market_movement->setDuration($travel_time);
         $market_movement->setEndDate($end_date);
         $market_movement->setResources($infos->resources);
+        $market_movement->setTraderNumber($market->getTraderToTransport($infos->resources));
         $em->persist($market_movement);
         $em->flush();
 
