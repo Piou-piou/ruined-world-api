@@ -29,6 +29,7 @@ class MarketController extends AbstractController
         $base = $globals->getCurrentBase();
         $infos = $session->get("jwt_infos");
         $other_base = $em->getRepository(Base::class)->findOneBy(["posx" => $infos->posx, "posy" => $infos->posy, "archived" => false]);
+		$resources_to_send = (array)$infos->resources;
 
         if (!$other_base) {
             return new JsonResponse([
@@ -37,11 +38,11 @@ class MarketController extends AbstractController
             ]);
         }
         
-        $enough_traders = $market->testIfEnoughTrader($infos->resources);
+        $enough_traders = $market->testIfEnoughTrader($resources_to_send);
         if (!$enough_traders) {
 			return new JsonResponse([
 				"success" => false,
-				"error_message" => "VOus n'avez pas assez de marchand disponible dans votre base pour ce transport"
+				"error_message" => "Vous n'avez pas assez de marchand disponible dans votre base pour ce transport"
 			]);
 		}
 
@@ -53,8 +54,8 @@ class MarketController extends AbstractController
         $market_movement->setBaseIdDest($other_base->getId());
         $market_movement->setDuration($travel_time);
         $market_movement->setEndDate($end_date);
-        $market_movement->setResources($infos->resources);
-        $market_movement->setTraderNumber($market->getTraderToTransport($infos->resources));
+        $market_movement->setResources($resources_to_send);
+        $market_movement->setTraderNumber($market->getTraderToTransport($resources_to_send));
         $em->persist($market_movement);
         $em->flush();
 
