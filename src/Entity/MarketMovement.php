@@ -40,6 +40,11 @@ class MarketMovement
     protected $resources;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $trader_number;
+
+    /**
      * @ORM\Column(type="integer", nullable=false)
      */
     protected $base_id_dest;
@@ -157,6 +162,25 @@ class MarketMovement
     public function setResources($resources)
     {
         $this->resources = $resources;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTraderNumber()
+    {
+        return $this->trader_number;
+    }
+
+    /**
+     * @param mixed $trader_number
+     * @return MarketMovement
+     */
+    public function setTraderNumber($trader_number)
+    {
+        $this->trader_number = $trader_number;
 
         return $this;
     }
