@@ -56,6 +56,7 @@ class MarketController extends AbstractController
         $market_movement->setEndDate($end_date);
         $market_movement->setResources($resources_to_send);
         $market_movement->setTraderNumber($market->getTraderToTransport($resources_to_send));
+        $market_movement->setType(Market::TYPE_GO);
         $em->persist($market_movement);
         $em->flush();
 
