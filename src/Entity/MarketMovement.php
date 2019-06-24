@@ -50,7 +50,7 @@ class MarketMovement
     protected $base_id_dest;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Base", inversedBy="buildings")
+     * @ORM\ManyToOne(targetEntity="Base", inversedBy="marketMovements")
      * @ORM\JoinColumn(name="base_id", referencedColumnName="id", nullable=false)
      */
     protected $base;
