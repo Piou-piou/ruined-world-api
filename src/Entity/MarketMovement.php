@@ -45,15 +45,16 @@ class MarketMovement
     protected $trader_number;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    protected $base_id_dest;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="marketMovements")
      * @ORM\JoinColumn(name="base_id", referencedColumnName="id", nullable=false)
      */
     protected $base;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Base", inversedBy="marketMovementsDest")
+	 * @ORM\JoinColumn(name="base_id_dest", referencedColumnName="id", nullable=false)
+	 */
+	protected $baseDest;
 
     /**
      * Set the value of id.
@@ -186,29 +187,6 @@ class MarketMovement
     }
 
     /**
-     * Set the value of base_id_dest.
-     *
-     * @param integer $base_id_dest
-     * @return MarketMovement
-     */
-    public function setBaseIdDest($base_id_dest)
-    {
-        $this->base_id_dest = $base_id_dest;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of base_id_dest.
-     *
-     * @return integer
-     */
-    public function getBaseIdDest()
-    {
-        return $this->base_id_dest;
-    }
-
-    /**
      * Set Base entity (many to one).
      *
      * @param Base $base
@@ -230,6 +208,25 @@ class MarketMovement
     {
         return $this->base;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getBaseDest()
+	{
+		return $this->baseDest;
+	}
+
+	/**
+	 * @param mixed $baseDest
+	 * @return MarketMovement
+	 */
+	public function setBaseDest($baseDest)
+	{
+		$this->baseDest = $baseDest;
+
+		return $this;
+	}
 
     public function __sleep()
     {
