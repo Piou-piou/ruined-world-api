@@ -101,6 +101,12 @@ class Base
 	 * @ORM\JoinColumn(name="id", referencedColumnName="base_id", nullable=false)
 	 */
 	protected $unitMovements;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="MarketMovement", mappedBy="base")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="base_id", nullable=false)
+	 */
+	protected $marketMovements;
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="bases")
@@ -114,6 +120,7 @@ class Base
 		$this->missions = new ArrayCollection();
 		$this->units = new ArrayCollection();
 		$this->unitMovements = new ArrayCollection();
+		$this->marketMovements = new ArrayCollection();
 	}
 	
 	/**
@@ -491,7 +498,7 @@ class Base
 		
 		return $this;
 	}
-	
+
 	/**
 	 * Get UnitMovement entity collection (one to many).
 	 *
@@ -500,6 +507,42 @@ class Base
 	public function getUnitMovements()
 	{
 		return $this->unitMovements;
+	}
+
+	/**
+	 * Add MarketMovement entity to collection (one to many).
+	 *
+	 * @param MarketMovement $marketMovement
+	 * @return Base
+	 */
+	public function addMarketMovement(MarketMovement $marketMovement)
+	{
+		$this->marketMovements[] = $marketMovement;
+
+		return $this;
+	}
+
+	/**
+	 * Remove MarketMovement entity from collection (one to many).
+	 *
+	 * @param MarketMovement $marketMovement
+	 * @return Base
+	 */
+	public function removeMarketMovement(MarketMovement $marketMovement)
+	{
+		$this->marketMovements->removeElement($marketMovement);
+
+		return $this;
+	}
+
+	/**
+	 * Get MarketMovement entity collection (one to many).
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getMarketMovements()
+	{
+		return $this->marketMovements;
 	}
 	
 	/**
