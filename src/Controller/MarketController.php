@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Base;
+use App\Entity\Building;
 use App\Entity\MarketMovement;
 use App\Service\Globals;
 use App\Service\Market;
@@ -64,4 +65,32 @@ class MarketController extends AbstractController
             "success" => true,
         ]);
     }
+
+	/**
+	 * method that send current market movement of current base
+	 * @Route("/api/market/send-current-movements/", name="merket_send_movements", methods={"POST"})
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+    public function sendMarketMovements(Globals $globals): JsonResponse
+	{
+		$movements = [];
+		$market_movements = $this->getDoctrine()->getRepository(MarketMovement::class)->findBy([
+			"base" => $globals->getCurrentBase()
+		]);
+
+		/** @var MarketMovement $market_movement */
+		foreach ($market_movements as $market_movement) {
+			$movements[] = [
+				"type" => $market_movement->getType(),
+				"endTransport" => $market_movement->getEndDate()->getTimestamp(),
+				"base_dest_name" => $market_movement->getBaseDest()->getName()
+			];
+		}
+
+		return new JsonResponse([
+			"success" => true,
+			"market_movements" => $movements
+		]);
+	}
 }
