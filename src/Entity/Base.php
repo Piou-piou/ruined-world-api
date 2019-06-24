@@ -107,6 +107,12 @@ class Base
 	 * @ORM\JoinColumn(name="id", referencedColumnName="base_id", nullable=false)
 	 */
 	protected $marketMovements;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="MarketMovement", mappedBy="baseDest")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="base_id_dest", nullable=false)
+	 */
+	protected $marketMovementsDest;
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="bases")
@@ -543,6 +549,42 @@ class Base
 	public function getMarketMovements()
 	{
 		return $this->marketMovements;
+	}
+
+	/**
+	 * Add MarketMovement entity to collection (one to many).
+	 *
+	 * @param MarketMovement $marketMovementDest
+	 * @return Base
+	 */
+	public function addMarketMovementDest(MarketMovement $marketMovementDest)
+	{
+		$this->marketMovementsDest[] = $marketMovementDest;
+
+		return $this;
+	}
+
+	/**
+	 * Remove MarketMovement entity from collection (one to many).
+	 *
+	 * @param MarketMovement $marketMovementDest
+	 * @return Base
+	 */
+	public function removeMarketMovementDest(MarketMovement $marketMovementDest)
+	{
+		$this->marketMovementsDest->removeElement($marketMovementDest);
+
+		return $this;
+	}
+
+	/**
+	 * Get MarketMovement entity collection (one to many).
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getMarketMovementsDest()
+	{
+		return $this->marketMovementsDest;
 	}
 	
 	/**
