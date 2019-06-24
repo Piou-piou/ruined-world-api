@@ -227,9 +227,4 @@ class MarketMovement
 
 		return $this;
 	}
-
-    public function __sleep()
-    {
-        return array('id', 'end_date', 'duration', 'type', 'base_id_dest', 'base_id');
-    }
 }
