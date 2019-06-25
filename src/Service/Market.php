@@ -129,6 +129,8 @@ class Market
     	foreach ($market_movements_ended as $market_movement) {
     		if ($market_movement->getType() === MarketMovement::TYPE_GO) {
     			$this->updateMarketMovementOnGo($market_movement);
+			} else {
+				$this->updateMarketMovementOnReturn($market_movement);
 			}
 		}
 	}
@@ -153,6 +155,16 @@ class Market
 		$market_movement->setType(MarketMovement::TYPE_RETURN);
 		$market_movement->setEndDate($end_date);
 		$this->em->persist($market_movement);
+		$this->em->flush();
+	}
+
+	/**
+	 * method to delete market movement that are finished
+	 * @param MarketMovement $market_movement
+	 */
+	private function updateMarketMovementOnReturn(MarketMovement $market_movement)
+	{
+		$this->em->remove($market_movement);
 		$this->em->flush();
 	}
 }
