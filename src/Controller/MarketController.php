@@ -51,7 +51,7 @@ class MarketController extends AbstractController
 
         $market_movement = new MarketMovement();
         $market_movement->setBase($base);
-        $market_movement->setBaseIdDest($other_base->getId());
+        $market_movement->setBaseDest($other_base);
         $market_movement->setDuration($travel_time);
         $market_movement->setEndDate($end_date);
         $market_movement->setResources($resources_to_send);
