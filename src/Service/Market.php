@@ -28,23 +28,30 @@ class Market
      */
     private $building;
 
+	/**
+	 * @var Resources
+	 */
+    private $resources;
+
     /**
      * @var \App\Entity\Building
      */
     private $market;
 
-    /**
-     * Market constructor.
-     * @param EntityManagerInterface $em
-     * @param Globals $globals
-     * @param Building $building
-     */
-    public function __construct(EntityManagerInterface $em, Globals $globals, Building $building)
+	/**
+	 * Market constructor.
+	 * @param EntityManagerInterface $em
+	 * @param Globals $globals
+	 * @param Building $building
+	 * @param Resources $resources
+	 */
+    public function __construct(EntityManagerInterface $em, Globals $globals, Building $building, Resources $resources)
     {
         $this->em = $em;
         $this->globals = $globals;
         $this->base = $globals->getCurrentBase();
         $this->building = $building;
+        $this->resources = $resources;
         $this->market = $this->getMarket();
     }
 
@@ -105,4 +112,44 @@ class Market
 
         return true;
     }
+
+	/**
+	 * method to updateMarketMovement of the base
+	 * @param Base $base
+	 * @throws \Exception
+	 */
+    public function updateMarketMovement(Base $base)
+	{
+    	$em = $this->em;
+    	$market_movements_ended = $em->getRepository(MarketMovement::class)->findByMovementEnded($base);
+
+    	foreach ($market_movements_ended as $market_movement) {
+    		if ($market_movement->getType() === MarketMovement::TYPE_GO) {
+    			$this->updateMarketMovementOnGo($market_movement);
+			}
+		}
+	}
+
+	/**
+	 * method to update ended market that are on the go
+	 * @param MarketMovement $market_movement
+	 * @throws \Exception
+	 */
+	private function updateMarketMovementOnGo(MarketMovement $market_movement)
+	{
+		$end_date = new \DateTime();
+		$end_date->add(new \DateInterval("PT".$market_movement->getDuration()."S"));
+		$base_dest = $market_movement->getBaseDest();
+		$this->resources->setBase($base_dest);
+
+		foreach ($market_movement->getResources() as $resource_name => $resource_value) {
+			$this->resources->addResource($resource_name, $resource_value);
+		}
+		$this->resources->setBase(null);
+
+		$market_movement->setType(MarketMovement::TYPE_RETURN);
+		$market_movement->setEndDate($end_date);
+		$this->em->persist($market_movement);
+		$this->em->flush();
+	}
 }
