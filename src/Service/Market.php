@@ -52,7 +52,6 @@ class Market
         $this->base = $globals->getCurrentBase();
         $this->building = $building;
         $this->resources = $resources;
-        $this->market = $this->getMarket();
     }
 
     /**
@@ -61,12 +60,16 @@ class Market
      */
     private function getMarket(): \App\Entity\Building
     {
-        $market = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
-            "base" => $this->base,
-            "array_name" => "market"
-        ]);
+    	if (!$this->market) {
+			$market = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
+				"base" => $this->base,
+				"array_name" => "market"
+			]);
 
-        return $market;
+			$this->market = $market;
+		}
+
+        return $this->market;
     }
 
     /**
@@ -75,7 +78,7 @@ class Market
      */
     public function getTraderNumberInBase(): int
     {
-        $trader_max = $this->building->getCurrentPower($this->market->getArrayName(), $this->market->getLevel());
+        $trader_max = $this->building->getCurrentPower($this->getMarket()->getArrayName(), $this->getMarket()->getLevel());
         $trader_inmove = $this->em->getRepository(MarketMovement::class)->findByTraderInMove($this->base);
 
         return $trader_max - $trader_inmove;
