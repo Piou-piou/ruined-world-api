@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\MarketMovement
  *
- * @ORM\Entity(repositoryClass="App\Repository\MarketMovement")
+ * @ORM\Entity(repositoryClass="App\Repository\MarketMovementRepository")
  * @ORM\Table(name="market_movement", indexes={@ORM\Index(name="fk_market_movement_base1_idx", columns={"base_id"})})
  */
 class MarketMovement
@@ -227,6 +227,121 @@ class MarketMovement
 	public function setBaseDest($baseDest)
 	{
 		$this->baseDest = $baseDest;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getElectricity(): int
+	{
+		if (is_array($this->resources) && array_key_exists("electricity", $this->resources)) {
+			return $this->resources["electricity"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $electricity
+	 * @return MarketMovement
+	 */
+	public function setElectricity(int $electricity): MarketMovement
+	{
+		$this->resources["electricity"] = $electricity;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFuel(): int
+	{
+		if (is_array($this->resources) && array_key_exists("fuel", $this->resources)) {
+			return $this->resources["fuel"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $fuel
+	 * @return MarketMovement
+	 */
+	public function setFuel(int $fuel): MarketMovement
+	{
+		$this->resources["fuel"] = $fuel;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIron(): int
+	{
+		if (is_array($this->resources) && array_key_exists("iron", $this->resources)) {
+			return $this->resources["iron"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $iron
+	 * @return MarketMovement
+	 */
+	public function setIron(int $iron): MarketMovement
+	{
+		$this->resources["iron"] = $iron;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getWater(): int
+	{
+		if (is_array($this->resources) && array_key_exists("water", $this->resources)) {
+			return $this->resources["water"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $water
+	 * @return MarketMovement
+	 */
+	public function setWater(int $water): MarketMovement
+	{
+		$this->resources["water"] = $water;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFood(): int
+	{
+		if (is_array($this->resources) && array_key_exists("food", $this->resources)) {
+			return $this->resources["food"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $food
+	 * @return MarketMovement
+	 */
+	public function setFood(int $food): MarketMovement
+	{
+		$this->resources["food"] = $food;
 
 		return $this;
 	}
