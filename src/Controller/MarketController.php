@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Base;
-use App\Entity\Building;
 use App\Entity\MarketMovement;
 use App\Service\Globals;
 use App\Service\Market;
@@ -57,7 +56,7 @@ class MarketController extends AbstractController
         $market_movement->setEndDate($end_date);
         $market_movement->setResources($resources_to_send);
         $market_movement->setTraderNumber($market->getTraderToTransport($resources_to_send));
-        $market_movement->setType(Market::TYPE_GO);
+        $market_movement->setType(MarketMovement::TYPE_GO);
         $em->persist($market_movement);
         $em->flush();
 

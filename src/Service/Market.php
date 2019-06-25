@@ -8,9 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class Market
 {
-	const TYPE_GO = 0,
-		TYPE_RETURN = 1;
-	
     /**
      * @var EntityManagerInterface
      */

@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class MarketMovement
 {
+	const TYPE_GO = 0,
+		TYPE_RETURN = 1;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
