@@ -91,9 +91,9 @@ class Resources
 
 	/**
 	 * method to use toher base in this service
-	 * @param Base $other_base
+	 * @param Base|null $other_base
 	 */
-	public function setBase(Base $other_base)
+	public function setBase($other_base)
 	{
 		$this->other_base = $other_base;
 	}
