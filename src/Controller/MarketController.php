@@ -67,7 +67,7 @@ class MarketController extends AbstractController
 
 	/**
 	 * method that send current market movement of current base
-	 * @Route("/api/market/send-current-movements/", name="merket_send_movements", methods={"POST"})
+	 * @Route("/api/market/send-current-movements/", name="market_send_movements", methods={"POST"})
 	 * @param Globals $globals
 	 * @return JsonResponse
 	 */
@@ -91,5 +91,20 @@ class MarketController extends AbstractController
 			"success" => true,
 			"market_movements" => $movements
 		]);
+	}
+
+	/**
+	 * method that update current movements of trader in base
+	 * @Route("/api/market/update-current-movements/", name="market_update_movements", methods={"POST"})
+	 * @param Globals $globals
+	 * @param Market $market
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+	public function updateMarketMovements(Globals $globals, Market $market): JsonResponse
+	{
+		$market->updateMarketMovement($globals->getCurrentBase(true));
+
+		return $this->sendMarketMovements($globals);
 	}
 }
