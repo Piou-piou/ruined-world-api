@@ -64,6 +64,7 @@ class MarketController extends AbstractController
 
         return new JsonResponse([
             "success" => true,
+			"success_message" => "Vos marchands, se mettent en route immédiatement !"
         ]);
     }
 
