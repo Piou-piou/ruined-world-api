@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Base;
+use App\Entity\MarketMovement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 
@@ -38,10 +39,11 @@ class MarketMovementRepository extends EntityRepository
 	public function findByCurrentMovements(Base $base)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT mm FROM App:MarketMovement mm
-			WHERE (mm.base = :base OR mm.baseDest = :base) AND mm.end_date >= :now
+			WHERE (mm.base = :base OR (mm.baseDest = :base AND mm.type = :go_movement)) AND mm.end_date >= :now
 		");
 
 		$query->setParameter("base", $base, Type::OBJECT);
+		$query->setParameter("go_movement", MarketMovement::TYPE_GO, Type::INTEGER);
 		$query->setParameter("now", new \DateTime(), Type::DATETIME);
 
 		return $query->getResult();
