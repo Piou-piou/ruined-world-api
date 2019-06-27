@@ -6,7 +6,7 @@ use App\Entity\Base;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 
-class MarketMDemandRepository extends EntityRepository
+class MarketDemandRepository extends EntityRepository
 {
 	/**
 	 * @param Base $base

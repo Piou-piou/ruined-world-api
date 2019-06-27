@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\MarketDemand
  *
- * @ORM\Entity(repositoryClass="App\Repository\MarketMDemandRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MarketDemandRepository")
  * @ORM\Table(name="market_demand", indexes={@ORM\Index(name="fk_market_demand_base1_idx", columns={"base_id"})})
  */
 class MarketDemand
