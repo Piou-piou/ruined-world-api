@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * App\Entity\MarketDemand
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\MarketMDemandRepository")
  * @ORM\Table(name="market_demand", indexes={@ORM\Index(name="fk_market_demand_base1_idx", columns={"base_id"})})
  */
 class MarketDemand
@@ -29,6 +29,11 @@ class MarketDemand
      */
     protected $asked_resource;
 
+	/**
+	 * @ORM\Column(type="integer", nullable=false)
+	 */
+	protected $trader_number_asked;
+
     /**
      * @ORM\Column(type="integer", nullable=false)
      */
@@ -38,6 +43,11 @@ class MarketDemand
      * @ORM\Column(type="string", length=100, nullable=false)
      */
     protected $offer_resource;
+
+	/**
+	 * @ORM\Column(type="integer", nullable=false)
+	 */
+    protected $trader_number_offer;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -119,6 +129,25 @@ class MarketDemand
         return $this->asked_resource;
     }
 
+	/**
+	 * @return mixed
+	 */
+	public function getTraderNumberAsked()
+	{
+		return $this->trader_number_asked;
+	}
+
+	/**
+	 * @param mixed $trader_number_asked
+	 * @return MarketDemand
+	 */
+	public function setTraderNumberAsked($trader_number_asked)
+	{
+		$this->trader_number_asked = $trader_number_asked;
+
+		return $this;
+	}
+
     /**
      * Set the value of offer.
      *
@@ -164,6 +193,25 @@ class MarketDemand
     {
         return $this->offer_resource;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getTraderNumberOffer()
+	{
+		return $this->trader_number_offer;
+	}
+
+	/**
+	 * @param mixed $trader_number_offer
+	 * @return MarketDemand
+	 */
+	public function setTraderNumberOffer($trader_number_offer)
+	{
+		$this->trader_number_offer = $trader_number_offer;
+
+		return $this;
+	}
 
     /**
      * Set the value of expiration_date.

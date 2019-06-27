@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Base;
+use App\Entity\MarketDemand;
 use App\Entity\MarketMovement;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -80,8 +81,9 @@ class Market
     {
         $trader_max = $this->building->getCurrentPower($this->getMarket()->getArrayName(), $this->getMarket()->getLevel());
         $trader_inmove = $this->em->getRepository(MarketMovement::class)->findByTraderInMove($this->base);
+        $trader_indemand = $this->em->getRepository(MarketDemand::class)->findByTraderReservedOnDemands($this->base);
 
-        return $trader_max - $trader_inmove;
+        return $trader_max - $trader_inmove - $trader_indemand;
     }
 
     /**
