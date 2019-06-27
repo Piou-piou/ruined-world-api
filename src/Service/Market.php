@@ -73,13 +73,22 @@ class Market
         return $this->market;
     }
 
+	/**
+	 * send max trader available in current base
+	 * @return int
+	 */
+    public function getMaxtraderInBase(): int
+	{
+		return $this->building->getCurrentPower($this->getMarket()->getArrayName(), $this->getMarket()->getLevel());
+	}
+
     /**
      * method that return number of traders in base
      * @return int
      */
     public function getTraderNumberInBase(): int
     {
-        $trader_max = $this->building->getCurrentPower($this->getMarket()->getArrayName(), $this->getMarket()->getLevel());
+        $trader_max = $this->getMaxtraderInBase();
         $trader_inmove = $this->em->getRepository(MarketMovement::class)->findByTraderInMove($this->base);
         $trader_indemand = $this->em->getRepository(MarketDemand::class)->findByTraderReservedOnDemands($this->base);
 

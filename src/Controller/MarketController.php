@@ -109,4 +109,19 @@ class MarketController extends AbstractController
 
 		return $this->sendMarketMovements($globals);
 	}
+
+	/**
+	 * method to send current market number in base
+	 * @Route("/api/market/send-current-market-number/", name="market_send_trader_number", methods={"POST"})
+	 * @param Market $market
+	 * @return JsonResponse
+	 */
+	public function sendCurrentTradersInBase(Market $market): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"trader_number" => $market->getTraderNumberInBase(),
+			"max_trader_number" => $market->getMaxtraderInBase()
+		]);
+	}
 }
