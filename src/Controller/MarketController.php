@@ -28,13 +28,15 @@ class MarketController extends AbstractController
         $today = new \DateTime();
         $base = $globals->getCurrentBase();
         $infos = $session->get("jwt_infos");
-        $other_base = $em->getRepository(Base::class)->findOneBy(["posx" => $infos->posx, "posy" => $infos->posy, "archived" => false]);
+        $posx = $infos->posx ? $infos->posx : 0;
+        $posy = $infos->posy ? $infos->posy : 0;
+        $other_base = $em->getRepository(Base::class)->findOneBy(["posx" => $posx, "posy" => $posy, "archived" => false]);
 		$resources_to_send = (array)$infos->resources;
 
         if (!$other_base) {
             return new JsonResponse([
                 "success" => false,
-                "error_message" => "Aucune base trouvée aux positions " . $infos->posx . ", " . $infos->posy
+                "error_message" => "Aucune base trouvée aux positions " . $posx . ", " . $posy
             ]);
         }
         
