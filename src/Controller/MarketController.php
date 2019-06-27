@@ -72,20 +72,20 @@ class MarketController extends AbstractController
 	 * @Route("/api/market/send-current-movements/", name="market_send_movements", methods={"POST"})
 	 * @param Globals $globals
 	 * @return JsonResponse
+	 * @throws \Exception
 	 */
     public function sendMarketMovements(Globals $globals): JsonResponse
 	{
 		$movements = [];
-		$market_movements = $this->getDoctrine()->getRepository(MarketMovement::class)->findBy([
-			"base" => $globals->getCurrentBase()
-		]);
+		$market_movements = $this->getDoctrine()->getRepository(MarketMovement::class)->findByCurrentMovements($globals->getCurrentBase());
 
 		/** @var MarketMovement $market_movement */
 		foreach ($market_movements as $market_movement) {
 			$movements[] = [
 				"type" => $market_movement->getType(),
 				"endTransport" => $market_movement->getEndDate()->getTimestamp(),
-				"base_dest_name" => $market_movement->getBaseDest()->getName()
+				"base_dest_name" => $market_movement->getBaseDest()->getName(),
+				"base_dest_guid" => $market_movement->getBaseDest()->getGuid()
 			];
 		}
 

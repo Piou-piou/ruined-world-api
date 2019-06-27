@@ -30,6 +30,24 @@ class MarketMovementRepository extends EntityRepository
 	}
 
 	/**
+	 * get current market movements (that depart or arrive to base in parameter)
+	 * @param Base $base
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function findByCurrentMovements(Base $base)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT mm FROM App:MarketMovement mm
+			WHERE (mm.base = :base OR mm.baseDest = :base) AND mm.end_date >= :now
+		");
+
+		$query->setParameter("base", $base, Type::OBJECT);
+		$query->setParameter("now", new \DateTime(), Type::DATETIME);
+
+		return $query->getResult();
+	}
+
+	/**
 	 * method that return all ended movements
 	 * @param Base $base
 	 * @return mixed
