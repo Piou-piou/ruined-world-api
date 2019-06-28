@@ -184,10 +184,10 @@
     "explanation_current_power": "La capacité de stockage est actuellement de [[to_replace]] unités.",
     "explanation_next_power": "Le capacité de stockage sera de [[to_replace]] unités au prochain niveau.",
     "resources_build": {
-      "electricity": 705,
-      "fuel": 740,
-      "iron": 695,
-      "water": 635
+      "electricity": 605,
+      "fuel": 640,
+      "iron": 595,
+      "water": 535
     },
     "to_build": {}
   }
