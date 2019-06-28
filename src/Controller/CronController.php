@@ -6,6 +6,7 @@ use App\Entity\Base;
 use App\Entity\Building;
 use App\Entity\User;
 use App\Service\Globals;
+use App\Service\Market;
 use App\Service\Resources;
 use App\Service\Utils;
 use Cron\CronExpression;
@@ -38,22 +39,29 @@ class CronController extends AbstractController
 	 * @var \App\Service\Building
 	 */
 	private $building;
+
+	/**
+	 * @var Market
+	 */
+	private $market;
 	
 	private $crons;
-	
+
 	/**
 	 * CronController constructor.
 	 * @param Utils $utils
 	 * @param SessionInterface $session
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building
+	 * @param Market $market
 	 */
-	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building)
+	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market)
 	{
 		$this->utils = $utils;
 		$this->session = $session;
 		$this->globals = $globals;
 		$this->building = $building;
+		$this->market = $market;
 	}
 	
 	/**
@@ -282,6 +290,24 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 			
 			$this->building->endConstructionBuildingsInBase();
+		}
+	}
+
+	/**
+	 * method that update market movements of each base
+	 * @throws \Exception
+	 */
+	private function updateMarketMovement()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->market->updateMarketMovement($base);
 		}
 	}
 }

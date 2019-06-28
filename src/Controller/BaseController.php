@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BaseController extends AbstractController
 {
 	/**
-	 * method that send the main base of a user if nop toekn of guid_base set in front
+	 * method that send the main base of a user if no token of guid_base set in front
 	 * @Route("/api/main-base/", name="main_base", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
@@ -49,7 +49,7 @@ class BaseController extends AbstractController
 	 * @param Resources $resources
 	 * @return JsonResponse
 	 */
-	public function sendInfos(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
+	public function sendInfosCurrentBase(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
 		
@@ -71,6 +71,33 @@ class BaseController extends AbstractController
 				"water_production" => $resources->getWaterProduction(),
 			],
 		]);
+	}
+
+	/**
+	 * @Route("/api/base/player/", name="base_player", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param Api $api
+	 * @return JsonResponse
+	 */
+	public function sendInfosAboutABase(Session $session, Globals $globals, Api $api): JsonResponse
+	{
+		$infos = $session->get("jwt_infos");
+		$base = $this->getDoctrine()->getRepository(Base::class)->findOneBy(["guid" => $infos->guid_other_base]);
+
+		if ($base) {
+			return new JsonResponse([
+				"success" => true,
+				"token" => $session->get("user")->getToken(),
+				"base" => $api->serializeObject($base),
+				"travel_time" => $globals->getTimeToTravel($globals->getCurrentBase(), $base, 1, true)
+			]);
+		} else {
+			return new JsonResponse([
+				"success" => false,
+				"error_message" => "Aucune base n'existe à ces positions"
+			]);
+		}
 	}
 	
 	/**
@@ -133,9 +160,10 @@ class BaseController extends AbstractController
 
 		return new JsonResponse($return_infos);
 	}
-	
+
 	/**
 	 * @Route("/api/bases-map/", name="bases_map", methods={"POST"})
+	 * @param Session $session
 	 * @return JsonResponse
 	 */
 	public function sendBasesForMap(Session $session): JsonResponse
@@ -153,6 +181,28 @@ class BaseController extends AbstractController
 			"success" => true,
 			"guids_player_bases" => $guids_player_bases,
 			"bases" => $bases
+		]);
+	}
+
+	/**
+	 * method that send time to travel between current base of a player and an other base
+	 * @Route("/api/base/travel-time/", name="base_travel_time", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendTimeToTravelToBase(Session $session, Globals $globals): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$base = $globals->getCurrentBase();
+		$infos = $session->get("jwt_infos");
+
+		$other_base = $em->getRepository(Base::class)->findOneBy(["guid" => $infos->guid_other_base]);
+		$travel_time = $globals->getTimeToTravel($base, $other_base, 1, true);
+
+		return new JsonResponse([
+			"success" => true,
+			"travel_time" => $travel_time
 		]);
 	}
 }

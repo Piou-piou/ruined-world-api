@@ -140,6 +140,7 @@
     "max_level": 50,
     "construction_time": 2000,
     "default_power": 1,
+    "resources_per_trader": 1000,
     "power_type": "reduction",
     "explanation": "Le marché te permets d'échanger des ressources avec les autres bases. Chaque amélioration augmente le nombre de marchans disponibles.",
     "explanation_current_power": "Le marché dispose de [[to_replace]] marchands actuellement.",
@@ -183,10 +184,10 @@
     "explanation_current_power": "La capacité de stockage est actuellement de [[to_replace]] unités.",
     "explanation_next_power": "Le capacité de stockage sera de [[to_replace]] unités au prochain niveau.",
     "resources_build": {
-      "electricity": 705,
-      "fuel": 740,
-      "iron": 695,
-      "water": 635
+      "electricity": 605,
+      "fuel": 640,
+      "iron": 595,
+      "water": 535
     },
     "to_build": {}
   }

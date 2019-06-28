@@ -74,4 +74,22 @@ class Utils
 			mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
 		);
 	}
+
+	/**
+	 * transform second to hms
+	 * @param int $seconds
+	 * @return string
+	 */
+	public static function secondsToHms(int $seconds): string
+	{
+		$hours = floor($seconds / 3600);
+		$minutes = floor(($seconds / 60) % 60);
+		$seconds = $seconds % 60;
+
+		$return_hours = $hours > 0 ? $hours."h" : "";
+		$return_minutes = $minutes > 0 ? $minutes."min" : "";
+		$return_seconds = $seconds > 0 ? $seconds."s" : "";
+
+		return $return_hours.$return_minutes.$return_seconds;
+	}
 }

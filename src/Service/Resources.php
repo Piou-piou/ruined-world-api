@@ -27,6 +27,11 @@ class Resources
 	 * @var Base
 	 */
 	private $base;
+
+	/**
+	 * @var Base
+	 */
+	private $other_base;
 	
 	/**
 	 * @var int
@@ -71,6 +76,27 @@ class Resources
 		$this->globals = $globals;
 		$this->base = $globals->getCurrentBase(true);
 	}
+
+	/**
+	 * method to get current base used in this service
+	 * @return Base
+	 */
+	private function getBase(): Base
+	{
+		if (!$this->other_base) {
+			return $this->base;
+		}
+		return $this->other_base;
+	}
+
+	/**
+	 * method to use toher base in this service
+	 * @param Base|null $other_base
+	 */
+	public function setBase($other_base)
+	{
+		$this->other_base = $other_base;
+	}
 	
 	/**
 	 * method called to add resource
@@ -82,13 +108,13 @@ class Resources
 		$getter = "get" . ucfirst($resource);
 		$setter = "set" . ucfirst($resource);
 		
-		$new_resource = $this->base->$getter() + $value_to_add;
+		$new_resource = $this->getBase()->$getter() + $value_to_add;
 		
 		if ($new_resource > $this->getWarehouseCapacity()) {
 			$new_resource = $this->getWarehouseCapacity();
 		}
 		
-		$this->base->$setter($new_resource);
+		$this->getBase()->$setter($new_resource);
 		$this->em->flush();
 	}
 	
@@ -102,13 +128,13 @@ class Resources
 		$getter = "get" . ucfirst($resource);
 		$setter = "set" . ucfirst($resource);
 		
-		$new_resource = $this->base->$getter() - $value_to_del;
+		$new_resource = $this->getBase()->$getter() - $value_to_del;
 		
 		if ($new_resource < 0) {
 			$new_resource = 0;
 		}
 		
-		$this->base->$setter($new_resource);
+		$this->getBase()->$setter($new_resource);
 		$this->em->flush();
 	}
 	
@@ -178,7 +204,7 @@ class Resources
 		if ($this->$class_property === null) {
 			$level = 0;
 			$building = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
-				"base" => $this->base,
+				"base" => $this->getBase(),
 				"array_name" => $building_array_name,
 			]);
 			
@@ -215,7 +241,7 @@ class Resources
 		$level = 0;
 		
 		$building = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
-			"base" => $this->globals->getCurrentBase(),
+			"base" => $this->getBase(),
 			"array_name" => $array_name,
 		]);
 		

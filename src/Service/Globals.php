@@ -98,6 +98,39 @@ class Globals
 		
 		return false;
 	}
+
+	/**
+	 * method that calcul the time to travel between to bases based on speed of unit
+	 * @param Base $first_base
+	 * @param Base $second_base
+	 * @param int $speed
+	 * @param bool $to_hms
+	 * @return mixed
+	 */
+	public function getTimeToTravel(Base $first_base, Base $second_base, int $speed = 1, $to_hms = false)
+	{
+		$multiplicator_time = $this->getGeneralConfig()["multiplicator_travel_time"];
+		$posx_calc = abs(($first_base->getPosx()-$second_base->getPosx())*$multiplicator_time);
+		$posy_calc = abs(($first_base->getPosy()-$second_base->getPosy())*$multiplicator_time);
+		$time = ($posx_calc+$posy_calc)/$speed;
+
+		if ($to_hms) {
+			return Utils::secondsToHms($time);
+		}
+
+		return $time;
+	}
+
+	/**
+	 * method that return the array of the building's config json file
+	 * @return mixed
+	 */
+	public function getGeneralConfig()
+	{
+		$general = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "general.json"), true);
+
+		return $general;
+	}
 	
 	/**
 	 * method that return the array of the building's config json file
