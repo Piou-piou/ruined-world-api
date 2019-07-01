@@ -36,7 +36,8 @@ class MarketController extends AbstractController
         if (!$other_base) {
             return new JsonResponse([
                 "success" => false,
-                "error_message" => "Aucune base trouvée aux positions " . $posx . ", " . $posy
+                "error_message" => "Aucune base trouvée aux positions " . $posx . ", " . $posy,
+				"token" => $session->get("user")->getToken(),
             ]);
         }
         
@@ -44,7 +45,8 @@ class MarketController extends AbstractController
         if (!$enough_traders) {
 			return new JsonResponse([
 				"success" => false,
-				"error_message" => "Vous n'avez pas assez de marchand disponible dans votre base pour ce transport"
+				"error_message" => "Vous n'avez pas assez de marchand disponible dans votre base pour ce transport",
+				"token" => $session->get("user")->getToken(),
 			]);
 		}
 
@@ -64,7 +66,8 @@ class MarketController extends AbstractController
 
         return new JsonResponse([
             "success" => true,
-			"success_message" => "Vos marchands, se mettent en route immédiatement !"
+			"success_message" => "Vos marchands, se mettent en route immédiatement !",
+			"token" => $session->get("user")->getToken(),
         ]);
     }
 
@@ -72,10 +75,11 @@ class MarketController extends AbstractController
 	 * method that send current market movement of current base
 	 * @Route("/api/market/send-current-movements/", name="market_send_movements", methods={"POST"})
 	 * @param Globals $globals
+	 * @param Session $session
 	 * @return JsonResponse
 	 * @throws \Exception
 	 */
-    public function sendMarketMovements(Globals $globals): JsonResponse
+    public function sendMarketMovements(Globals $globals, Session $session): JsonResponse
 	{
 		$movements = [];
 		$market_movements = $this->getDoctrine()->getRepository(MarketMovement::class)->findByCurrentMovements($globals->getCurrentBase());
@@ -92,7 +96,8 @@ class MarketController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"market_movements" => $movements
+			"market_movements" => $movements,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 
@@ -115,14 +120,16 @@ class MarketController extends AbstractController
 	 * method to send current market number in base
 	 * @Route("/api/market/send-current-market-number/", name="market_send_trader_number", methods={"POST"})
 	 * @param Market $market
+	 * @param Session $session
 	 * @return JsonResponse
 	 */
-	public function sendCurrentTradersInBase(Market $market): JsonResponse
+	public function sendCurrentTradersInBase(Market $market, Session $session): JsonResponse
 	{
 		return new JsonResponse([
 			"success" => true,
 			"trader_number" => $market->getTraderNumberInBase(),
-			"max_trader_number" => $market->getMaxtraderInBase()
+			"max_trader_number" => $market->getMaxtraderInBase(),
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 }
