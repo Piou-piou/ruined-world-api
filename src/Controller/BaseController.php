@@ -35,8 +35,8 @@ class BaseController extends AbstractController
 		
 		return new JsonResponse([
 			"success" => $success,
-			"token" => $session->get("user")->getToken(),
 			"guid_base" => $guid_base,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 	
@@ -61,7 +61,6 @@ class BaseController extends AbstractController
 		
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
 			"base" => $api->serializeObject($base),
 			"resources_infos" => [
 				"max_storage" => $resources->getWarehouseCapacity(),
@@ -70,6 +69,7 @@ class BaseController extends AbstractController
 				"fuel_production" => $resources->getFuelProduction(),
 				"water_production" => $resources->getWaterProduction(),
 			],
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 
@@ -88,14 +88,15 @@ class BaseController extends AbstractController
 		if ($base) {
 			return new JsonResponse([
 				"success" => true,
-				"token" => $session->get("user")->getToken(),
 				"base" => $api->serializeObject($base),
-				"travel_time" => $globals->getTimeToTravel($globals->getCurrentBase(), $base, 1, true)
+				"travel_time" => $globals->getTimeToTravel($globals->getCurrentBase(), $base, 1, true),
+				"token" => $session->get("user")->getToken(),
 			]);
 		} else {
 			return new JsonResponse([
 				"success" => false,
-				"error_message" => "Aucune base n'existe à ces positions"
+				"error_message" => "Aucune base n'existe à ces positions",
+				"token" => $session->get("user")->getToken(),
 			]);
 		}
 	}
@@ -112,11 +113,11 @@ class BaseController extends AbstractController
 		$base = $globals->getCurrentBase();
 		
 		return new JsonResponse([
-			"token" => $session->get("user")->getToken(),
 			"electricity" => $base->getElectricity(),
 			"iron" => $base->getIron(),
 			"fuel" => $base->getFuel(),
 			"water" => $base->getWater(),
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 
@@ -135,7 +136,8 @@ class BaseController extends AbstractController
 		$base_name = isset($infos->base_name) && $infos->base_name ? $infos->base_name : null;
 		$return_infos = [
 			"success" => false,
-			"error_message" => "Le nom de la base ne peut pas être vide"
+			"error_message" => "Le nom de la base ne peut pas être vide",
+			"token" => $session->get("user")->getToken(),
 		];
 
 		if ($base_name) {
@@ -144,7 +146,8 @@ class BaseController extends AbstractController
 			if (count($base_exist) > 0) {
 				$return_infos = [
 					"success" => false,
-					"error_message" => "Une base existe déjà avec ce nom, merci d'en choisir un autre"
+					"error_message" => "Une base existe déjà avec ce nom, merci d'en choisir un autre",
+					"token" => $session->get("user")->getToken(),
 				];
 			} else {
 				$base->setName($base_name);
@@ -152,8 +155,9 @@ class BaseController extends AbstractController
 				$em->flush();
 				$return_infos = [
 					"success" => true,
+					"success_message" => "Le nom de la base a été changé",
 					"base_name" => $base_name,
-					"success_message" => "Le nom de la base a été changé"
+					"token" => $session->get("user")->getToken(),
 				];
 			}
 		}
@@ -180,7 +184,8 @@ class BaseController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"guids_player_bases" => $guids_player_bases,
-			"bases" => $bases
+			"bases" => $bases,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 
@@ -202,7 +207,8 @@ class BaseController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"travel_time" => $travel_time
+			"travel_time" => $travel_time,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 }

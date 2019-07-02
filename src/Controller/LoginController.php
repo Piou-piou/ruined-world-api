@@ -39,7 +39,7 @@ class LoginController extends AbstractController
 				if ($user->getArchived() == true) {
 					return new JsonResponse([
 						"success" => false,
-						"message" => "You account is disabled",
+						"error_message" => "Votre compte a été archivé, vous ne pouvez plus vous connecter",
 					]);
 				}
 				
@@ -52,7 +52,7 @@ class LoginController extends AbstractController
 		
 		return new JsonResponse([
 			"success" => false,
-			"message" => "bad identifiant and/or password",
+			"error_message" => "mauvais identifiant ou mot de passe",
 		]);
 	}
 	
@@ -72,7 +72,7 @@ class LoginController extends AbstractController
 		if ($test_logged === false) {
 			return new JsonResponse([
 				"success" => $test_logged,
-				"error_message" => "Your account were archived, you can't play anymore",
+				"error_message" => "Votre compte a été archivé, vous ne pouvez plus vous connecter",
 			]);
 		}
 		

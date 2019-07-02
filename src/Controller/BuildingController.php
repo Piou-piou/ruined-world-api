@@ -10,6 +10,7 @@ use App\Service\Resources;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -111,18 +112,20 @@ class BuildingController extends AbstractController
 			"explanation_current_power" => $explanation_string["current"],
 			"explanation_next_power" => $explanation_string["next"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
-			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
+			"resources_build" => $resources->getResourcesToBuild($infos->array_name),
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
-	
+
 	/**
 	 * method to send in construction buildings in base
 	 * @Route("/api/buildings/in-construction/", name="building_in_construction", methods={"POST"})
+	 * @param Session $session
 	 * @param Globals $globals
 	 * @return JsonResponse
 	 * @throws \Exception
 	 */
-	public function sendInConstructionBuildingsBase(Globals $globals): JsonResponse
+	public function sendInConstructionBuildingsBase(Session $session,Globals $globals): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$buildings = $em->getRepository(Building::class)->finByBuildingInConstruction($globals->getCurrentBase());
@@ -141,17 +144,20 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"buildings" => $return_buildings,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
-	
+
 	/**
 	 * method that send all building that are possible to build
 	 * @Route("/api/buildings/list-to-build/", name="list_building_to_build", methods={"POST"})
-	 * @param \App\Service\Building $building_service
 	 * @param Globals $globals
+	 * @param \App\Service\Building $building_service
+	 * @param Resources $resources
+	 * @param Session $session
 	 * @return JsonResponse
 	 */
-	public function sendBuildingToBuild(Globals $globals, \App\Service\Building $building_service, Resources $resources): JsonResponse
+	public function sendBuildingToBuild(Globals $globals, \App\Service\Building $building_service, Resources $resources, Session $session): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$buildings = $em->getRepository(Building::class)->finByBuildingArrayNameInBase($globals->getCurrentBase());
@@ -201,7 +207,8 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"buildings" => $return_buildings,
-			"nb_buildings" => count($return_buildings)
+			"nb_buildings" => count($return_buildings),
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 }
