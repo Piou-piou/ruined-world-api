@@ -51,6 +51,52 @@ class Building
 			return (int)round($building_config["construction_time"] * $level);
 		}
 	}
+
+	/**
+	 * method to return current and next power string with correct value in to_replace
+	 * @param string $array_name
+	 * @param int $level
+	 * @return array
+	 */
+	public function getExplanationStringPower(string $array_name, int $level): array
+	{
+		$building_config = $this->globals->getBuildingsConfig()[$array_name];
+		$explanation_current = str_replace("[[to_replace]]", $this->getCurrentPower($array_name, $level), $building_config["explanation_current_power"]);
+		$explanation_next = str_replace("[[to_replace]]", $this->getCurrentPower($array_name, $level+1), $building_config["explanation_next_power"]);
+
+		return [
+			"current" => $explanation_current,
+			"next" => $explanation_next
+		];
+	}
+
+	/**
+	 * method to return current power of a building calculated by type
+	 * @param string $array_name
+	 * @param int $level
+	 * @return int
+	 */
+	public function getCurrentPower(string $array_name, int $level): int
+	{
+		$building_config = $this->globals->getBuildingsConfig()[$array_name];
+		$default_power = $building_config["default_power"];
+
+		if ($level === 0) {
+			return 0;
+		}
+
+		if ($building_config["power_type"] === "reduction") {
+			return $default_power * $level;
+		} else if ($building_config["power_type"] === "production") {
+			$coef = $this->globals->getCoefForProduction()[$level];
+			return (int)round($default_power * $level * (float)$coef);
+		} else if ($building_config["power_type"] === "storage") {
+			$coef = $this->globals->getCoefForStorage()[$level];
+			return (int)round($default_power * $level * (float)$coef);
+		} else {
+			return $default_power * $level;
+		}
+	}
 	
 	/**
 	 * method that end all construction that are terminated

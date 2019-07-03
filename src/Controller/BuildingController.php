@@ -5,10 +5,15 @@ namespace App\Controller;
 use App\Entity\Building;
 use App\Service\Api;
 use App\Service\Globals;
+use App\Service\Point;
 use App\Service\Resources;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,15 +25,16 @@ class BuildingController extends AbstractController
 	 * @param SessionInterface $session
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building_service
+	 * @param Point $point
 	 * @return JsonResponse
 	 * @throws NonUniqueResultException
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function buildOrUpgrade(SessionInterface $session, Globals $globals, \App\Service\Building $building_service): JsonResponse
+	public function buildOrUpgrade(SessionInterface $session, Globals $globals, \App\Service\Building $building_service, Point $point): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$now = new \DateTime();
+		$now = new DateTime();
 		$building_config = $globals->getBuildingsConfig()[$infos->array_name];
 		$base = $globals->getCurrentBase();
 		$buildings_in_construction = $em->getRepository(Building::class)->finByBuildingInConstruction($base);
@@ -55,7 +61,7 @@ class BuildingController extends AbstractController
 		}
 		
 		$building->setInConstruction(true);
-		$end_construction = $now->add(new \DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
+		$end_construction = $now->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
 		$building->setEndConstruction($end_construction);
 		
 		if ($building_service->testWithdrawResourcesToBuild($infos->array_name) === false) {
@@ -68,6 +74,7 @@ class BuildingController extends AbstractController
 		
 		$em->persist($building);
 		$em->flush();
+		$point->addPoints("building_construction");
 		
 		return new JsonResponse([
 			"success" => true,
@@ -90,6 +97,7 @@ class BuildingController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
+		$buildings_config = $globals->getBuildingsConfig();
 		$building = $em->getRepository(Building::class)->findByBuildingInBase($infos->array_name, $globals->getCurrentBase());
 
 		if (!$building) {
@@ -100,21 +108,28 @@ class BuildingController extends AbstractController
 			]);
 		}
 
+		$explanation_string = $building_service->getExplanationStringPower($infos->array_name, $building->getLevel());
+
 		return new JsonResponse([
 			"building" => $api->serializeObject($building),
+			"explanation" => $buildings_config[$infos->array_name]["explanation"],
+			"explanation_current_power" => $explanation_string["current"],
+			"explanation_next_power" => $explanation_string["next"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
-			"resources_build" => $resources->getResourcesToBuild($infos->array_name)
+			"resources_build" => $resources->getResourcesToBuild($infos->array_name),
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
-	
+
 	/**
 	 * method to send in construction buildings in base
 	 * @Route("/api/buildings/in-construction/", name="building_in_construction", methods={"POST"})
+	 * @param Session $session
 	 * @param Globals $globals
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function sendInConstructionBuildingsBase(Globals $globals): JsonResponse
+	public function sendInConstructionBuildingsBase(Session $session,Globals $globals): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$buildings = $em->getRepository(Building::class)->finByBuildingInConstruction($globals->getCurrentBase());
@@ -124,6 +139,7 @@ class BuildingController extends AbstractController
 			/** @var Building $building */
 			foreach ($buildings as $building) {
 				$return_buildings[] = [
+					"id" => $building->getId(),
 					"name" => $building->getName(),
 					"endConstruction" => $building->getEndConstruction()->getTimestamp()
 				];
@@ -133,17 +149,36 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"buildings" => $return_buildings,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
-	
+
+	/**
+	 * method to finish current constructions in base
+	 * @Route("/api/buildings/end-constructions-base/", name="building_end_constructions", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param \App\Service\Building $building
+	 * @return JsonResponse
+	 * @throws Exception
+	 */
+	public function endConstructions(Session $session, Globals $globals, \App\Service\Building $building): JsonResponse
+	{
+		$building->endConstructionBuildingsInBase();
+
+		return $this->sendInConstructionBuildingsBase($session, $globals);
+	}
+
 	/**
 	 * method that send all building that are possible to build
 	 * @Route("/api/buildings/list-to-build/", name="list_building_to_build", methods={"POST"})
-	 * @param \App\Service\Building $building_service
 	 * @param Globals $globals
+	 * @param \App\Service\Building $building_service
+	 * @param Resources $resources
+	 * @param Session $session
 	 * @return JsonResponse
 	 */
-	public function sendBuildingToBuild(Globals $globals, \App\Service\Building $building_service, Resources $resources): JsonResponse
+	public function sendBuildingToBuild(Globals $globals, \App\Service\Building $building_service, Resources $resources, Session $session): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$buildings = $em->getRepository(Building::class)->finByBuildingArrayNameInBase($globals->getCurrentBase());
@@ -153,12 +188,16 @@ class BuildingController extends AbstractController
 		if (count($buildings) > 0) {
 			foreach ($buildings_config as $building_config) {
 				$array_name = $building_config["array_name"];
+				$explanation_string = $building_service->getExplanationStringPower($array_name, 0);
 				
 				if (!array_key_exists($array_name, $buildings)) {
 					if (count($building_config["to_build"]) === 0) {
 						$return_buildings[$array_name] = [
 							"name" => $building_config["name"],
 							"array_name" => $array_name,
+							"explanation" => $building_config["explanation"],
+							"explanation_current_power" => $explanation_string["current"],
+							"explanation_next_power" => $explanation_string["next"],
 							"construction_time" => $building_service->getConstructionTime($array_name, 0),
 							"resources_build" => $resources->getResourcesToBuild($array_name)
 						];
@@ -171,7 +210,15 @@ class BuildingController extends AbstractController
 						}
 						
 						if ($add_building === true) {
-							$return_buildings[$array_name] = $building_config;
+							$return_buildings[$array_name] = [
+								"name" => $building_config["name"],
+								"array_name" => $array_name,
+								"explanation" => $building_config["explanation"],
+								"explanation_current_power" => $explanation_string["current"],
+								"explanation_next_power" => $explanation_string["next"],
+								"construction_time" => $building_service->getConstructionTime($array_name, 0),
+								"resources_build" => $resources->getResourcesToBuild($array_name)
+							];
 						}
 					}
 				}
@@ -181,7 +228,8 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"buildings" => $return_buildings,
-			"nb_buildings" => count($return_buildings)
+			"nb_buildings" => count($return_buildings),
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 }
