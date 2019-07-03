@@ -1,0 +1,18 @@
+{
+  "villager": {
+    "name": "Villager",
+    "array_name": "villager",
+    "max_level": 10,
+    "recruitment_time": 60,
+    "attack_power": 10,
+    "defense_power": 10,
+    "speed": 4,
+    "transport_weight": 45,
+    "resources_recruit": {
+      "electricity": 130,
+      "fuel": 115,
+      "iron": 160,
+      "water": 100
+    }
+  }
+}
