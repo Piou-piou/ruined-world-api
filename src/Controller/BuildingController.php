@@ -7,7 +7,10 @@ use App\Service\Api;
 use App\Service\Globals;
 use App\Service\Point;
 use App\Service\Resources;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -25,12 +28,13 @@ class BuildingController extends AbstractController
 	 * @param Point $point
 	 * @return JsonResponse
 	 * @throws NonUniqueResultException
+	 * @throws Exception
 	 */
 	public function buildOrUpgrade(SessionInterface $session, Globals $globals, \App\Service\Building $building_service, Point $point): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$now = new \DateTime();
+		$now = new DateTime();
 		$building_config = $globals->getBuildingsConfig()[$infos->array_name];
 		$base = $globals->getCurrentBase();
 		$buildings_in_construction = $em->getRepository(Building::class)->finByBuildingInConstruction($base);
@@ -57,7 +61,7 @@ class BuildingController extends AbstractController
 		}
 		
 		$building->setInConstruction(true);
-		$end_construction = $now->add(new \DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
+		$end_construction = $now->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
 		$building->setEndConstruction($end_construction);
 		
 		if ($building_service->testWithdrawResourcesToBuild($infos->array_name) === false) {
@@ -123,7 +127,7 @@ class BuildingController extends AbstractController
 	 * @param Session $session
 	 * @param Globals $globals
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function sendInConstructionBuildingsBase(Session $session,Globals $globals): JsonResponse
 	{
@@ -150,12 +154,13 @@ class BuildingController extends AbstractController
 	}
 
 	/**
+	 * method to finish current constructions in base
 	 * @Route("/api/buildings/end-constructions-base/", name="building_end_constructions", methods={"POST"})
 	 * @param Session $session
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function endConstructions(Session $session, Globals $globals, \App\Service\Building $building): JsonResponse
 	{
