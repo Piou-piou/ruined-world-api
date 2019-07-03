@@ -135,6 +135,7 @@ class BuildingController extends AbstractController
 			/** @var Building $building */
 			foreach ($buildings as $building) {
 				$return_buildings[] = [
+					"id" => $building->getId(),
 					"name" => $building->getName(),
 					"endConstruction" => $building->getEndConstruction()->getTimestamp()
 				];
