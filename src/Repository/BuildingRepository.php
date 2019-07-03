@@ -39,7 +39,7 @@ class BuildingRepository extends EntityRepository
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT bu FROM App:Building bu
 			JOIN App:Base ba WITH bu.base = ba AND bu.base = :base
-			WHERE bu.in_construction = true AND bu.end_construction < :now
+			WHERE bu.in_construction = true AND bu.end_construction <= :now
 		");
 		
 		$query->setParameter("base", $base, Type::OBJECT);

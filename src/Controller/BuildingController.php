@@ -150,6 +150,21 @@ class BuildingController extends AbstractController
 	}
 
 	/**
+	 * @Route("/api/buildings/end-constructions-base/", name="building_end_constructions", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param \App\Service\Building $building
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+	public function endConstructions(Session $session, Globals $globals, \App\Service\Building $building): JsonResponse
+	{
+		$building->endConstructionBuildingsInBase();
+
+		return $this->sendInConstructionBuildingsBase($session, $globals);
+	}
+
+	/**
 	 * method that send all building that are possible to build
 	 * @Route("/api/buildings/list-to-build/", name="list_building_to_build", methods={"POST"})
 	 * @param Globals $globals
