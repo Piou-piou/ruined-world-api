@@ -64,7 +64,7 @@ class Unit
 
     /**
      * @ORM\ManyToOne(targetEntity="UnitMovement", inversedBy="units")
-     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=true)
      */
     protected $unitMovement;
 
