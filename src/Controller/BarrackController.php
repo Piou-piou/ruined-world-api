@@ -47,6 +47,26 @@ class BarrackController extends AbstractController
 	}
 
 	/**
+	 * method to finish current recruitments in base
+	 * @Route("/api/barrack/end-recruitments-base/", name="barrack_end_recruitments", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param Barrack $barrack
+	 * @return JsonResponse
+	 * @throws Exception
+	 */
+	public function endRecruitment(Session $session, Globals $globals, Barrack $barrack): JsonResponse
+	{
+		$barrack->endRecruitmentUnitsInBase();
+
+		return new JsonResponse([
+			"success" => true,
+			"units" => $globals->getCurrentBase()->getUnits(),
+			"token" => $session->get("user")->getToken(),
+		]);
+	}
+
+	/**
 	 * method to create unit and set time of their recruitment
 	 * @Route("/api/barrack/recruit-units/", name="recruit_units", methods={"POST"})
 	 * @param Session $session

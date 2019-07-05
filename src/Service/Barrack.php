@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Unit;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class Barrack
 {
@@ -60,5 +62,25 @@ class Barrack
 		$resources->withdrawResource("water", ($resources_torecruit["water"] * $number_to_recruit));
 
 		return true;
+	}
+
+	/**
+	 * method that end all recruitment that are terminated
+	 * @throws Exception
+	 */
+	public function endRecruitmentUnitsInBase()
+	{
+		$units = $this->em->getRepository(Unit::class)->findByRecruitmentEnded($this->globals->getCurrentBase());
+
+		/**
+		 * @var $unit Unit
+		 */
+		foreach ($units as $unit) {
+			$unit->setInRecruitment(false);
+			$unit->setEndRecruitment(null);
+			$this->em->persist($unit);
+		}
+
+		$this->em->flush();
 	}
 }
