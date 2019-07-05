@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BarrackController extends AbstractController
 {
 	/**
-	 * metho to send units that are possible to recruit
+	 * method to send units that are possible to recruit
 	 * @Route("/api/barrack/list-units-to-recruit/", name="list_units_to_recruit", methods={"POST"})
 	 * @param Session $session
 	 * @param Globals $globals
@@ -26,6 +26,22 @@ class BarrackController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"units" => $globals->getUnitsConfig(),
+			"token" => $session->get("user")->getToken(),
+		]);
+	}
+
+	/**
+	 * method to send to front current units that are in recruitment in base
+	 * @Route("/api/barrack/units-in-recruitment/", name="units_in_recruitment", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendUnitsInRecruitment(Session $session, Globals $globals): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"units_in_recruitment" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInRecruitment($globals->getCurrentBase()),
 			"token" => $session->get("user")->getToken(),
 		]);
 	}
