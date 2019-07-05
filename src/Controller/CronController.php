@@ -268,7 +268,7 @@ class CronController extends AbstractController
 			$em->persist($user);
 		}
 
-		$message = (new \Swift_Message('Hello Email'))
+		$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
 			->setFrom("no-reply@anthony-pilloud.fr")
 			->setTo("pilloud.anthony@gmail.com")
 			->setBody(
