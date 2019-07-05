@@ -10,6 +10,7 @@ use App\Service\Market;
 use App\Service\Resources;
 use App\Service\Utils;
 use Cron\CronExpression;
+use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CronController extends AbstractController
 {
+	/**
+	 * @var Swift_Mailer
+	 */
+	private $mailer;
+
 	/**
 	 * @var Utils
 	 */
@@ -54,6 +60,7 @@ class CronController extends AbstractController
 
 	/**
 	 * CronController constructor.
+	 * @param Swift_Mailer $mailer
 	 * @param Utils $utils
 	 * @param SessionInterface $session
 	 * @param Globals $globals
@@ -61,8 +68,9 @@ class CronController extends AbstractController
 	 * @param Market $market
 	 * @param Barrack $barrack
 	 */
-	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market, Barrack $barrack)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market, Barrack $barrack)
 	{
+		$this->mailer = $mailer;
 		$this->utils = $utils;
 		$this->session = $session;
 		$this->globals = $globals;
@@ -82,7 +90,7 @@ class CronController extends AbstractController
 		$ip = $request->server->get('REMOTE_ADDR');
 		$allowed_ip = ["127.0.0.1", "91.165.47.238", "90.100.133.37"];
 		
-		if (in_array($ip, $allowed_ip)) {
+		/*if (in_array($ip, $allowed_ip)) {*/
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
 			$now = new \DateTime();
@@ -96,19 +104,19 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					if ($next_exec === null) {
+					/*if ($next_exec === null) {
 						$this->$key();
-					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
+					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {*/
 						$this->$key();
-					}
+					/*}*/
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
 				}
 			}
-		} else {
+		/*} else {
 			throw new AccessDeniedHttpException("You haven't got access to this page");
-		}
+		}*/
 		
 		return new Response();
 	}
@@ -259,6 +267,15 @@ class CronController extends AbstractController
 			
 			$em->persist($user);
 		}
+
+		$message = (new \Swift_Message('Hello Email'))
+			->setFrom("no-reply@anthony-pilloud.fr")
+			->setTo("pilloud.anthony@gmail.com")
+			->setBody(
+				$this->renderView('archived_account.html.twig', ["users" => $users]),
+				'text/html'
+			);
+		$this->mailer->send($message);
 		
 		$em->flush();
 	}
