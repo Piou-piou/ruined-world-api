@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Base;
-use App\Entity\Building;
 use App\Entity\User;
+use App\Service\Barrack;
 use App\Service\Globals;
 use App\Service\Market;
 use App\Service\Resources;
@@ -44,6 +44,11 @@ class CronController extends AbstractController
 	 * @var Market
 	 */
 	private $market;
+
+	/**
+	 * @var Barrack
+	 */
+	private $barrack;
 	
 	private $crons;
 
@@ -54,14 +59,16 @@ class CronController extends AbstractController
 	 * @param Globals $globals
 	 * @param \App\Service\Building $building
 	 * @param Market $market
+	 * @param Barrack $barrack
 	 */
-	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market)
+	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market, Barrack $barrack)
 	{
 		$this->utils = $utils;
 		$this->session = $session;
 		$this->globals = $globals;
 		$this->building = $building;
 		$this->market = $market;
+		$this->barrack = $barrack;
 	}
 	
 	/**
@@ -308,6 +315,22 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->market->updateMarketMovement($base);
+		}
+	}
+
+	/**
+	 * method to finish all construction that end date was before current date
+	 */
+	private function endRecruitmentUnits()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->barrack->endRecruitmentUnitsInBase();
 		}
 	}
 }
