@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Base;
 use App\Entity\User;
 use App\Service\Barrack;
+use App\Service\Building;
 use App\Service\Globals;
 use App\Service\Market;
 use App\Service\Resources;
 use App\Service\Utils;
 use Cron\CronExpression;
+use DateTime;
+use Exception;
 use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -42,7 +45,7 @@ class CronController extends AbstractController
 	private $globals;
 	
 	/**
-	 * @var \App\Service\Building
+	 * @var Building
 	 */
 	private $building;
 
@@ -64,11 +67,11 @@ class CronController extends AbstractController
 	 * @param Utils $utils
 	 * @param SessionInterface $session
 	 * @param Globals $globals
-	 * @param \App\Service\Building $building
+	 * @param Building $building
 	 * @param Market $market
 	 * @param Barrack $barrack
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market, Barrack $barrack)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -83,17 +86,17 @@ class CronController extends AbstractController
 	 * @Route("/cron", name="cron")
 	 * @param Request $request
 	 * @return Response
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function cron(Request $request)
 	{
 		$ip = $request->server->get('REMOTE_ADDR');
 		$allowed_ip = ["127.0.0.1", "91.165.47.238", "90.100.133.37"];
 		
-		/*if (in_array($ip, $allowed_ip)) {*/
+		if (in_array($ip, $allowed_ip)) {
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
-			$now = new \DateTime();
+			$now = new DateTime();
 			
 			// start executing crons
 			foreach ($this->crons as $key => $cron) {
@@ -104,19 +107,19 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					/*if ($next_exec === null) {
+					if ($next_exec === null) {
 						$this->$key();
-					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {*/
+					} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
 						$this->$key();
-					/*}*/
+					}
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
 				}
 			}
-		/*} else {
+		} else {
 			throw new AccessDeniedHttpException("You haven't got access to this page");
-		}*/
+		}
 		
 		return new Response();
 	}
@@ -201,7 +204,7 @@ class CronController extends AbstractController
 	
 	/**
 	 * method that update resources of a base based on resources produced by hour. This method is called every minute
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function updateResources()
 	{
@@ -215,7 +218,7 @@ class CronController extends AbstractController
 			
 			$resources = new Resources($em, $this->session, $this->globals);
 			
-			$now = new \DateTime();
+			$now = new DateTime();
 			$last_update_resources = $base->getLastUpdateResources();
 			$diff = $now->getTimestamp() - $last_update_resources->getTimestamp();
 			
@@ -242,7 +245,7 @@ class CronController extends AbstractController
 	/**
 	 * method to archive a user that hasn't connected to the game for a certain time
 	 * this will archive all his bases too
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function archiveUsers()
 	{
@@ -282,7 +285,7 @@ class CronController extends AbstractController
 	
 	/**
 	 * method to disable holidays mode of user and set last connection date to today
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function disableHolidaysMode()
 	{
@@ -294,7 +297,7 @@ class CronController extends AbstractController
 		 */
 		foreach ($users as $user) {
 			$user->setHolidays(false);
-			$user->setLastConnection(new \DateTime());
+			$user->setLastConnection(new DateTime());
 			$em->persist($user);
 		}
 		
@@ -319,7 +322,7 @@ class CronController extends AbstractController
 
 	/**
 	 * method that update market movements of each base
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function updateMarketMovement()
 	{
