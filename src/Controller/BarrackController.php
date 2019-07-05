@@ -61,7 +61,7 @@ class BarrackController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"units" => $globals->getCurrentBase()->getUnits(),
+			"units_in_recruitment" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInRecruitment($globals->getCurrentBase()),
 			"token" => $session->get("user")->getToken(),
 		]);
 	}
