@@ -78,7 +78,7 @@ class Barrack
 	 * @param int $time
 	 * @return int
 	 */
-	private function getTimeToRecruit(int $time): int
+	public function getTimeToRecruit(int $time): int
 	{
 		return round($time * ((100-$this->getCurrentBarrackPower())/100));
 	}
