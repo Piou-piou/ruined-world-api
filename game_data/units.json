@@ -14,6 +14,9 @@
       "fuel": 115,
       "iron": 160,
       "water": 100
+    },
+    "to_recruit": {
+
     }
   }
 }
