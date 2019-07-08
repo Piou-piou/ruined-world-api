@@ -19,13 +19,14 @@ class BarrackController extends AbstractController
 	 * @Route("/api/barrack/list-units-to-recruit/", name="list_units_to_recruit", methods={"POST"})
 	 * @param Session $session
 	 * @param Globals $globals
+	 * @param Barrack $barrack
 	 * @return JsonResponse
 	 */
-	public function sendUnitsPossibleToRecruit(Session $session, Globals $globals): JsonResponse
+	public function sendUnitsPossibleToRecruit(Session $session, Globals $globals, Barrack $barrack): JsonResponse
 	{
 		return new JsonResponse([
 			"success" => true,
-			"units" => $globals->getUnitsConfig(),
+			"units" => $barrack->getUnitsPossibleToRecruit(),
 			"token" => $session->get("user")->getToken(),
 		]);
 	}
