@@ -69,10 +69,10 @@
     "explanation_current_power": "La station électrique produit actuellement [[to_replace]] unité par heure.",
     "explanation_next_power": "La station électrique produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
-      "electricity": 30,
-      "fuel": 175,
-      "iron": 115,
-      "water": 160
+      "electricity": 100,
+      "fuel": 165,
+      "iron": 105,
+      "water": 150
     },
     "to_build": {}
   },
@@ -128,10 +128,10 @@
     "explanation_current_power": "La statoin de fer produit actuellement [[to_replace]] unité par heure.",
     "explanation_next_power": "La statoin de fer produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
-      "electricity": 115,
-      "fuel": 160,
-      "iron": 30,
-      "water": 175
+      "electricity": 105,
+      "fuel": 150,
+      "iron": 100,
+      "water": 165
     },
     "to_build": {}
   },
@@ -167,10 +167,10 @@
     "explanation_current_power": "La statoin d'eau produit actuellement [[to_replace]] unité par heure.",
     "explanation_next_power": "La statoin d'eau produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
-      "electricity": 115,
-      "fuel": 175,
-      "iron": 160,
-      "water": 30
+      "electricity": 105,
+      "fuel": 165,
+      "iron": 150,
+      "water": 100
     },
     "to_build": {}
   },
