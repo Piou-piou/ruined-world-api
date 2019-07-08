@@ -1,0 +1,10 @@
+{% for user in users %}
+	<h1>Liste des comptes archivés aujorud'hui</h1>
+	<h3>Compte de {{ user.name }} archivé</h3>
+	<ul>
+		<li>Points : {{ user.point }}</li>
+		<li>Nombre de bases : {{ user.bases|length }}</li>
+	</ul>
+{% else %}
+	<h3>Auncun compte à archiver</h3>
+{% endfor %}
