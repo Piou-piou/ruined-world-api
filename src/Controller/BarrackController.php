@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Unit;
 use App\Service\Barrack;
 use App\Service\Globals;
+use App\Service\Point;
 use DateInterval;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -73,10 +74,11 @@ class BarrackController extends AbstractController
 	 * @param Session $session
 	 * @param Globals $globals
 	 * @param Barrack $barrack
+	 * @param Point $point
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function recruitUnits(Session $session, Globals $globals, Barrack $barrack): JsonResponse
+	public function recruitUnits(Session $session, Globals $globals, Barrack $barrack, Point $point): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$now = new \DateTime();
@@ -100,6 +102,7 @@ class BarrackController extends AbstractController
 			}
 
 			$em->flush();
+			$point->addPoints("end_unit_recruitment");
 
 			return new JsonResponse([
 				"success" => true,
