@@ -99,10 +99,10 @@ class BarrackController extends AbstractController
 				$unit->setInRecruitment(true);
 				$unit->setEndRecruitment($end_recruitment);
 				$em->persist($unit);
+				$point->addPoints("end_unit_recruitment");
 			}
 
 			$em->flush();
-			$point->addPoints("end_unit_recruitment");
 
 			return new JsonResponse([
 				"success" => true,
