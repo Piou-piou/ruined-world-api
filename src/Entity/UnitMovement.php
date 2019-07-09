@@ -17,7 +17,8 @@ class UnitMovement
 		TYPE_ATTACK = 2;
 
 	const MOVEMENT_TYPE_GO = 0,
-		MOVEMENT_TYPE_RETURN = 1;
+		MOVEMENT_TYPE_RETURN = 1,
+		MOVEMENT_TYPE_MISSION = 2;
 
     /**
      * @ORM\Id
