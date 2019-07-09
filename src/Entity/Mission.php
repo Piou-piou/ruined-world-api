@@ -20,12 +20,12 @@ class Mission
     protected $id;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     protected $in_progress;
 
 	/**
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", nullable=true)
 	 */
 	protected $disabled;
 
@@ -42,7 +42,7 @@ class Mission
 
     /**
      * @ORM\ManyToOne(targetEntity="UnitMovement", inversedBy="missions")
-     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=true)
      */
     protected $unitMovement;
 
