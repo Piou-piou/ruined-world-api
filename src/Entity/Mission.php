@@ -20,29 +20,14 @@ class Mission
     protected $id;
 
     /**
-     * @ORM\Column(name="`name`", type="string", length=255)
-     */
-    protected $name;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    protected $description;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $points;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $duration;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     protected $in_progress;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+    protected $missions_config_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="missions")
@@ -84,98 +69,6 @@ class Mission
     }
 
     /**
-     * Set the value of name.
-     *
-     * @param string $name
-     * @return Mission
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the value of description.
-     *
-     * @param string $description
-     * @return Mission
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of description.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the value of points.
-     *
-     * @param integer $points
-     * @return Mission
-     */
-    public function setPoints($points)
-    {
-        $this->points = $points;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of points.
-     *
-     * @return integer
-     */
-    public function getPoints()
-    {
-        return $this->points;
-    }
-
-    /**
-     * Set the value of duration.
-     *
-     * @param integer $duration
-     * @return Mission
-     */
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of duration.
-     *
-     * @return integer
-     */
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    /**
      * Set the value of in_progress.
      *
      * @param boolean $in_progress
@@ -197,6 +90,25 @@ class Mission
     {
         return $this->in_progress;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getMissionsConfigId()
+	{
+		return $this->missions_config_id;
+	}
+
+	/**
+	 * @param mixed $missions_config_id
+	 * @return Mission
+	 */
+	public function setMissionsConfigId($missions_config_id)
+	{
+		$this->missions_config_id = $missions_config_id;
+
+		return $this;
+	}
 
     /**
      * Set Base entity (many to one).
