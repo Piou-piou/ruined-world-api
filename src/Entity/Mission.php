@@ -25,6 +25,11 @@ class Mission
     protected $in_progress;
 
 	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $disabled;
+
+	/**
 	 * @ORM\Column(type="integer")
 	 */
     protected $missions_config_id;
@@ -90,6 +95,25 @@ class Mission
     {
         return $this->in_progress;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getDisabled()
+	{
+		return $this->disabled;
+	}
+
+	/**
+	 * @param mixed $disabled
+	 * @return Mission
+	 */
+	public function setDisabled($disabled)
+	{
+		$this->disabled = $disabled;
+
+		return $this;
+	}
 
 	/**
 	 * @return mixed
