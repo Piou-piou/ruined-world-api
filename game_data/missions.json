@@ -1,5 +1,5 @@
 {
-  "food1": {
+  "1": {
     "name": "Food 1",
     "array_name": "food1",
     "type": "food",
@@ -7,7 +7,7 @@
     "lost_percentage": 60,
     "duration": 5400
   },
-  "food9": {
+  "2": {
     "name": "Food 9",
     "array_name": "food9",
     "type": "food",
@@ -15,7 +15,7 @@
     "lost_percentage": 50,
     "duration": 4500
   },
-  "food2": {
+  "3": {
     "name": "Food 2",
     "array_name": "food2",
     "type": "food",
@@ -23,7 +23,7 @@
     "lost_percentage": 40,
     "duration": 3600
   },
-  "food8": {
+  "4": {
     "name": "Food 8",
     "array_name": "food8",
     "type": "food",
@@ -31,7 +31,7 @@
     "lost_percentage": 30,
     "duration": 2700
   },
-  "food4": {
+  "5": {
     "name": "Food 4",
     "array_name": "food4",
     "type": "food",
@@ -39,7 +39,7 @@
     "lost_percentage": 20,
     "duration": 1800
   },
-  "food7": {
+  "6": {
     "name": "Food 7",
     "array_name": "food7",
     "type": "food",
@@ -47,7 +47,7 @@
     "lost_percentage": 15,
     "duration": 1200
   },
-  "food5": {
+  "7": {
     "name": "Food 5",
     "array_name": "food5",
     "type": "food",
@@ -55,7 +55,7 @@
     "lost_percentage": 10,
     "duration": 600
   },
-  "food6": {
+  "8": {
     "name": "Food 6",
     "array_name": "food6",
     "type": "food",
