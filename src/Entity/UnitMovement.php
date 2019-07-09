@@ -16,6 +16,9 @@ class UnitMovement
 	const TYPE_MISSION = 1,
 		TYPE_ATTACK = 2;
 
+	const MOVEMENT_TYPE_GO = 0,
+		MOVEMENT_TYPE_RETURN = 1;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -36,6 +39,11 @@ class UnitMovement
 	 * @ORM\Column(name="type_id", type="integer")
 	 */
     protected $type_id;
+
+	/**
+	 * @ORM\Column(name="movement_type", type="integer")
+	 */
+    protected $movement_type;
 
     /**
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="unitMovement")
@@ -147,10 +155,32 @@ class UnitMovement
 
 	/**
 	 * @param mixed $type_id
+	 * @return UnitMovement
 	 */
-	public function setTypeId($type_id): void
+	public function setTypeId($type_id)
 	{
 		$this->type_id = $type_id;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMovementType()
+	{
+		return $this->movement_type;
+	}
+
+	/**
+	 * @param mixed $movement_type
+	 * @return UnitMovement
+	 */
+	public function setMovementType($movement_type)
+	{
+		$this->movement_type = $movement_type;
+
+		return $this;
 	}
 
     /**
