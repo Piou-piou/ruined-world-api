@@ -9,6 +9,20 @@ use Exception;
 
 class UnitRepository extends EntityRepository
 {
+	/**
+	 * method to find units that are currently in base
+	 * @param Base $base
+	 * @return mixed
+	 */
+	public function findByUnitsInBase(Base $base) {
+		$query = $this->getEntityManager()->createQuery("SELECT u.name, u.array_name, count(u) as number FROM App:Unit u
+			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
+			GROUP BY u.array_name, u.end_recruitment
+		");
+		$query->setParameter("base", $base, Type::OBJECT);
+
+		return $query->getResult();
+	}
 
 	/**
 	 * method to find units that are currently in recruitment in base
