@@ -13,6 +13,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class UnitMovement
 {
+	const TYPE_MISSION = 1,
+		TYPE_ATTACK = 2;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -28,6 +31,11 @@ class UnitMovement
      * @ORM\Column(name="`type`", type="integer")
      */
     protected $type;
+
+	/**
+	 * @ORM\Column(name="type_id", type="integer")
+	 */
+    protected $type_id;
 
     /**
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="unitMovement")
@@ -128,6 +136,22 @@ class UnitMovement
     {
         return $this->type;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getTypeId()
+	{
+		return $this->type_id;
+	}
+
+	/**
+	 * @param mixed $type_id
+	 */
+	public function setTypeId($type_id): void
+	{
+		$this->type_id = $type_id;
+	}
 
     /**
      * Add Mission entity to collection (one to many).
