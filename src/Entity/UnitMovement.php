@@ -30,6 +30,11 @@ class UnitMovement
      */
     protected $end_date;
 
+	/**
+	 * @ORM\Column(type="integer", nullable=false)
+	 */
+	protected $duration;
+
     /**
      * @ORM\Column(name="`type`", type="integer")
      */
@@ -121,6 +126,25 @@ class UnitMovement
     {
         return $this->end_date;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getDuration()
+	{
+		return $this->duration;
+	}
+
+	/**
+	 * @param mixed $duration
+	 * @return UnitMovement
+	 */
+	public function setDuration($duration)
+	{
+		$this->duration = $duration;
+
+		return $this;
+	}
 
     /**
      * Set the value of type.
