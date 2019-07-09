@@ -278,14 +278,14 @@ class CronController extends AbstractController
 			$em->persist($user);
 		}
 
-		/*$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
+		$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
 			->setFrom("no-reply@anthony-pilloud.fr")
 			->setTo("pilloud.anthony@gmail.com")
 			->setBody(
 				$this->renderView('archived_account.html.twig', ["users" => $users]),
 				'text/html'
 			);
-		$this->mailer->send($message);*/
+		$this->mailer->send($message);
 		
 		$em->flush();
 	}
