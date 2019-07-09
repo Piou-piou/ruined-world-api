@@ -1,0 +1,34 @@
+{
+  "food1": {
+    "name": "Food 1",
+    "array_name": "food1",
+    "type": "food",
+    "win_resources": 100,
+    "lost_percentage": 50,
+    "duration": 5400
+  },
+  "food2": {
+    "name": "Food 2",
+    "array_name": "food2",
+    "type": "food",
+    "win_resources": 70,
+    "lost_percentage": 40,
+    "duration": 3600
+  },
+  "food4": {
+    "name": "Food 4",
+    "array_name": "food4",
+    "type": "food",
+    "win_resources": 50,
+    "lost_percentage": 20,
+    "duration": 1800
+  },
+  "food5": {
+    "name": "Food 5",
+    "array_name": "food5",
+    "type": "food",
+    "win_resources": 30,
+    "lost_percentage": 10,
+    "duration": 600
+  }
+}
