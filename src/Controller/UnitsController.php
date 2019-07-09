@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Unit;
-use App\Entity\UnitMovement;
-use App\Service\Api;
 use App\Service\Globals;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
