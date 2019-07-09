@@ -16,6 +16,7 @@ parameters:
         updateMarketMovement: "* * * * *"
         archiveUsers: "0 0 * * *"
         disableHolidaysMode: "0 0 * * *"
+        updateMissionsForBase: "0 */3 * * *"
 
 services:
     # default configuration for services in *this* file

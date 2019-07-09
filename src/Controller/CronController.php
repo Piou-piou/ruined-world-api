@@ -8,6 +8,7 @@ use App\Service\Barrack;
 use App\Service\Building;
 use App\Service\Globals;
 use App\Service\Market;
+use App\Service\Mission;
 use App\Service\Resources;
 use App\Service\Utils;
 use Cron\CronExpression;
@@ -19,7 +20,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CronController extends AbstractController
@@ -58,6 +58,11 @@ class CronController extends AbstractController
 	 * @var Barrack
 	 */
 	private $barrack;
+
+	/**
+	 * @var Mission
+	 */
+	private $mission;
 	
 	private $crons;
 
@@ -70,8 +75,9 @@ class CronController extends AbstractController
 	 * @param Building $building
 	 * @param Market $market
 	 * @param Barrack $barrack
+	 * @param Mission $mission
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -80,6 +86,7 @@ class CronController extends AbstractController
 		$this->building = $building;
 		$this->market = $market;
 		$this->barrack = $barrack;
+		$this->mission = $mission;
 	}
 	
 	/**
@@ -271,14 +278,14 @@ class CronController extends AbstractController
 			$em->persist($user);
 		}
 
-		$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
+		/*$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
 			->setFrom("no-reply@anthony-pilloud.fr")
 			->setTo("pilloud.anthony@gmail.com")
 			->setBody(
 				$this->renderView('archived_account.html.twig', ["users" => $users]),
 				'text/html'
 			);
-		$this->mailer->send($message);
+		$this->mailer->send($message);*/
 		
 		$em->flush();
 	}
@@ -351,6 +358,23 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->barrack->endRecruitmentUnitsInBase();
+		}
+	}
+
+	/**
+	 * method to update missions of the base
+	 */
+	private function updateMissionsForBase()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->mission->setAleatoryMissionsForBase();
 		}
 	}
 }
