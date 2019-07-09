@@ -1,3 +1,4 @@
 {
-  "multiplicator_travel_time": 70
+  "multiplicator_travel_time": 70,
+  "check_mission_interval": 10800
 }
