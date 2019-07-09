@@ -4,8 +4,16 @@
     "array_name": "food1",
     "type": "food",
     "win_resources": 100,
-    "lost_percentage": 50,
+    "lost_percentage": 60,
     "duration": 5400
+  },
+  "food9": {
+    "name": "Food 9",
+    "array_name": "food9",
+    "type": "food",
+    "win_resources": 85,
+    "lost_percentage": 50,
+    "duration": 4500
   },
   "food2": {
     "name": "Food 2",
@@ -15,6 +23,14 @@
     "lost_percentage": 40,
     "duration": 3600
   },
+  "food8": {
+    "name": "Food 8",
+    "array_name": "food8",
+    "type": "food",
+    "win_resources": 60,
+    "lost_percentage": 30,
+    "duration": 2700
+  },
   "food4": {
     "name": "Food 4",
     "array_name": "food4",
@@ -23,6 +39,14 @@
     "lost_percentage": 20,
     "duration": 1800
   },
+  "food7": {
+    "name": "Food 7",
+    "array_name": "food7",
+    "type": "food",
+    "win_resources": 40,
+    "lost_percentage": 15,
+    "duration": 1200
+  },
   "food5": {
     "name": "Food 5",
     "array_name": "food5",
@@ -30,5 +54,13 @@
     "win_resources": 30,
     "lost_percentage": 10,
     "duration": 600
+  },
+  "food6": {
+    "name": "Food 6",
+    "array_name": "food6",
+    "type": "food",
+    "win_resources": 15,
+    "lost_percentage": 5,
+    "duration": 300
   }
 }
