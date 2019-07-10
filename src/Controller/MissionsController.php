@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Mission;
+use App\Entity\Unit;
 use App\Service\Globals;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,7 +34,8 @@ class MissionsController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
-			"missions" => $return_missions
+			"missions" => $return_missions,
+			"units" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInBase($globals->getCurrentBase())
 		]);
 	}
 }
