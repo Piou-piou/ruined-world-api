@@ -340,6 +340,9 @@ class UnitMovement
         return $this->base;
     }
 
+	/**
+	 * @return string
+	 */
     public function getStringType()
 	{
 		if ($this->getType() === self::TYPE_MISSION) {
