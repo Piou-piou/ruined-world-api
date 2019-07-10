@@ -33,7 +33,7 @@ class Unit
 	 * method that get entity of current movement based on the type and type id of it
 	 * @param int $type
 	 * @param int $type_id
-	 * @return object|null
+	 * @return \App\Entity\Mission|null
 	 */
 	private function getEntityOfTypeMovement(int $type, int $type_id)
 	{
