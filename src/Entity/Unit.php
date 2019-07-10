@@ -51,10 +51,10 @@ class Unit
 	protected $end_recruitment;
 
     /**
-     * @ORM\OneToMany(targetEntity="UnitGroup", mappedBy="unit")
-     * @ORM\JoinColumn(name="id", referencedColumnName="unit_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="UnitGroup", inversedBy="units")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
      */
-    protected $unitGroups;
+    protected $unitGroup;
 
     /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="units")
@@ -67,11 +67,6 @@ class Unit
      * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=true)
      */
     protected $unitMovement;
-
-    public function __construct()
-    {
-        $this->unitGroups = new ArrayCollection();
-    }
 
     /**
      * Set the value of id.
@@ -226,41 +221,24 @@ class Unit
 		return $this;
 	}
 
-    /**
-     * Add UnitGroup entity to collection (one to many).
-     *
-     * @param UnitGroup $unitGroup
-     * @return Unit
-     */
-    public function addUnitGroup(UnitGroup $unitGroup)
-    {
-        $this->unitGroups[] = $unitGroup;
+	/**
+	 * @return mixed
+	 */
+	public function getUnitGroup()
+	{
+		return $this->unitGroup;
+	}
 
-        return $this;
-    }
+	/**
+	 * @param mixed $unitGroup
+	 * @return Unit
+	 */
+	public function setUnitGroup($unitGroup)
+	{
+		$this->unitGroup = $unitGroup;
 
-    /**
-     * Remove UnitGroup entity from collection (one to many).
-     *
-     * @param UnitGroup $unitGroup
-     * @return Unit
-     */
-    public function removeUnitGroup(UnitGroup $unitGroup)
-    {
-        $this->unitGroups->removeElement($unitGroup);
-
-        return $this;
-    }
-
-    /**
-     * Get UnitGroup entity collection (one to many).
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUnitGroups()
-    {
-        return $this->unitGroups;
-    }
+		return $this;
+	}
 
     /**
      * Set Base entity (many to one).
