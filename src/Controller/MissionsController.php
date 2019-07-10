@@ -8,6 +8,7 @@ use App\Service\Globals;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MissionsController extends AbstractController
@@ -36,6 +37,21 @@ class MissionsController extends AbstractController
 			"token" => $session->get("user")->getToken(),
 			"missions" => $return_missions,
 			"units" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInBase($globals->getCurrentBase())
+		]);
+	}
+
+	/**
+	 * method to send units in mission
+	 * @Route("/api/missions/send-units/", name="missions_send_units", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendUnitsInMission(SessionInterface $session, Globals $globals): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 }
