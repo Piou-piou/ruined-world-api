@@ -38,4 +38,22 @@ class UnitMovementRepository extends EntityRepository
 
 		return $return_results;
 	}
+
+	/**
+	 * method that return all ended movements
+	 * @param Base $base
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function findByMovementEnded(Base $base)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT um FROM App:UnitMovement um
+			WHERE um.base = :base AND um.end_date <= :now
+		");
+
+		$query->setParameter("base", $base, Type::OBJECT);
+		$query->setParameter("now", new \DateTime(), Type::DATETIME);
+
+		return $query->getResult();
+	}
 }
