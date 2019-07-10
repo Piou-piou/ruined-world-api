@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Base;
 use App\Entity\UnitMovement;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -68,7 +69,7 @@ class Unit
 				"string_type" => $unit_movement->getStringType(),
 				"entity_type" => $entity_type,
 				"movement_type" => $unit_movement->getType(),
-				"units" => $this->em->getRepository(\App\Entity\Unit::class)->findByUnitsInMovement($unit_movement)
+				"units" => $this->em->getRepository(UnitMovement::class)->findByUnitsInMovement($unit_movement)
 			];
 		}
 
