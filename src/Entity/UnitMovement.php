@@ -351,4 +351,12 @@ class UnitMovement
 			return "attack";
 		}
 	}
+
+	public function clearUnits()
+	{
+		/** @var Unit $unit */
+		foreach ($this->getUnits() as $unit) {
+			$unit->setUnitMovement(null);
+		}
+	}
 }
