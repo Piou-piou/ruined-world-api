@@ -19,14 +19,38 @@ class Unit
 	private $globals;
 
 	/**
+	 * @var Resources
+	 */
+	private $resources;
+
+	/**
 	 * Unit constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
+	 * @param Resources $resources
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
+		$this->resources = $resources;
+	}
+
+	/**
+	 * method that return max transport weight that unit can carry durin movement
+	 * @param $units
+	 * @return int
+	 */
+	private function getMaxCapacityTransport($units): int
+	{
+		$max_transport_weight = 0;
+
+		/** @var \App\Entity\Unit $unit */
+		foreach ($units as $unit) {
+			$max_transport_weight += $this->globals->getUnitsConfig()[$unit->getArrayName()]["transport_weight"];
+		}
+
+		return $max_transport_weight;
 	}
 
 	/**
@@ -74,5 +98,61 @@ class Unit
 		}
 
 		return $return_movements;
+	}
+
+	/**
+	 * method called to update unit movements of the base
+	 * @param Base $base
+	 * @throws \Exception
+	 */
+	public function updateUnitMovement(Base $base)
+	{
+		$em = $this->em;
+		$unit_movements_ended = $em->getRepository(UnitMovement::class)->findByMovementEnded($base);
+
+		/** @var UnitMovement $unit_movement */
+		foreach ($unit_movements_ended as $unit_movement) {
+			if ($unit_movement->getType() === UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === UnitMovement::MOVEMENT_TYPE_GO) {
+				// attack on the go
+			} else if ($unit_movement->getType() === UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === UnitMovement::MOVEMENT_TYPE_RETURN) {
+				// attack on the return
+			} else if ($unit_movement->getType() === UnitMovement::TYPE_MISSION) {
+				$this->endMission($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
+			}
+		}
+	}
+
+	/**
+	 * method called to end a mission kill unit based on lost percentage of it and give food based
+	 * on win_resources percentage of mission
+	 * @param Base $base
+	 * @param UnitMovement $unit_movement
+	 * @param \App\Entity\Mission $mission
+	 */
+	private function endMission(Base $base, UnitMovement $unit_movement, \App\Entity\Mission $mission)
+	{
+		$current_mission_config = $this->globals->getMissionsConfig()[$mission->getMissionsConfigId()];
+		$lost_unit = round(count($unit_movement->getUnits())*(rand(0, $current_mission_config["lost_percentage"])/100));
+
+		for ($i=0 ; $i<$lost_unit ; $i++) {
+			$this->em->remove($unit_movement->getUnits()->get($i));
+			$unit_movement->getUnits()->remove($i);
+		}
+		$this->em->persist($unit_movement);
+		$this->em->flush();
+
+		$max_transport_capacity = $this->getMaxCapacityTransport($unit_movement->getUnits());
+		$win_resources = round($max_transport_capacity*((100-$current_mission_config["win_resources"])/100));
+
+		$this->resources->setBase($base);
+		$this->resources->addResource("food", $win_resources);
+
+		$mission->setInProgress(false);
+		$mission->setUnitMovement(null);
+		$this->em->persist($mission);
+		$unit_movement->clearUnits();
+		$this->em->persist($unit_movement);
+		$this->em->flush();
+		$this->em->remove($unit_movement);
 	}
 }
