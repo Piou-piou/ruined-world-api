@@ -339,4 +339,13 @@ class UnitMovement
     {
         return $this->base;
     }
+
+    public function getStringType()
+	{
+		if ($this->getType() === self::TYPE_MISSION) {
+			return "mission";
+		} else if ($this->getType() === self::TYPE_ATTACK) {
+			return "attack";
+		}
+	}
 }

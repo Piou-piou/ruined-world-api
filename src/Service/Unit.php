@@ -65,6 +65,7 @@ class Unit
 				"duration" => $unit_movement->getDuration(),
 				"end_date" => $unit_movement->getEndDate()->getTimestamp(),
 				"type" => $unit_movement->getType(),
+				"string_type" => $unit_movement->getStringType(),
 				"entity_type" => $entity_type,
 				"movement_type" => $unit_movement->getType(),
 				"units" => $this->em->getRepository(\App\Entity\Unit::class)->findByUnitsInMovement($unit_movement)
