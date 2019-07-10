@@ -10,6 +10,7 @@ use App\Service\Globals;
 use App\Service\Market;
 use App\Service\Mission;
 use App\Service\Resources;
+use App\Service\Unit;
 use App\Service\Utils;
 use Cron\CronExpression;
 use DateTime;
@@ -64,6 +65,11 @@ class CronController extends AbstractController
 	 * @var Mission
 	 */
 	private $mission;
+
+	/**
+	 * @var Unit
+	 */
+	private $unit;
 	
 	private $crons;
 
@@ -77,8 +83,9 @@ class CronController extends AbstractController
 	 * @param Market $market
 	 * @param Barrack $barrack
 	 * @param Mission $mission
+	 * @param Unit $unit
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -88,6 +95,7 @@ class CronController extends AbstractController
 		$this->market = $market;
 		$this->barrack = $barrack;
 		$this->mission = $mission;
+		$this->unit = $unit;
 	}
 	
 	/**
@@ -376,6 +384,24 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->mission->setAleatoryMissionsForBase();
+		}
+	}
+
+	/**
+	 * method that update market movements of each base
+	 * @throws Exception
+	 */
+	private function updateUnitMovement()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->unit->updateUnitMovement($base);
 		}
 	}
 }
