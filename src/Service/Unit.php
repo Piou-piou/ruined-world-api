@@ -67,7 +67,7 @@ class Unit
 				"type" => $unit_movement->getType(),
 				"entity_type" => $entity_type,
 				"movement_type" => $unit_movement->getType(),
-				"units" => $unit_movement->getUnits()
+				"units" => $this->em->getRepository(\App\Entity\Unit::class)->findByUnitsInMovement($unit_movement)
 			];
 		}
 
