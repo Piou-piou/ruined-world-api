@@ -11,6 +11,7 @@ use App\Service\Market;
 use App\Service\Mission;
 use App\Service\Resources;
 use App\Service\Unit;
+use App\Service\UnitMovement;
 use App\Service\Utils;
 use Cron\CronExpression;
 use DateTime;
@@ -70,6 +71,11 @@ class CronController extends AbstractController
 	 * @var Unit
 	 */
 	private $unit;
+
+	/**
+	 * @var UnitMovement
+	 */
+	private $unit_movement;
 	
 	private $crons;
 
@@ -84,8 +90,9 @@ class CronController extends AbstractController
 	 * @param Barrack $barrack
 	 * @param Mission $mission
 	 * @param Unit $unit
+	 * @param UnitMovement $unitMovement
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -96,6 +103,7 @@ class CronController extends AbstractController
 		$this->barrack = $barrack;
 		$this->mission = $mission;
 		$this->unit = $unit;
+		$this->unit_movement = $unitMovement;
 	}
 	
 	/**
@@ -401,7 +409,7 @@ class CronController extends AbstractController
 			$this->session->set("current_base", $base);
 			$this->session->set("token", $base->getUser()->getToken());
 
-			$this->unit->updateUnitMovement($base);
+			$this->unit_movement->updateUnitMovement($base);
 		}
 	}
 }

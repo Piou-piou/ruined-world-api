@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Unit;
 use App\Service\Globals;
+use App\Service\UnitMovement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -32,15 +33,15 @@ class UnitsController extends AbstractController
 	 * @Route("/api/units/list-movements/", name="units_list_movements", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
-	 * @param \App\Service\Unit $unit
+	 * @param UnitMovement $unitMovement
 	 * @return JsonResponse
 	 */
-	public function sendUnitsInMovement(SessionInterface $session, Globals $globals, \App\Service\Unit $unit): JsonResponse
+	public function sendUnitsInMovement(SessionInterface $session, Globals $globals, UnitMovement $unitMovement): JsonResponse
 	{
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
-			"unit_movements" => $unit->getCurrentMovementsInBase()
+			"unit_movements" => $unitMovement->getCurrentMovementsInBase()
 		]);
 	}
 }
