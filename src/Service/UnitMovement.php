@@ -3,7 +3,10 @@
 namespace App\Service;
 
 use App\Entity\Base;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class UnitMovement
 {
@@ -73,6 +76,32 @@ class UnitMovement
 	}
 
 	/**
+	 * method that create a unit movement
+	 * @param int $type
+	 * @param int $type_id
+	 * @param int $movement_type
+	 * @return \App\Entity\UnitMovement
+	 * @throws Exception
+	 */
+	public function create(int $type, int $type_id, int $movement_type):\App\Entity\UnitMovement
+	{
+		$now = new DateTime();
+		$mission_config = $this->globals->getMissionsConfig()[$type_id];
+
+		$unit_movement = new \App\Entity\UnitMovement();
+		$unit_movement->setBase($this->globals->getCurrentBase());
+		$unit_movement->setDuration($mission_config["duration"]);
+		$unit_movement->setEndDate($now->add(new DateInterval("PT". $mission_config["duration"] ."S")));
+		$unit_movement->setType($type);
+		$unit_movement->setTypeId($type_id);
+		$unit_movement->setMovementType($movement_type);
+		$this->em->persist($unit_movement);
+		$this->em->flush();
+
+		return $unit_movement;
+	}
+
+	/**
 	 * method that return current units movements in base
 	 */
 	public function getCurrentMovementsInBase()
@@ -102,7 +131,7 @@ class UnitMovement
 	/**
 	 * method called to update unit movements of the base
 	 * @param Base $base
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function updateUnitMovement(Base $base)
 	{
