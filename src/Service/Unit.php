@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Base;
 use App\Entity\UnitMovement;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 
 class Unit
 {
@@ -51,6 +52,24 @@ class Unit
 		}
 
 		return $max_transport_weight;
+	}
+
+	/**
+	 * method that test if we have enough unit of a type in our base
+	 * @param array $units
+	 * @return bool
+	 * @throws NonUniqueResultException
+	 */
+	public function testEnoughUnitInBaseToSend(array $units)
+	{
+		foreach ($units as $array_name => $number) {
+			$unit_base = $this->em->getRepository(\App\Entity\Unit::class)->countSameUnitInBase($this->globals->getCurrentBase(),$array_name);
+			if ($unit_base < $number) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
