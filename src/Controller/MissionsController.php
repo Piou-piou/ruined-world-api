@@ -4,7 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Mission;
 use App\Entity\Unit;
+use App\Entity\UnitMovement;
 use App\Service\Globals;
+use DateTime;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -44,11 +48,40 @@ class MissionsController extends AbstractController
 	 * method to send units in mission
 	 * @Route("/api/missions/send-units/", name="missions_send_units", methods={"POST"})
 	 * @param SessionInterface $session
-	 * @param Globals $globals
+	 * @param \App\Service\Unit $unit
+	 * @param \App\Service\UnitMovement $unit_movement_service
 	 * @return JsonResponse
+	 * @throws NonUniqueResultException
 	 */
-	public function sendUnitsInMission(SessionInterface $session, Globals $globals): JsonResponse
+	public function sendUnitsInMission(SessionInterface $session, \App\Service\Unit $unit, \App\Service\UnitMovement $unit_movement_service): JsonResponse
 	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+
+		/** @var Mission $mission */
+		$mission = $em->getRepository(Mission::class)->findOneBy(["missions_config_id" => $infos->mission_id]);
+		if (!$mission) {
+			return new JsonResponse([
+				"success" => false,
+				"token" => $session->get("user")->getToken(),
+				"error_message" => "Impossible de trouver la mission demandée"
+			]);
+		}
+		if ($unit->testEnoughUnitInBaseToSend($infos->units) === false) {
+			return new JsonResponse([
+				"success" => false,
+				"token" => $session->get("user")->getToken(),
+				"error_message" => "Vous n'avez pas autant d'unités à envoyer en mission"
+			]);
+		}
+
+		$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
+
+		$mission->setUnitMovement($unit_movement);
+		$mission->setInProgress(true);
+		$em->persist($mission);
+		$em->flush();
+
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
