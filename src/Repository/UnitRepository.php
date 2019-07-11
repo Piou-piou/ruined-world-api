@@ -6,6 +6,7 @@ use App\Entity\Base;
 use App\Entity\UnitMovement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 
 class UnitRepository extends EntityRepository
@@ -99,5 +100,29 @@ class UnitRepository extends EntityRepository
 		}
 
 		return $return_results;
+	}
+
+	/**
+	 * method that count same unit array_name in a base
+	 * @param Base $base
+	 * @param string $array_name
+	 * @return mixed
+	 * @throws NonUniqueResultException
+	 */
+	public function countSameUnitInBase(Base $base, string $array_name)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
+			WHERE u.array_name = :array_name AND u.base = :base
+		");
+		$query->setParameter("array_name", $array_name, Type::STRING);
+		$query->setParameter("base", $base, Type::OBJECT);
+
+		$result = $query->getOneOrNullResult();
+
+		if (count($result) === 1) {
+			return (int)$result["number"];
+		} else {
+			return 0;
+		}
 	}
 }
