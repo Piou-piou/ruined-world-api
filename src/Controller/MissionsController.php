@@ -30,7 +30,7 @@ class MissionsController extends AbstractController
 		$mission_config = $globals->getMissionsConfig();
 		$missions = $em->getRepository(Mission::class)->findByMissionAvailable($globals->getCurrentBase());
 		$return_missions = [];
-		dump($missions);
+
 		/** @var Mission $mission */
 		foreach ($missions as $mission) {
 			$return_missions[$mission->getMissionsConfigId()] = $mission_config[$mission->getMissionsConfigId()];
