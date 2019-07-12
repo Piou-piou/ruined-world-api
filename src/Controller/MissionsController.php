@@ -34,6 +34,7 @@ class MissionsController extends AbstractController
 		foreach ($missions as $mission) {
 			$return_missions[$mission->getMissionsConfigId()] = $mission_config[$mission->getMissionsConfigId()];
 			$return_missions[$mission->getMissionsConfigId()]["in_progress"] = $mission->getInProgress();
+			$return_missions[$mission->getMissionsConfigId()]["id"] = $mission->getMissionsConfigId();
 		}
 
 		return new JsonResponse([
