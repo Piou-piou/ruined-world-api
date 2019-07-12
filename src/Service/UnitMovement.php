@@ -171,7 +171,7 @@ class UnitMovement
 		$this->em->flush();
 
 		$max_transport_capacity = $this->getMaxCapacityTransport($unit_movement->getUnits());
-		$win_resources = round($max_transport_capacity*((100-$current_mission_config["win_resources"])/100));
+		$win_resources = round(($max_transport_capacity*((100+$current_mission_config["win_resources"])/100))-$max_transport_capacity);
 
 		$this->resources->setBase($base);
 		$this->resources->addResource("food", $win_resources);
