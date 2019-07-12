@@ -135,13 +135,13 @@ class UnitRepository extends EntityRepository
 	 * @param $number
 	 */
 	public function putUnitsInMission(Base $base, UnitMovement $movement, $array_name, $number) {
-		$query = $this->getEntityManager()->createQuery("UPDATE App:Unit u SET u.unit_movement = :movement 
+		$query = $this->getEntityManager()->createQuery("UPDATE App:Unit u SET u.unitMovement = :movement 
 			WHERE u.array_name = :array_name AND u.base = :base
 		");
 		$query->setMaxResults($number);
-
 		$query->setParameter("array_name", $array_name, Type::STRING);
 		$query->setParameter("movement", $movement, Type::OBJECT);
 		$query->setParameter("base", $base, Type::OBJECT);
+		$query->execute();
 	}
 }

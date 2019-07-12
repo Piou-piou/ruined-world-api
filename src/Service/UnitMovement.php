@@ -78,15 +78,16 @@ class UnitMovement
 	/**
 	 * method that create a unit movement
 	 * @param int $type
+	 * @param int $config_id
 	 * @param int $type_id
 	 * @param int $movement_type
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
 	 */
-	public function create(int $type, int $type_id, int $movement_type):\App\Entity\UnitMovement
+	public function create(int $type, int $config_id, int $type_id, int $movement_type):\App\Entity\UnitMovement
 	{
 		$now = new DateTime();
-		$mission_config = $this->globals->getMissionsConfig()[$type_id];
+		$mission_config = $this->globals->getMissionsConfig()[$config_id];
 
 		$unit_movement = new \App\Entity\UnitMovement();
 		$unit_movement->setBase($this->globals->getCurrentBase());

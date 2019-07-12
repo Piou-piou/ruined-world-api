@@ -38,7 +38,7 @@ class Unit
 	{
 		foreach ($units as $array_name => $number) {
 			$unit_base = $this->em->getRepository(\App\Entity\Unit::class)->countSameUnitInBase($this->globals->getCurrentBase(),$array_name);
-			if ($unit_base < $number) {
+			if ($unit_base < $number->number) {
 				return false;
 			}
 		}
@@ -54,7 +54,7 @@ class Unit
 	public function putUnitsInMovement(array $units, \App\Entity\UnitMovement $unit_movement)
 	{
 		foreach ($units as $array_name => $number) {
-			$this->em->getRepository(\App\Entity\Unit::class)->putUnitsInMission($this->globals->getCurrentBase(), $unit_movement, $array_name, $number);
+			$this->em->getRepository(\App\Entity\Unit::class)->putUnitsInMission($this->globals->getCurrentBase(), $unit_movement, $array_name, $number->number);
 		}
 	}
 }

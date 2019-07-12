@@ -67,14 +67,14 @@ class MissionsController extends AbstractController
 			$success = false;
 			$error_message = "Impossible de trouver la mission demandée";
 		}
-		if ($unit->testEnoughUnitInBaseToSend($infos->units) === false) {
+		if ($unit->testEnoughUnitInBaseToSend((array)$infos->units) === false) {
 			$success = false;
 			$error_message = "Vous n'avez pas autant d'unités à envoyer en mission";
 		}
 
 		if ($success === true) {
-			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
-			$unit->putUnitsInMovement($infos->units, $unit_movement);
+			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getMissionsConfigId(), $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
+			$unit->putUnitsInMovement((array)$infos->units, $unit_movement);
 
 			$mission->setUnitMovement($unit_movement);
 			$mission->setInProgress(true);
