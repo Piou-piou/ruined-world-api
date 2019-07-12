@@ -86,7 +86,8 @@ class MissionsController extends AbstractController
 		return new JsonResponse([
 			"success" => $success,
 			"token" => $session->get("user")->getToken(),
-			"error_message" => $error_message
+			"error_message" => $error_message,
+			"success_message" => "Vos unités se mettent en route"
 		]);
 	}
 }
