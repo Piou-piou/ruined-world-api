@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Base;
+use App\Entity\Mission;
 use App\Entity\UnitMovement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
@@ -124,5 +125,23 @@ class UnitRepository extends EntityRepository
 		} else {
 			return 0;
 		}
+	}
+
+	/**
+	 * method to put units on a specifiq movement
+	 * @param Base $base
+	 * @param UnitMovement $movement
+	 * @param $array_name
+	 * @param $number
+	 */
+	public function putUnitsInMission(Base $base, UnitMovement $movement, $array_name, $number) {
+		$query = $this->getEntityManager()->createQuery("UPDATE App:Unit u SET u.unit_movement = :movement 
+			WHERE u.array_name = :array_name AND u.base = :base
+		");
+		$query->setMaxResults($number);
+
+		$query->setParameter("array_name", $array_name, Type::STRING);
+		$query->setParameter("movement", $movement, Type::OBJECT);
+		$query->setParameter("base", $base, Type::OBJECT);
 	}
 }

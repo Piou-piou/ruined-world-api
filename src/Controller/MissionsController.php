@@ -57,34 +57,34 @@ class MissionsController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
+		$success = true;
+		$error_message = "";
 
 		/** @var Mission $mission */
 		$mission = $em->getRepository(Mission::class)->findOneBy(["missions_config_id" => $infos->mission_id]);
 		if (!$mission) {
-			return new JsonResponse([
-				"success" => false,
-				"token" => $session->get("user")->getToken(),
-				"error_message" => "Impossible de trouver la mission demandée"
-			]);
+			$success = false;
+			$error_message = "Impossible de trouver la mission demandée";
 		}
 		if ($unit->testEnoughUnitInBaseToSend($infos->units) === false) {
-			return new JsonResponse([
-				"success" => false,
-				"token" => $session->get("user")->getToken(),
-				"error_message" => "Vous n'avez pas autant d'unités à envoyer en mission"
-			]);
+			$success = false;
+			$error_message = "Vous n'avez pas autant d'unités à envoyer en mission";
 		}
 
-		$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
+		if ($success === true) {
+			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
+			$unit->putUnitsInMovement($infos->units, $unit_movement);
 
-		$mission->setUnitMovement($unit_movement);
-		$mission->setInProgress(true);
-		$em->persist($mission);
-		$em->flush();
+			$mission->setUnitMovement($unit_movement);
+			$mission->setInProgress(true);
+			$em->persist($mission);
+			$em->flush();
+		}
 
 		return new JsonResponse([
-			"success" => true,
+			"success" => $success,
 			"token" => $session->get("user")->getToken(),
+			"error_message" => $error_message
 		]);
 	}
 }

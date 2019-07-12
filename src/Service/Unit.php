@@ -45,4 +45,16 @@ class Unit
 
 		return true;
 	}
+
+	/**
+	 * method to puts units on a specific movement
+	 * @param array $units
+	 * @param \App\Entity\UnitMovement $unit_movement
+	 */
+	public function putUnitsInMovement(array $units, \App\Entity\UnitMovement $unit_movement)
+	{
+		foreach ($units as $array_name => $number) {
+			$this->em->getRepository(\App\Entity\Unit::class)->putUnitsInMission($this->globals->getCurrentBase(), $unit_movement, $array_name, $number);
+		}
+	}
 }
