@@ -113,7 +113,7 @@ class UnitRepository extends EntityRepository
 	public function countSameUnitInBase(Base $base, string $array_name)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
-			WHERE u.array_name = :array_name AND u.base = :base
+			WHERE u.array_name = :array_name AND u.base = :base AND u.unitMovement IS NULL
 		");
 		$query->setParameter("array_name", $array_name, Type::STRING);
 		$query->setParameter("base", $base, Type::OBJECT);
