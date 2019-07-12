@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Base;
-use App\Entity\Mission;
 use App\Entity\UnitMovement;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -131,17 +131,20 @@ class UnitRepository extends EntityRepository
 	 * method to put units on a specifiq movement
 	 * @param Base $base
 	 * @param UnitMovement $movement
-	 * @param $array_name
-	 * @param $number
+	 * @param string $array_name
+	 * @param int $number
+	 * @throws DBALException
 	 */
-	public function putUnitsInMission(Base $base, UnitMovement $movement, $array_name, $number) {
-		$query = $this->getEntityManager()->createQuery("UPDATE App:Unit u SET u.unitMovement = :movement 
-			WHERE u.array_name = :array_name AND u.base = :base
+	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number) {
+		$query = $this->getEntityManager()->getConnection()->prepare("UPDATE unit u SET u.unit_movement_id = :movement_id
+			WHERE u.array_name = :array_name AND u.base_id = :base_id
+			LIMIT :number
 		");
-		$query->setMaxResults($number);
-		$query->setParameter("array_name", $array_name, Type::STRING);
-		$query->setParameter("movement", $movement, Type::OBJECT);
-		$query->setParameter("base", $base, Type::OBJECT);
+
+		$query->bindValue("array_name", $array_name, Type::STRING);
+		$query->bindValue("number", $number, Type::INTEGER);
+		$query->bindValue("movement_id", $movement->getId(), Type::INTEGER);
+		$query->bindValue("base_id", $base->getId(), Type::INTEGER);
 		$query->execute();
 	}
 }
