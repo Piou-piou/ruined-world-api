@@ -26,10 +26,11 @@ class MissionsController extends AbstractController
 	 */
 	public function sendCurrentMissions(Session $session, Globals $globals): JsonResponse
 	{
+		$em = $this->getDoctrine()->getManager();
 		$mission_config = $globals->getMissionsConfig();
-		$missions = $globals->getCurrentBase()->getMissions();
+		$missions = $em->getRepository(Mission::class)->findByMissionAvailable($globals->getCurrentBase());
 		$return_missions = [];
-
+		dump($missions);
 		/** @var Mission $mission */
 		foreach ($missions as $mission) {
 			$return_missions[$mission->getMissionsConfigId()] = $mission_config[$mission->getMissionsConfigId()];
@@ -41,7 +42,7 @@ class MissionsController extends AbstractController
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
 			"missions" => $return_missions,
-			"units" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInBase($globals->getCurrentBase())
+			"units" => $em->getRepository(Unit::class)->findByUnitsInBase($globals->getCurrentBase())
 		]);
 	}
 
