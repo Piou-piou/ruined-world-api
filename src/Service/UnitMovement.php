@@ -183,5 +183,6 @@ class UnitMovement
 		$this->em->persist($unit_movement);
 		$this->em->flush();
 		$this->em->remove($unit_movement);
+		$this->em->flush();
 	}
 }
