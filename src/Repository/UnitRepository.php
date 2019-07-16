@@ -152,7 +152,7 @@ class UnitRepository extends EntityRepository
 	 */
 	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number) {
 		$query = $this->getEntityManager()->getConnection()->prepare("UPDATE unit u SET u.unit_movement_id = :movement_id
-			WHERE u.array_name = :array_name AND u.base_id = :base_id
+			WHERE u.array_name = :array_name AND u.base_id = :base_id AND u.unit_movement_id IS NULL
 			LIMIT :number
 		");
 
