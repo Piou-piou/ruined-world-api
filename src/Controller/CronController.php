@@ -6,6 +6,7 @@ use App\Entity\Base;
 use App\Entity\User;
 use App\Service\Barrack;
 use App\Service\Building;
+use App\Service\Food;
 use App\Service\Globals;
 use App\Service\Market;
 use App\Service\Mission;
@@ -76,6 +77,11 @@ class CronController extends AbstractController
 	 * @var UnitMovement
 	 */
 	private $unit_movement;
+
+	/**
+	 * @var Food
+	 */
+	private $food;
 	
 	private $crons;
 
@@ -91,8 +97,9 @@ class CronController extends AbstractController
 	 * @param Mission $mission
 	 * @param Unit $unit
 	 * @param UnitMovement $unitMovement
+	 * @param Food $food
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -104,6 +111,7 @@ class CronController extends AbstractController
 		$this->mission = $mission;
 		$this->unit = $unit;
 		$this->unit_movement = $unitMovement;
+		$this->food = $food;
 	}
 	
 	/**
@@ -117,7 +125,7 @@ class CronController extends AbstractController
 		$ip = $request->server->get('REMOTE_ADDR');
 		$allowed_ip = ["127.0.0.1", "91.165.47.238", "90.100.133.37"];
 		
-		if (in_array($ip, $allowed_ip)) {
+		/*if (in_array($ip, $allowed_ip)) {*/
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
 			$now = new DateTime();
@@ -131,19 +139,19 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					if ($next_exec === null) {
+					/*if ($next_exec === null) {*/
 						$this->$key();
-					} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
+					/*} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
 						$this->$key();
-					}
+					}*/
 					
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
 				}
 			}
-		} else {
+		/*} else {
 			throw new AccessDeniedHttpException("You haven't got access to this page");
-		}
+		}*/
 		
 		return new Response();
 	}
@@ -239,6 +247,8 @@ class CronController extends AbstractController
 		foreach ($bases as $base) {
 			$this->session->set("current_base", $base);
 			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->food->consumeFood();
 			
 			$resources = new Resources($em, $this->session, $this->globals);
 			
