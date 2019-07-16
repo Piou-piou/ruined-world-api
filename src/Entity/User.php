@@ -74,6 +74,11 @@ class User
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 */
 	protected $verified_account;
+	
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	protected $validate_account_key;
 
     /**
      * @ORM\OneToMany(targetEntity="Base", mappedBy="user")
@@ -330,6 +335,22 @@ class User
 	public function setVerifiedAccount($verified_account): void
 	{
 		$this->verified_account = $verified_account;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getValidateAccountKey()
+	{
+		return $this->validate_account_key;
+	}
+	
+	/**
+	 * @param mixed $validate_account_key
+	 */
+	public function setValidateAccountKey($validate_account_key): void
+	{
+		$this->validate_account_key = $validate_account_key;
 	}
 	
 	/**
