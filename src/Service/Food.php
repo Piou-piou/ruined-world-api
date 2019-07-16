@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Base;
 use App\Entity\Unit;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Food
@@ -40,12 +41,13 @@ class Food
 	/**
 	 * method that return number of food consumed per hour
 	 * @return int
+	 * @throws NonUniqueResultException
 	 */
-	private function getFoodConsumedPerHour(): int
+	public function getFoodConsumedPerHour(): int
 	{
-		$units = $this->em->getRepository(Unit::class)->findByUnitsInBase($this->base);
+		$units_number = $this->em->getRepository(Unit::class)->countUnitsInBase($this->base);
 
-		return count($units) * 2;
+		return $units_number * 2;
 	}
 
 	/**

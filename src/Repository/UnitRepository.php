@@ -28,6 +28,21 @@ class UnitRepository extends EntityRepository
 	}
 
 	/**
+	 * method to count units that are currently in base
+	 * @param Base $base
+	 * @return mixed
+	 * @throws NonUniqueResultException
+	 */
+	public function countUnitsInBase(Base $base) {
+		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
+			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
+		");
+		$query->setParameter("base", $base, Type::OBJECT);
+
+		return $query->getOneOrNullResult()["number"];
+	}
+
+	/**
 	 * method to find units that are currently in recruitment in base
 	 * @param Base $base
 	 * @return array
