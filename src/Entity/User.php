@@ -26,6 +26,11 @@ class User
     protected $pseudo;
 	
 	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+    protected $email;
+	
+	/**
 	 * @ORM\Column(type="string", length=200)
 	 */
     protected $token;
@@ -64,6 +69,11 @@ class User
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 */
 	protected $archived;
+	
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $verified_account;
 
     /**
      * @ORM\OneToMany(targetEntity="Base", mappedBy="user")
@@ -121,6 +131,22 @@ class User
     {
         return $this->pseudo;
     }
+	
+	/**
+	 * @return mixed
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+	
+	/**
+	 * @param mixed $email
+	 */
+	public function setEmail($email): void
+	{
+		$this->email = $email;
+	}
 	
 	/**
 	 * @return mixed
@@ -288,6 +314,22 @@ class User
 		$this->archived = $archived;
 		
 		return $this;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getVerifiedAccount()
+	{
+		return $this->verified_account;
+	}
+	
+	/**
+	 * @param mixed $verified_account
+	 */
+	public function setVerifiedAccount($verified_account): void
+	{
+		$this->verified_account = $verified_account;
 	}
 	
 	/**
