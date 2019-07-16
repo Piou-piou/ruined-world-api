@@ -6,9 +6,8 @@ use App\Entity\Mission;
 use App\Entity\Unit;
 use App\Entity\UnitMovement;
 use App\Service\Globals;
-use DateTime;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\NonUniqueResultException;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -54,6 +53,7 @@ class MissionsController extends AbstractController
 	 * @param \App\Service\UnitMovement $unit_movement_service
 	 * @return JsonResponse
 	 * @throws NonUniqueResultException
+	 * @throws DBALException
 	 */
 	public function sendUnitsInMission(SessionInterface $session, \App\Service\Unit $unit, \App\Service\UnitMovement $unit_movement_service): JsonResponse
 	{
