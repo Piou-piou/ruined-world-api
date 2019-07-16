@@ -63,7 +63,8 @@ class BaseController extends AbstractController
 			"success" => true,
 			"base" => $api->serializeObject($base),
 			"resources_infos" => [
-				"max_storage" => $resources->getWarehouseCapacity(),
+				"max_storage_wharehouse" => $resources->getWarehouseCapacity(),
+				"max_storage_garner" => $resources->getGarnerCapacity(),
 				"electricity_production" => $resources->getElectricityProduction(),
 				"iron_production" => $resources->getIronProduction(),
 				"fuel_production" => $resources->getFuelProduction(),
@@ -117,6 +118,7 @@ class BaseController extends AbstractController
 			"iron" => $base->getIron(),
 			"fuel" => $base->getFuel(),
 			"water" => $base->getWater(),
+			"food" => $base->getFood(),
 			"token" => $session->get("user")->getToken(),
 		]);
 	}

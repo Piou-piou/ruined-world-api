@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Entity\Mission
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\MissionRepository")
  * @ORM\Table(name="mission", indexes={@ORM\Index(name="fk_mission_base1_idx", columns={"base_id"}), @ORM\Index(name="fk_mission_unit_movement1_idx", columns={"unit_movement_id"})})
  */
 class Mission
@@ -20,29 +20,19 @@ class Mission
     protected $id;
 
     /**
-     * @ORM\Column(name="`name`", type="string", length=255)
+     * @ORM\Column(type="boolean", options={"default" : false})
      */
-    protected $name;
+    protected $in_progress = false;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    protected $description;
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $disabled = false;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $points;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $duration;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $in_progress;
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+    protected $missions_config_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="missions")
@@ -52,7 +42,7 @@ class Mission
 
     /**
      * @ORM\ManyToOne(targetEntity="UnitMovement", inversedBy="missions")
-     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=true)
      */
     protected $unitMovement;
 
@@ -84,98 +74,6 @@ class Mission
     }
 
     /**
-     * Set the value of name.
-     *
-     * @param string $name
-     * @return Mission
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the value of description.
-     *
-     * @param string $description
-     * @return Mission
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of description.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the value of points.
-     *
-     * @param integer $points
-     * @return Mission
-     */
-    public function setPoints($points)
-    {
-        $this->points = $points;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of points.
-     *
-     * @return integer
-     */
-    public function getPoints()
-    {
-        return $this->points;
-    }
-
-    /**
-     * Set the value of duration.
-     *
-     * @param integer $duration
-     * @return Mission
-     */
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of duration.
-     *
-     * @return integer
-     */
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    /**
      * Set the value of in_progress.
      *
      * @param boolean $in_progress
@@ -197,6 +95,44 @@ class Mission
     {
         return $this->in_progress;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getDisabled()
+	{
+		return $this->disabled;
+	}
+
+	/**
+	 * @param mixed $disabled
+	 * @return Mission
+	 */
+	public function setDisabled($disabled)
+	{
+		$this->disabled = $disabled;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMissionsConfigId()
+	{
+		return $this->missions_config_id;
+	}
+
+	/**
+	 * @param mixed $missions_config_id
+	 * @return Mission
+	 */
+	public function setMissionsConfigId($missions_config_id)
+	{
+		$this->missions_config_id = $missions_config_id;
+
+		return $this;
+	}
 
     /**
      * Set Base entity (many to one).

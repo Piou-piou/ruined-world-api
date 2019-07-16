@@ -110,8 +110,10 @@ class Resources
 		
 		$new_resource = $this->getBase()->$getter() + $value_to_add;
 		
-		if ($new_resource > $this->getWarehouseCapacity()) {
+		if ($resource !== "food" && $new_resource > $this->getWarehouseCapacity()) {
 			$new_resource = $this->getWarehouseCapacity();
+		} else if ($resource === "food" && $new_resource > $this->getGarnerCapacity()) {
+			$new_resource = $this->getGarnerCapacity();
 		}
 		
 		$this->getBase()->$setter($new_resource);

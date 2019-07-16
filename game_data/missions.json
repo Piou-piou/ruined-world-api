@@ -1,0 +1,73 @@
+{
+  "1": {
+    "name": "Food 1",
+    "array_name": "food1",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 100,
+    "lost_percentage": 60,
+    "duration": 5400
+  },
+  "2": {
+    "name": "Food 9",
+    "array_name": "food9",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 85,
+    "lost_percentage": 50,
+    "duration": 4500
+  },
+  "3": {
+    "name": "Food 2",
+    "array_name": "food2",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 70,
+    "lost_percentage": 40,
+    "duration": 3600
+  },
+  "4": {
+    "name": "Food 8",
+    "array_name": "food8",
+    "type": "food",
+    "win_resources": 60,
+    "lost_percentage": 30,
+    "duration": 2700
+  },
+  "5": {
+    "name": "Food 4",
+    "array_name": "food4",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 50,
+    "lost_percentage": 20,
+    "duration": 1800
+  },
+  "6": {
+    "name": "Food 7",
+    "array_name": "food7",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 40,
+    "lost_percentage": 15,
+    "duration": 1200
+  },
+  "7": {
+    "name": "Food 5",
+    "array_name": "food5",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 30,
+    "lost_percentage": 10,
+    "duration": 600
+  },
+  "8": {
+    "name": "Food 6",
+    "array_name": "food6",
+    "type": "food",
+    "explanation": "Bacon ipsum dolor amet meatloaf shank filet mignon t-bone boudin frankfurter beef hamburger rump pastrami drumstick strip steak jowl ribeye flank. Pastrami turducken fatback, ham hock bacon boudin sirloin andouille salami pig tri-tip frankfurter ham turkey. Filet mignon cow pork belly, strip steak doner sausage pork chop jowl frankfurter prosciutto. Corned beef andouille kevin ground round, hamburger ball tip boudin fatback spare ribs bacon ribeye filet mignon meatloaf pancetta chuck. Pork belly pork jerky frankfurter chicken shoulder ham sirloin kielbasa. Short ribs cow filet mignon pastrami. Andouille short ribs bresaola pork short loin flank hamburger meatball frankfurter shoulder.",
+    "win_resources": 15,
+    "lost_percentage": 5,
+    "duration": 300
+  }
+}

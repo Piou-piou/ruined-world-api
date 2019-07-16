@@ -6,9 +6,13 @@ use App\Entity\Base;
 use App\Entity\User;
 use App\Service\Barrack;
 use App\Service\Building;
+use App\Service\Food;
 use App\Service\Globals;
 use App\Service\Market;
+use App\Service\Mission;
 use App\Service\Resources;
+use App\Service\Unit;
+use App\Service\UnitMovement;
 use App\Service\Utils;
 use Cron\CronExpression;
 use DateTime;
@@ -58,6 +62,26 @@ class CronController extends AbstractController
 	 * @var Barrack
 	 */
 	private $barrack;
+
+	/**
+	 * @var Mission
+	 */
+	private $mission;
+
+	/**
+	 * @var Unit
+	 */
+	private $unit;
+
+	/**
+	 * @var UnitMovement
+	 */
+	private $unit_movement;
+
+	/**
+	 * @var Food
+	 */
+	private $food;
 	
 	private $crons;
 
@@ -70,8 +94,12 @@ class CronController extends AbstractController
 	 * @param Building $building
 	 * @param Market $market
 	 * @param Barrack $barrack
+	 * @param Mission $mission
+	 * @param Unit $unit
+	 * @param UnitMovement $unitMovement
+	 * @param Food $food
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -80,6 +108,10 @@ class CronController extends AbstractController
 		$this->building = $building;
 		$this->market = $market;
 		$this->barrack = $barrack;
+		$this->mission = $mission;
+		$this->unit = $unit;
+		$this->unit_movement = $unitMovement;
+		$this->food = $food;
 	}
 	
 	/**
@@ -215,6 +247,8 @@ class CronController extends AbstractController
 		foreach ($bases as $base) {
 			$this->session->set("current_base", $base);
 			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->food->consumeFood();
 			
 			$resources = new Resources($em, $this->session, $this->globals);
 			
@@ -351,6 +385,41 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->barrack->endRecruitmentUnitsInBase();
+		}
+	}
+
+	/**
+	 * method to update missions of the base
+	 */
+	private function updateMissionsForBase()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->mission->setAleatoryMissionsForBase();
+		}
+	}
+
+	/**
+	 * method that update market movements of each base
+	 * @throws Exception
+	 */
+	private function updateUnitMovement()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->unit_movement->updateUnitMovement($base);
 		}
 	}
 }
