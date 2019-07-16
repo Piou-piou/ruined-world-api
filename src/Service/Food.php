@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Entity\Base;
 use App\Entity\Unit;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -52,10 +54,14 @@ class Food
 
 	/**
 	 * methdo to consume food per hour
+	 * @throws NonUniqueResultException
 	 */
 	public function consumeFood()
 	{
-		if ($this->base->getFood() > 0) {
+		$last_hour = new DateTime();
+		$last_hour->sub(new DateInterval("PT1H"));
+
+		if ($this->base->getFood() > 0 && $last_hour > $this->base->getLastCheckFood()) {
 			$new_food = $this->base->getFood() - $this->getFoodConsumedPerHour();
 
 			if ($new_food < 0) {
@@ -64,6 +70,7 @@ class Food
 			}
 
 			$this->base->setFood($new_food);
+			$this->base->setLastCheckFood(new DateTime());
 			$this->em->persist($this->base);
 			$this->em->flush();
 		}
