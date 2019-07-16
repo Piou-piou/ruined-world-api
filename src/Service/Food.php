@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Unit;
 use DateInterval;
 use DateTime;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -48,6 +49,7 @@ class Food
 	/**
 	 * methdo to consume food per hour
 	 * @throws NonUniqueResultException
+	 * @throws DBALException
 	 */
 	public function consumeFood()
 	{
@@ -70,7 +72,17 @@ class Food
 		}
 	}
 
-	private function killUnits($negative_food) {
+	/**
+	 * method to kill random units because of no more food in base
+	 * @param $negative_food
+	 * @throws DBALException
+	 */
+	private function killUnits($negative_food)
+	{
+		$units_to_kill = round(abs($negative_food) / 2);
 
+		if ($units_to_kill > 0) {
+			$this->em->getRepository(Unit::class)->killRandomUnitBecauseFood($this->globals->getCurrentBase(), $units_to_kill);
+		}
 	}
 }
