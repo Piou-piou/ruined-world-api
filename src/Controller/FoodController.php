@@ -26,7 +26,7 @@ class FoodController extends AbstractController
 		$food_consumption = $food->getFoodConsumedPerHour();
 		$string = "consommé par heure";
 
-		if ($base->getFood() === 0 && count($food_consumption) > 0) {
+		if ($base->getFood() === 0 && $food_consumption > 0) {
 			$string = "mort par heure";
 		}
 
