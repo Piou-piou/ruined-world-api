@@ -53,11 +53,11 @@ class Mission
 	{
 		$this->deleteMissionsOfBase();
 		$this->user_number_mission = [];
-		$check_mission_interval = $this->globals->getGeneralConfig()["check_mission_interval"];
+		$check_mission_interval = $this->globals->getGeneralConfig()["check_mission_interval_hour"];
 		$missions_config = $this->globals->getMissionsConfig();
 		$number_missions = $this->globals->getGeneralConfig()["number_of_missions_base"];
 		$now = new \DateTime();
-		$last_check = $now->sub(new \DateInterval("PT".$check_mission_interval."S"));
+		$last_check = $now->sub(new \DateInterval("PT".$check_mission_interval."H"));
 
 		if ($this->globals->getCurrentBase()->getLastCheckMission() > $last_check) {
 			return;
