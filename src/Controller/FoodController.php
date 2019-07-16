@@ -28,6 +28,7 @@ class FoodController extends AbstractController
 
 		if ($base->getFood() === 0 && $food_consumption > 0) {
 			$string = "mort par heure";
+			$food_consumption = $food->getUnitKilledPerHour();
 		}
 
 		return new JsonResponse([

@@ -47,6 +47,21 @@ class Food
 	}
 
 	/**
+	 * method that return killed unit per hour when food is equal or under 0
+	 * @param int|null $negative_food
+	 * @return int
+	 * @throws NonUniqueResultException
+	 */
+	public function getUnitKilledPerHour(int $negative_food = null): int
+	{
+		if ($negative_food === null) {
+			$negative_food = $this->getFoodConsumedPerHour();
+		}
+
+		return round(abs($negative_food) / 6);
+	}
+
+	/**
 	 * methdo to consume food per hour
 	 * @throws NonUniqueResultException
 	 * @throws DBALException
@@ -76,13 +91,12 @@ class Food
 	 * method to kill random units because of no more food in base
 	 * @param $negative_food
 	 * @throws DBALException
+	 * @throws NonUniqueResultException
 	 */
 	private function killUnits($negative_food)
 	{
-		$units_to_kill = round(abs($negative_food) / 2);
-
-		if ($units_to_kill > 0) {
-			$this->em->getRepository(Unit::class)->killRandomUnitBecauseFood($this->globals->getCurrentBase(), $units_to_kill);
+		if ($this->getUnitKilledPerHour($negative_food) > 0) {
+			$this->em->getRepository(Unit::class)->killRandomUnitBecauseFood($this->globals->getCurrentBase(), $this->getUnitKilledPerHour($negative_food));
 		}
 	}
 }

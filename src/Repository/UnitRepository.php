@@ -171,8 +171,8 @@ class UnitRepository extends EntityRepository
 	 */
 	public function killRandomUnitBecauseFood(Base $base, int $number)
 	{
-		$query = $this->getEntityManager()->getConnection()->prepare("DELETE FROM unit u
-			WHERE u.base_id = :base_id AND  u.unit_movement_id IS NULL AND u.in_recruitment = 0
+		$query = $this->getEntityManager()->getConnection()->prepare("DELETE FROM unit
+			WHERE base_id = :base_id AND unit_movement_id IS NULL AND in_recruitment = 0
 			ORDER BY RAND()
 			LIMIT :number
 		");
