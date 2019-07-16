@@ -25,17 +25,21 @@ class FoodController extends AbstractController
 		$base = $globals->getCurrentBase(true);
 		$food_consumption = $food->getFoodConsumedPerHour();
 		$string = "consommé par heure";
+		$string_kill = "mort par heure";
+		$food_kill = $food->getUnitKilledPerHour();
 
 		if ($base->getFood() === 0 && $food_consumption > 0) {
-			$string = "mort par heure";
-			$food_consumption = $food->getUnitKilledPerHour();
+			$food_consumption = 0;
+			$string = "";
 		}
 
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
 			"food_consumption" => $food_consumption,
-			"food_string" => $string
+			"food_string" => $string,
+			"food_kill" => $food_kill,
+			"food_string_kill" => $string_kill,
 		]);
 	}
 }
