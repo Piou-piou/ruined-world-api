@@ -65,6 +65,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "egulias/email-validator": {
+        "version": "2.1.9"
+    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
@@ -94,6 +97,9 @@
     },
     "ramsey/uuid": {
         "version": "3.8.0"
+    },
+    "swiftmailer/swiftmailer": {
+        "version": "v6.2.1"
     },
     "symfony/cache": {
         "version": "v4.2.2"
@@ -164,6 +170,9 @@
     "symfony/orm-pack": {
         "version": "v1.0.6"
     },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.11.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
     },
@@ -211,6 +220,20 @@
     },
     "symfony/stopwatch": {
         "version": "v4.2.3"
+    },
+    "symfony/swiftmailer-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "3db029c03e452b4a23f7fc45cec7c922c2247eb8"
+        },
+        "files": [
+            "config/packages/dev/swiftmailer.yaml",
+            "config/packages/swiftmailer.yaml",
+            "config/packages/test/swiftmailer.yaml"
+        ]
     },
     "symfony/twig-bridge": {
         "version": "v4.2.4"

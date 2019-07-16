@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\Unit
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UnitRepository")
  * @ORM\Table(name="unit", indexes={@ORM\Index(name="fk_unit_base1_idx", columns={"base_id"}), @ORM\Index(name="fk_unit_unit_movement1_idx", columns={"unit_movement_id"})})
  */
 class Unit
@@ -39,11 +39,22 @@ class Unit
      * @ORM\Column(type="integer")
      */
     protected $defense_level;
+
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+    protected $in_recruitment;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	protected $end_recruitment;
+
     /**
-     * @ORM\OneToMany(targetEntity="UnitGroup", mappedBy="unit")
-     * @ORM\JoinColumn(name="id", referencedColumnName="unit_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="UnitGroup", inversedBy="units")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
      */
-    protected $unitGroups;
+    protected $unitGroup;
 
     /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="units")
@@ -53,14 +64,9 @@ class Unit
 
     /**
      * @ORM\ManyToOne(targetEntity="UnitMovement", inversedBy="units")
-     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=true)
      */
     protected $unitMovement;
-
-    public function __construct()
-    {
-        $this->unitGroups = new ArrayCollection();
-    }
 
     /**
      * Set the value of id.
@@ -177,41 +183,62 @@ class Unit
         return $this->defense_level;
     }
 
-    /**
-     * Add UnitGroup entity to collection (one to many).
-     *
-     * @param UnitGroup $unitGroup
-     * @return Unit
-     */
-    public function addUnitGroup(UnitGroup $unitGroup)
-    {
-        $this->unitGroups[] = $unitGroup;
+	/**
+	 * @return mixed
+	 */
+	public function getInRecruitment()
+	{
+		return $this->in_recruitment;
+	}
 
-        return $this;
-    }
+	/**
+	 * @param mixed $in_recruitment
+	 * @return Unit
+	 */
+	public function setInRecruitment($in_recruitment)
+	{
+		$this->in_recruitment = $in_recruitment;
 
-    /**
-     * Remove UnitGroup entity from collection (one to many).
-     *
-     * @param UnitGroup $unitGroup
-     * @return Unit
-     */
-    public function removeUnitGroup(UnitGroup $unitGroup)
-    {
-        $this->unitGroups->removeElement($unitGroup);
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getEndRecruitment()
+	{
+		return $this->end_recruitment;
+	}
 
-    /**
-     * Get UnitGroup entity collection (one to many).
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUnitGroups()
-    {
-        return $this->unitGroups;
-    }
+	/**
+	 * @param mixed $end_recruitment
+	 * @return Unit
+	 */
+	public function setEndRecruitment($end_recruitment)
+	{
+		$this->end_recruitment = $end_recruitment;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUnitGroup()
+	{
+		return $this->unitGroup;
+	}
+
+	/**
+	 * @param mixed $unitGroup
+	 * @return Unit
+	 */
+	public function setUnitGroup($unitGroup)
+	{
+		$this->unitGroup = $unitGroup;
+
+		return $this;
+	}
 
     /**
      * Set Base entity (many to one).

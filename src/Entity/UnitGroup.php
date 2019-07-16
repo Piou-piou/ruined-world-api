@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Entity\UnitGroup
  *
  * @ORM\Entity
- * @ORM\Table(name="unit_group", indexes={@ORM\Index(name="fk_unit_group_unit1_idx", columns={"unit_id"}), @ORM\Index(name="fk_unit_group_unit_movement1_idx", columns={"unit_movement_id"})})
+ * @ORM\Table(name="unit_group", indexes={@ORM\Index(name="fk_unit_group_unit_movement1_idx", columns={"unit_movement_id"})})
  */
 class UnitGroup
 {
@@ -28,17 +29,22 @@ class UnitGroup
      */
     protected $experience;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Unit", inversedBy="unitGroups")
-     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id", nullable=false)
-     */
-    protected $unit;
+	/**
+	 * @ORM\OneToMany(targetEntity="Unit", mappedBy="unitGroup")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="group_id", nullable=false)
+	 */
+    protected $units;
 
     /**
      * @ORM\ManyToOne(targetEntity="UnitMovement", inversedBy="unitGroups")
      * @ORM\JoinColumn(name="unit_movement_id", referencedColumnName="id", nullable=false)
      */
     protected $unitMovement;
+
+	public function __construct()
+	{
+		$this->units = new ArrayCollection();
+	}
 
     /**
      * Set the value of id.
@@ -109,28 +115,41 @@ class UnitGroup
         return $this->experience;
     }
 
-    /**
-     * Set Unit entity (many to one).
-     *
-     * @param Unit $unit
-     * @return UnitGroup
-     */
-    public function setUnit(Unit $unit = null)
-    {
-        $this->unit = $unit;
+	/**
+	 * Add Unit entity to collection (one to many).
+	 *
+	 * @param Unit $unit
+	 * @return UnitGroup
+	 */
+	public function addUnit(Unit $unit)
+	{
+		$this->units[] = $unit;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get Unit entity (many to one).
-     *
-     * @return Unit
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
+	/**
+	 * Remove Unit entity from collection (one to many).
+	 *
+	 * @param Unit $unit
+	 * @return UnitGroup
+	 */
+	public function removeUnit(Unit $unit)
+	{
+		$this->units->removeElement($unit);
+
+		return $this;
+	}
+
+	/**
+	 * Get Unit entity collection (one to many).
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getUnits()
+	{
+		return $this->units;
+	}
 
     /**
      * Set UnitMovement entity (many to one).

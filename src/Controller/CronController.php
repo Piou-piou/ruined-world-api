@@ -3,13 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Base;
-use App\Entity\Building;
 use App\Entity\User;
+use App\Service\Barrack;
+use App\Service\Building;
+use App\Service\Food;
 use App\Service\Globals;
 use App\Service\Market;
+use App\Service\Mission;
 use App\Service\Resources;
+use App\Service\Unit;
+use App\Service\UnitMovement;
 use App\Service\Utils;
 use Cron\CronExpression;
+use DateTime;
+use Exception;
+use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +28,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CronController extends AbstractController
 {
+	/**
+	 * @var Swift_Mailer
+	 */
+	private $mailer;
+
 	/**
 	 * @var Utils
 	 */
@@ -36,7 +49,7 @@ class CronController extends AbstractController
 	private $globals;
 	
 	/**
-	 * @var \App\Service\Building
+	 * @var Building
 	 */
 	private $building;
 
@@ -44,31 +57,68 @@ class CronController extends AbstractController
 	 * @var Market
 	 */
 	private $market;
+
+	/**
+	 * @var Barrack
+	 */
+	private $barrack;
+
+	/**
+	 * @var Mission
+	 */
+	private $mission;
+
+	/**
+	 * @var Unit
+	 */
+	private $unit;
+
+	/**
+	 * @var UnitMovement
+	 */
+	private $unit_movement;
+
+	/**
+	 * @var Food
+	 */
+	private $food;
 	
 	private $crons;
 
 	/**
 	 * CronController constructor.
+	 * @param Swift_Mailer $mailer
 	 * @param Utils $utils
 	 * @param SessionInterface $session
 	 * @param Globals $globals
-	 * @param \App\Service\Building $building
+	 * @param Building $building
 	 * @param Market $market
+	 * @param Barrack $barrack
+	 * @param Mission $mission
+	 * @param Unit $unit
+	 * @param UnitMovement $unitMovement
+	 * @param Food $food
 	 */
-	public function __construct(Utils $utils, SessionInterface $session, Globals $globals, \App\Service\Building $building, Market $market)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food)
 	{
+		$this->mailer = $mailer;
 		$this->utils = $utils;
 		$this->session = $session;
 		$this->globals = $globals;
 		$this->building = $building;
 		$this->market = $market;
+		$this->barrack = $barrack;
+		$this->mission = $mission;
+		$this->unit = $unit;
+		$this->unit_movement = $unitMovement;
+		$this->food = $food;
 	}
 	
 	/**
 	 * @Route("/cron", name="cron")
 	 * @param Request $request
 	 * @return Response
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function cron(Request $request)
 	{
@@ -78,7 +128,7 @@ class CronController extends AbstractController
 		if (in_array($ip, $allowed_ip)) {
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
-			$now = new \DateTime();
+			$now = new DateTime();
 			
 			// start executing crons
 			foreach ($this->crons as $key => $cron) {
@@ -91,7 +141,7 @@ class CronController extends AbstractController
 				if (method_exists($this, $key)) {
 					if ($next_exec === null) {
 						$this->$key();
-					} else if ($now >= \DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
+					} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
 						$this->$key();
 					}
 					
@@ -186,7 +236,7 @@ class CronController extends AbstractController
 	
 	/**
 	 * method that update resources of a base based on resources produced by hour. This method is called every minute
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function updateResources()
 	{
@@ -197,10 +247,12 @@ class CronController extends AbstractController
 		foreach ($bases as $base) {
 			$this->session->set("current_base", $base);
 			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->food->consumeFood();
 			
 			$resources = new Resources($em, $this->session, $this->globals);
 			
-			$now = new \DateTime();
+			$now = new DateTime();
 			$last_update_resources = $base->getLastUpdateResources();
 			$diff = $now->getTimestamp() - $last_update_resources->getTimestamp();
 			
@@ -227,7 +279,7 @@ class CronController extends AbstractController
 	/**
 	 * method to archive a user that hasn't connected to the game for a certain time
 	 * this will archive all his bases too
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function archiveUsers()
 	{
@@ -252,13 +304,22 @@ class CronController extends AbstractController
 			
 			$em->persist($user);
 		}
+
+		$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
+			->setFrom("no-reply@anthony-pilloud.fr")
+			->setTo("pilloud.anthony@gmail.com")
+			->setBody(
+				$this->renderView('archived_account.html.twig', ["users" => $users]),
+				'text/html'
+			);
+		$this->mailer->send($message);
 		
 		$em->flush();
 	}
 	
 	/**
 	 * method to disable holidays mode of user and set last connection date to today
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function disableHolidaysMode()
 	{
@@ -270,7 +331,7 @@ class CronController extends AbstractController
 		 */
 		foreach ($users as $user) {
 			$user->setHolidays(false);
-			$user->setLastConnection(new \DateTime());
+			$user->setLastConnection(new DateTime());
 			$em->persist($user);
 		}
 		
@@ -295,7 +356,7 @@ class CronController extends AbstractController
 
 	/**
 	 * method that update market movements of each base
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function updateMarketMovement()
 	{
@@ -308,6 +369,57 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->market->updateMarketMovement($base);
+		}
+	}
+
+	/**
+	 * method to finish all construction that end date was before current date
+	 */
+	private function endRecruitmentUnits()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->barrack->endRecruitmentUnitsInBase();
+		}
+	}
+
+	/**
+	 * method to update missions of the base
+	 */
+	private function updateMissionsForBase()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->mission->setAleatoryMissionsForBase();
+		}
+	}
+
+	/**
+	 * method that update market movements of each base
+	 * @throws Exception
+	 */
+	private function updateUnitMovement()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		/** @var Base $base */
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->unit_movement->updateUnitMovement($base);
 		}
 	}
 }

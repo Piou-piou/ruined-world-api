@@ -186,4 +186,26 @@ class Globals
 		
 		return $points;
 	}
+	
+	/**
+	 * method that return the array of the units config json file
+	 * @return mixed
+	 */
+	public function getUnitsConfig()
+	{
+		$units = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "units.json"), true);
+		
+		return $units;
+	}
+
+	/**
+	 * method that return the array of the missions config json file
+	 * @return mixed
+	 */
+	public function getMissionsConfig()
+	{
+		$missions = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "missions.json"), true);
+
+		return $missions;
+	}
 }

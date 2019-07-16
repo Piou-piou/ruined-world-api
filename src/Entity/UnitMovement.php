@@ -8,14 +8,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\UnitMovement
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UnitMovementRepository")
  * @ORM\Table(name="unit_movement", indexes={@ORM\Index(name="fk_unit_movement_base1_idx", columns={"base_id"})})
  */
 class UnitMovement
 {
+	const TYPE_MISSION = 1,
+		TYPE_ATTACK = 2;
+
+	const MOVEMENT_TYPE_GO = 0,
+		MOVEMENT_TYPE_RETURN = 1,
+		MOVEMENT_TYPE_MISSION = 2;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -24,10 +32,25 @@ class UnitMovement
      */
     protected $end_date;
 
+	/**
+	 * @ORM\Column(type="integer", nullable=false)
+	 */
+	protected $duration;
+
     /**
      * @ORM\Column(name="`type`", type="integer")
      */
     protected $type;
+
+	/**
+	 * @ORM\Column(name="type_id", type="integer")
+	 */
+    protected $type_id;
+
+	/**
+	 * @ORM\Column(name="movement_type", type="integer")
+	 */
+    protected $movement_type;
 
     /**
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="unitMovement")
@@ -106,6 +129,25 @@ class UnitMovement
         return $this->end_date;
     }
 
+	/**
+	 * @return mixed
+	 */
+	public function getDuration()
+	{
+		return $this->duration;
+	}
+
+	/**
+	 * @param mixed $duration
+	 * @return UnitMovement
+	 */
+	public function setDuration($duration)
+	{
+		$this->duration = $duration;
+
+		return $this;
+	}
+
     /**
      * Set the value of type.
      *
@@ -128,6 +170,44 @@ class UnitMovement
     {
         return $this->type;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getTypeId()
+	{
+		return $this->type_id;
+	}
+
+	/**
+	 * @param mixed $type_id
+	 * @return UnitMovement
+	 */
+	public function setTypeId($type_id)
+	{
+		$this->type_id = $type_id;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMovementType()
+	{
+		return $this->movement_type;
+	}
+
+	/**
+	 * @param mixed $movement_type
+	 * @return UnitMovement
+	 */
+	public function setMovementType($movement_type)
+	{
+		$this->movement_type = $movement_type;
+
+		return $this;
+	}
 
     /**
      * Add Mission entity to collection (one to many).
@@ -259,4 +339,24 @@ class UnitMovement
     {
         return $this->base;
     }
+
+	/**
+	 * @return string
+	 */
+    public function getStringType()
+	{
+		if ($this->getType() === self::TYPE_MISSION) {
+			return "mission";
+		} else if ($this->getType() === self::TYPE_ATTACK) {
+			return "attack";
+		}
+	}
+
+	public function clearUnits()
+	{
+		/** @var Unit $unit */
+		foreach ($this->getUnits() as $unit) {
+			$unit->setUnitMovement(null);
+		}
+	}
 }
