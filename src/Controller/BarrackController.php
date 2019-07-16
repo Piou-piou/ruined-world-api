@@ -86,10 +86,10 @@ class BarrackController extends AbstractController
 		$unit_array_name = $infos->unit_array_name;
 		$number_to_recruit = (int)$infos->number_to_recruit;
 		$unit_config = $globals->getUnitsConfig()[$unit_array_name];
-		$end_recruitment = $now->add(new DateInterval("PT" . $barrack->getTimeToRecruit($unit_config["recruitment_time"]) . "S"));
 
 		if ($barrack->testWithdrawResourcesToRecruit($unit_array_name, $number_to_recruit)) {
 			for ($i = 0; $i < $number_to_recruit; $i++) {
+				$end_recruitment = $now->add(new DateInterval("PT" . $barrack->getTimeToRecruit($unit_config["recruitment_time"]) . "S"));
 				$unit = new Unit();
 				$unit->setName($unit_config["name"]);
 				$unit->setArrayName($unit_config["array_name"]);
