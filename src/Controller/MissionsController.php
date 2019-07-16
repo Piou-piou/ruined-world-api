@@ -90,4 +90,22 @@ class MissionsController extends AbstractController
 			"success_message" => "Vos unités se mettent en route"
 		]);
 	}
+
+	/**
+	 * @Route("/api/missions/update-movements/", name="missions_update_movements", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @param \App\Service\UnitMovement $unit_movement
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+	public function updateUnitMovements(SessionInterface $session, Globals $globals, \App\Service\UnitMovement $unit_movement): JsonResponse
+	{
+		$unit_movement->updateUnitMovement($globals->getCurrentBase(true));
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken()
+		]);
+	}
 }
