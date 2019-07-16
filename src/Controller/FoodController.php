@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Unit;
 use App\Service\Food;
 use App\Service\Globals;
 use Doctrine\ORM\NonUniqueResultException;
