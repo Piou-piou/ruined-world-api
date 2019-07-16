@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 
@@ -50,6 +51,7 @@ class Unit
 	 * method to puts units on a specific movement
 	 * @param array $units
 	 * @param \App\Entity\UnitMovement $unit_movement
+	 * @throws DBALException
 	 */
 	public function putUnitsInMovement(array $units, \App\Entity\UnitMovement $unit_movement)
 	{
