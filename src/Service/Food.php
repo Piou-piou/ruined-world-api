@@ -43,7 +43,7 @@ class Food
 	{
 		$units_number = $this->em->getRepository(Unit::class)->countUnitsInBase($this->globals->getCurrentBase());
 
-		return $units_number * 2;
+		return $units_number * $this->globals->getGeneralConfig()["unit_food_consumption_hour"];
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Food
 			$negative_food = $this->getFoodConsumedPerHour();
 		}
 
-		return round(abs($negative_food) / 6);
+		return round(abs($negative_food) / $this->globals->getGeneralConfig()["food_kill_divider"]);
 	}
 
 	/**

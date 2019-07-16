@@ -2,5 +2,7 @@
   "multiplicator_travel_time": 70,
   "check_mission_interval_hour": 3,
   "number_missions_config": 8,
-  "number_of_missions_base": 3
+  "number_of_missions_base": 3,
+  "unit_food_consumption_hour": 2,
+  "food_kill_divider": 6
 }
