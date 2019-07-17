@@ -275,6 +275,32 @@ class CronController extends AbstractController
 			$this->session->remove("token");
 		}
 	}
+
+	/**
+	 * method to send mail to user before their account archiving
+	 * @throws Exception
+	 */
+	private function sendMailBeforeArchiveUser()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days")-3);
+
+		/**
+		 * @var $user User
+		 */
+		foreach ($users as $user) {
+			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y h:i:s");
+			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
+				->setSender("no-reply@anthony-pilloud.fr")
+				->setFrom("no-reply@anthony-pilloud.fr")
+				->setTo($user->getEmail())
+				->setBody(
+					$this->renderView('before_archive_account.html.twig', ["desactivation_date" => $desactivation_date]),
+					'text/html'
+				);
+			$this->mailer->send($message);
+		}
+	}
 	
 	/**
 	 * method to archive a user that hasn't connected to the game for a certain time
