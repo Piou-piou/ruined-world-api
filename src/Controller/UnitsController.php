@@ -13,6 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class UnitsController extends AbstractController
 {
 	/**
+	 * method that send all units that exist in the game
+	 * @Route("/api/units/list-all-units/", name="units_list_all", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendAllUnitsExistsInConfig(SessionInterface $session, Globals $globals): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"units" => $globals->getUnitsConfig()
+		]);
+	}
+
+	/**
 	 * @Route("/api/units/list-units-base/", name="units_list_base", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
