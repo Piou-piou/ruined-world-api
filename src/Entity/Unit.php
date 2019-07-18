@@ -43,7 +43,7 @@ class Unit
 	/**
 	 * @ORM\Column(type="integer", options={"default" : 100})
 	 */
-    protected $life;
+    protected $life = 100;
 
 	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
