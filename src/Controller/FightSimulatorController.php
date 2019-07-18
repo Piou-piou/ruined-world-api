@@ -22,10 +22,9 @@ class FightSimulatorController extends AbstractController
 	public function simulateFight(SessionInterface $session, Globals $globals): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
-		$units_config = $globals->getUnitsConfig();
-		$attack_units = [];
+		$base_units = [];
 		$base = $em->getRepository(Base::class)->find(1);
-		$defend_units = $em->getRepository(Unit::class)->findBy([
+		$other_base_units = $em->getRepository(Unit::class)->findBy([
 			"base" => $em->getRepository(Base::class)->find(8),
 			"in_recruitment" => false,
 			"unitMovement" => null
@@ -38,42 +37,50 @@ class FightSimulatorController extends AbstractController
 			$unit->setDefenseLevel(1);
 			$unit->setLife(100);
 			$unit->setBase($base);
-			$attack_units[] = $unit;
+			$base_units[] = $unit;
 		}
 
-		dump($attack_units);
-		dump($defend_units);
+		dump($base_units);
+		dump($other_base_units);
 
-		$test = array_merge($defend_units, $attack_units);
+		$test = array_merge($other_base_units, $base_units);
 		shuffle($test);
 
 		foreach ($test as $unit) {
 			if ($unit->getBase() === $base) {
-				$attack_power = $units_config[$unit->getArrayName()]["attack_power"];
-				$attack_key = count(array_keys($defend_units)) > 0 ? array_keys($defend_units)[0] : null;
-
-				if ($attack_key !== null) {
-					$defend_units[$attack_key]->setLife($defend_units[$attack_key]->getLife() - $attack_power);
-					if ($defend_units[$attack_key]->getLife() <= 0) {
-						unset($defend_units[$attack_key]);
-					}
-				}
+				$other_base_units = $this->attackUnit($globals, $unit, $other_base_units, "attack");
 			} else {
-				$defend_power = $units_config[$unit->getArrayName()]["defense_power"];
-
-				$defend_key = array_keys($attack_units)[0];
-				$attack_units[$defend_key]->setLife($attack_units[$defend_key]->getLife() - $defend_power);
-				if ($attack_units[$defend_key]->getLife() <= 0) {
-					unset($attack_units[$defend_key]);
-				}
+				$base_units = $this->attackUnit($globals, $unit, $base_units, "defense");
 			}
 		}
 
 		dump('----------------------');
 
-		dump($attack_units);
-		dump($defend_units);
+		dump($base_units);
+		dump($other_base_units);
 
 		return new JsonResponse();
+	}
+
+	private function attackUnit(Globals $globals, Unit $unit, array $units, string $type = "attack") {
+		$units_config = $globals->getUnitsConfig();
+		$power = $units_config[$unit->getArrayName()][$type."_power"];
+		$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
+
+		if ($key !== null) {
+			$units[$key]->setLife($units[$key]->getLife() - $power);
+
+			if ($units[$key]->getLife() <= 0) {
+				$delete_for_next = abs($units[$key]->getLife());
+				unset($units[$key]);
+				$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
+
+				if ($key !== null) {
+					$units[$key]->setLife($units[$key]->getLife() - $delete_for_next);
+				}
+			}
+		}
+
+		return $units;
 	}
 }
