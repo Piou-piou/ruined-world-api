@@ -29,6 +29,7 @@ class UnitsController extends AbstractController
 	}
 
 	/**
+	 * method that send units currently in base
 	 * @Route("/api/units/list-units-base/", name="units_list_base", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
@@ -46,6 +47,7 @@ class UnitsController extends AbstractController
 	}
 
 	/**
+	 * method that send units currently in movement
 	 * @Route("/api/units/list-movements/", name="units_list_movements", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Globals $globals
