@@ -31,6 +31,35 @@ class FightSimulatorController extends AbstractController
 	}
 
 	/**
+	 * method that create units of attack and defense
+	 * @param string $type
+	 * @param $units
+	 * @return array
+	 */
+	private function createUnits(string $type, $units): array
+	{
+		$return_units = [];
+		$base = new Base();
+		$base->setId(1);
+		if ($type === "defense") $base->setId(2);
+
+		foreach ($units as $array_name => $number) {
+			for ($i=0 ; $i<$number ; $i++) {
+				$unit = new Unit();
+				$unit->setName($array_name);
+				$unit->setArrayName($array_name);
+				$unit->setAssaultLevel(1);
+				$unit->setDefenseLevel(1);
+				$unit->setLife(100);
+				$unit->setBase($base);
+				$return_units[] = $unit;
+			}
+		}
+
+		return $return_units;
+	}
+
+	/**
 	 * @Route("/api/fight/simulate/", name="fight_simulate")
 	 * @param SessionInterface $session
 	 * @param Globals $globals
@@ -38,43 +67,22 @@ class FightSimulatorController extends AbstractController
 	 */
 	public function simulateFight(SessionInterface $session, Globals $globals): JsonResponse
 	{
-		$em = $this->getDoctrine()->getManager();
-		$base_units = [];
-		$base = $em->getRepository(Base::class)->find(1);
-		$other_base_units = $em->getRepository(Unit::class)->findBy([
-			"base" => $em->getRepository(Base::class)->find(8),
-			"in_recruitment" => false,
-			"unitMovement" => null
-		]);
-		for ($i=0 ; $i<9 ; $i++) {
-			$unit = new Unit();
-			$unit->setName("Villager");
-			$unit->setArrayName("villager");
-			$unit->setAssaultLevel(1);
-			$unit->setDefenseLevel(1);
-			$unit->setLife(100);
-			$unit->setBase($base);
-			$base_units[] = $unit;
-		}
-
-		dump($base_units);
-		dump($other_base_units);
+		$infos = $session->get("jwt_infos");
+		$base = new Base();
+		$base->setId(1);
+		$other_base_units = $this->createUnits("defense", $infos->defense_units);
+		$base_units = $this->createUnits("attack", $infos->attack_units);
 
 		$test = array_merge($other_base_units, $base_units);
 		shuffle($test);
 
 		foreach ($test as $unit) {
-			if ($unit->getBase() === $base) {
+			if ($unit->getBase()->getId() === $base->getId()) {
 				$other_base_units = $this->attackOrDefendUnit($globals, $unit, $other_base_units, "attack");
 			} else {
 				$base_units = $this->attackOrDefendUnit($globals, $unit, $base_units, "defense");
 			}
 		}
-
-		dump('----------------------');
-
-		dump($base_units);
-		dump($other_base_units);
 
 		return new JsonResponse();
 	}
