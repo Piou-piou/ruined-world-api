@@ -14,6 +14,23 @@ class FightSimulatorController extends AbstractController
 {
 
 	/**
+	 * @Route("/api/fight/all-units-type/", name="figth_all_units_types", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendAllUnitTypes(SessionInterface $session, Globals $globals): JsonResponse
+	{
+		$units_config = $globals->getUnitsConfig();
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"units" => $units_config
+		]);
+	}
+
+	/**
 	 * @Route("/api/fight/simulate/", name="fight_simulate")
 	 * @param SessionInterface $session
 	 * @param Globals $globals
