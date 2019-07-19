@@ -86,5 +86,27 @@
     "to_recruit": {
 
     }
+  },
+  "conquieror": {
+    "name": "Conquieror ",
+    "array_name": "conquieror",
+    "max_level": 10,
+    "attack_power": 180,
+    "defense_power": 144,
+    "speed": 4,
+    "life": 100,
+    "armor": 80,
+    "recruitment_time": 450,
+    "explanation": "Le Conquieror est l'unité ultime aussi doué pour l'attaque que la défnse. Elle ferait trembler n'importe qui !",
+    "transport_weight": 70,
+    "resources_recruit": {
+      "electricity": 520,
+      "fuel": 480,
+      "iron": 435,
+      "water": 380
+    },
+    "to_recruit": {
+
+    }
   }
 }
