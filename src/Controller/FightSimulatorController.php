@@ -32,12 +32,14 @@ class FightSimulatorController extends AbstractController
 
 	/**
 	 * method that create units of attack and defense
+	 * @param Globals $globals
 	 * @param string $type
 	 * @param $units
 	 * @return array
 	 */
-	private function createUnits(string $type, $units): array
+	private function createUnits(Globals $globals, string $type, $units): array
 	{
+		$units_config = $globals->getUnitsConfig();
 		$return_units = [];
 		$base = new Base();
 		$base->setId(1);
@@ -50,7 +52,7 @@ class FightSimulatorController extends AbstractController
 				$unit->setArrayName($array_name);
 				$unit->setAssaultLevel(1);
 				$unit->setDefenseLevel(1);
-				$unit->setLife(100);
+				$unit->setLife($units_config[$array_name]["life"]);
 				$unit->setBase($base);
 				$return_units[] = $unit;
 			}
@@ -126,8 +128,8 @@ class FightSimulatorController extends AbstractController
 		$infos = $session->get("jwt_infos");
 		$base = new Base();
 		$base->setId(1);
-		$other_base_units = $this->createUnits("defense", $infos->defense_units);
-		$base_units = $this->createUnits("attack", $infos->attack_units);
+		$other_base_units = $this->createUnits($globals,"defense", $infos->defense_units);
+		$base_units = $this->createUnits($globals,"attack", $infos->attack_units);
 
 		$test = array_merge($other_base_units, $base_units);
 		shuffle($test);
