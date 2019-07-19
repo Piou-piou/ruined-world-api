@@ -48,9 +48,9 @@ class FightSimulatorController extends AbstractController
 
 		foreach ($test as $unit) {
 			if ($unit->getBase() === $base) {
-				$other_base_units = $this->attackUnit($globals, $unit, $other_base_units, "attack");
+				$other_base_units = $this->attackOrDefendUnit($globals, $unit, $other_base_units, "attack");
 			} else {
-				$base_units = $this->attackUnit($globals, $unit, $base_units, "defense");
+				$base_units = $this->attackOrDefendUnit($globals, $unit, $base_units, "defense");
 			}
 		}
 
@@ -62,7 +62,7 @@ class FightSimulatorController extends AbstractController
 		return new JsonResponse();
 	}
 
-	private function attackUnit(Globals $globals, Unit $unit, array $units, string $type = "attack") {
+	private function attackOrDefendUnit(Globals $globals, Unit $unit, array $units, string $type = "attack") {
 		$units_config = $globals->getUnitsConfig();
 		$power = $units_config[$unit->getArrayName()][$type."_power"];
 		$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
