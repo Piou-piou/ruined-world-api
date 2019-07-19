@@ -53,6 +53,7 @@ class FightSimulatorController extends AbstractController
 				$unit->setAssaultLevel(1);
 				$unit->setDefenseLevel(1);
 				$unit->setLife($units_config[$array_name]["life"]);
+				$unit->setArmor($units_config[$array_name]["armor"]);
 				$unit->setBase($base);
 				$return_units[] = $unit;
 			}
@@ -76,10 +77,23 @@ class FightSimulatorController extends AbstractController
 		$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
 
 		if ($key !== null) {
-			$units[$key]->setLife($units[$key]->getLife() - $power);
+			$unit_key = $units[$key];
+			if ($unit_key->getArmor() > 0) {
+				$life_to_delete = 0;
+				$unit_key->setArmor($unit_key->getArmor() - $power);
+			} else {
+				$life_to_delete = $power;
+			}
 
-			if ($units[$key]->getLife() <= 0) {
-				$delete_for_next = abs($units[$key]->getLife());
+			if ($unit_key->getArmor() < 0) {
+				$life_to_delete = abs($unit_key->getArmor());
+				$unit_key->setArmor(0);
+			}
+
+			$unit_key->setLife($unit_key->getLife() - $life_to_delete);
+
+			if ($unit_key->getLife() <= 0) {
+				$delete_for_next = abs($unit_key->getLife());
 				unset($units[$key]);
 				$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
 
