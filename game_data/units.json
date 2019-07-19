@@ -42,5 +42,49 @@
     "to_recruit": {
 
     }
+  },
+  "attacker": {
+    "name": "Attacker",
+    "array_name": "attacker",
+    "max_level": 10,
+    "attack_power": 70,
+    "defense_power": 10,
+    "speed": 3,
+    "life": 100,
+    "armor": 50,
+    "recruitment_time": 90,
+    "explanation": "L'attaquer est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
+    "transport_weight": 10,
+    "resources_recruit": {
+      "electricity": 170,
+      "fuel": 140,
+      "iron": 120,
+      "water": 135
+    },
+    "to_recruit": {
+
+    }
+  },
+  "attacker_1": {
+    "name": "Attacker 1",
+    "array_name": "attacker_1",
+    "max_level": 10,
+    "attack_power": 160,
+    "defense_power": 50,
+    "speed": 6,
+    "life": 100,
+    "armor": 60,
+    "recruitment_time": 330,
+    "explanation": "L'attaquer 1 est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
+    "transport_weight": 100,
+    "resources_recruit": {
+      "electricity": 425,
+      "fuel": 350,
+      "iron": 380,
+      "water": 500
+    },
+    "to_recruit": {
+
+    }
   }
 }
