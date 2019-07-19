@@ -33,10 +33,10 @@ class FightSimulatorController extends AbstractController
 	/**
 	 * method that create units of attack and defense
 	 * @param string $type
-	 * @param $units
+	 * @param array $units
 	 * @return array
 	 */
-	private function createUnits(string $type, $units): array
+	private function createUnits(string $type, array $units): array
 	{
 		$return_units = [];
 		$base = new Base();
