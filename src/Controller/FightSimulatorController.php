@@ -33,10 +33,10 @@ class FightSimulatorController extends AbstractController
 	/**
 	 * method that create units of attack and defense
 	 * @param string $type
-	 * @param array $units
+	 * @param $units
 	 * @return array
 	 */
-	private function createUnits(string $type, array $units): array
+	private function createUnits(string $type, $units): array
 	{
 		$return_units = [];
 		$base = new Base();
@@ -115,6 +115,11 @@ class FightSimulatorController extends AbstractController
 			}
 		}
 
-		return new JsonResponse();
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"attack_units" => $this->createUnitsArrayForApp("attack", $base_units),
+			"defense_units" => $this->createUnitsArrayForApp("defense", $base_units)
+		]);
 	}
 }
