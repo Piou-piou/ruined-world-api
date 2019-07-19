@@ -46,6 +46,11 @@ class Unit
     protected $life = 100;
 
 	/**
+	 * @ORM\Column(type="integer", options={"default" : 0})
+	 */
+    protected $armor = 0;
+
+	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 */
     protected $in_recruitment;
@@ -203,6 +208,25 @@ class Unit
 	public function setLife($life)
 	{
 		$this->life = $life;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getArmor()
+	{
+		return $this->armor;
+	}
+
+	/**
+	 * @param mixed $armor
+	 * @return Unit
+	 */
+	public function setArmor($armor)
+	{
+		$this->armor = $armor;
 
 		return $this;
 	}
