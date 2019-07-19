@@ -95,6 +95,8 @@ class BarrackController extends AbstractController
 				$unit->setArrayName($unit_config["array_name"]);
 				$unit->setAssaultLevel(1);
 				$unit->setDefenseLevel(1);
+				$unit->setLife($unit_config["life"]);
+				$unit->setArmor($unit_config["armor"]);
 				$unit->setBase($globals->getCurrentBase());
 				$unit->setInRecruitment(true);
 				$unit->setEndRecruitment($end_recruitment);
