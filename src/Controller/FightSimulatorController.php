@@ -91,6 +91,31 @@ class FightSimulatorController extends AbstractController
 	}
 
 	/**
+	 * method that format units for front
+	 * @param Globals $globals
+	 * @param array $units
+	 * @return array
+	 */
+	private function createUnitsArrayForApp(Globals $globals, array $units): array
+	{
+		$units_config = $globals->getUnitsConfig();
+		$return_units = [];
+
+		foreach ($units as $unit) {
+			if (array_key_exists($unit->getArrayName(), $return_units)) {
+				$return_units[$unit->getArrayName()]["number"]++;
+			} else {
+				$return_units[$unit->getArrayName()] = [
+					"name" => $units_config[$unit->getArrayName()]["name"],
+					"number" => 1
+				];
+			}
+		}
+
+		return $return_units;
+	}
+
+	/**
 	 * @Route("/api/fight/simulate/", name="fight_simulate")
 	 * @param SessionInterface $session
 	 * @param Globals $globals
@@ -118,8 +143,8 @@ class FightSimulatorController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
-			"attack_units" => $this->createUnitsArrayForApp("attack", $base_units),
-			"defense_units" => $this->createUnitsArrayForApp("defense", $base_units)
+			"attack_units" => $this->createUnitsArrayForApp($globals, $base_units),
+			"defense_units" => $this->createUnitsArrayForApp($globals, $base_units)
 		]);
 	}
 }
