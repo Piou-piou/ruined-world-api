@@ -144,7 +144,7 @@ class FightSimulatorController extends AbstractController
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
 			"attack_units" => $this->createUnitsArrayForApp($globals, $base_units),
-			"defense_units" => $this->createUnitsArrayForApp($globals, $base_units)
+			"defense_units" => $this->createUnitsArrayForApp($globals, $other_base_units)
 		]);
 	}
 }
