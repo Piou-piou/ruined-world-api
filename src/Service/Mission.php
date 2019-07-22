@@ -18,14 +18,14 @@ class Mission
 	private $globals;
 
 	/**
-	 * @var UnitMovement
-	 */
-	private $unit_movement;
-
-	/**
 	 * @var Resources
 	 */
 	private $resources;
+
+	/**
+	 * @var Unit
+	 */
+	private $unit;
 
 	private $user_number_mission= [];
 
@@ -33,15 +33,14 @@ class Mission
 	 * Mission constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
-	 * @param UnitMovement $unit_movement
 	 * @param Resources $resources
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, UnitMovement $unit_movement, Resources $resources)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, Unit $unit)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
-		$this->unit_movement = $unit_movement;
 		$this->resources = $resources;
+		$this->unit = $unit;
 	}
 
 	/**
@@ -125,7 +124,7 @@ class Mission
 		$this->em->persist($unit_movement);
 		$this->em->flush();
 
-		$max_transport_capacity = $this->unit_movement->getMaxCapacityTransport($unit_movement->getUnits());
+		$max_transport_capacity = $this->unit->getMaxCapacityTransport($unit_movement->getUnits());
 		$win_resources = round(($max_transport_capacity*((100+$current_mission_config["win_resources"])/100))-$max_transport_capacity);
 
 		$this->resources->setBase($base);
