@@ -10,10 +10,12 @@ use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class FightController extends AbstractController
 {
 	/**
+	 * @Route("/api/fight/send-attack/", name="fight_send_attack", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Unit $unit
 	 * @param \App\Service\UnitMovement $unit_movement_service
@@ -42,11 +44,6 @@ class FightController extends AbstractController
 		if ($success === true) {
 			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_ATTACK,  $dest_base->getId(), UnitMovement::MOVEMENT_TYPE_GO);
 			$unit->putUnitsInMovement((array)$infos->units, $unit_movement);
-
-			/*$mission->setUnitMovement($unit_movement);
-			$mission->setInProgress(true);
-			$em->persist($mission);
-			$em->flush();*/
 		}
 
 		return new JsonResponse([
