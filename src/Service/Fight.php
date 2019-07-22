@@ -4,9 +4,15 @@ namespace App\Service;
 
 use App\Entity\Base;
 use App\Entity\Unit;
+use Doctrine\ORM\EntityManagerInterface;
 
 class Fight
 {
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
+
 	/**
 	 * @var Globals
 	 */
@@ -14,10 +20,12 @@ class Fight
 
 	/**
 	 * Fight constructor.
+	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 */
-	public function __construct(Globals $globals)
+	public function __construct(EntityManagerInterface $em, Globals $globals)
 	{
+		$this->em = $em;
 		$this->globals = $globals;
 	}
 
@@ -66,6 +74,28 @@ class Fight
 
 	public function attackBase(Base $base, \App\Entity\UnitMovement $unit_movement, Base $attacked_base)
 	{
+		$attack_units = $unit_movement->getUnits()->toArray();
+		$defend_units = $this->em->getRepository(Unit::class)->findBy([
+			"base" => $attacked_base,
+			"in_recruitment" => false,
+			"unitMovement" => null
+		]);
 
+		$test = array_merge($attack_units, $defend_units);
+		shuffle($test);
+
+		foreach ($test as $unit) {
+			if ($unit->getBase()->getId() === $base->getId()) {
+				$other_base_units = $this->attackOrDefendUnit($unit, $defend_units, "attack");
+			} else {
+				$base_units = $this->attackOrDefendUnit($unit, $attack_units, "defense");
+			}
+		}
+
+		dump($attack_units);
+		dump($defend_units);
+		dump('----------------------');
+		dump($other_base_units);
+		dump($base_units);
 	}
 }
