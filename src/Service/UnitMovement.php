@@ -21,21 +21,21 @@ class UnitMovement
 	private $globals;
 
 	/**
-	 * @var Resources
+	 * @var Mission
 	 */
-	private $resources;
+	private $mission;
 
 	/**
 	 * UnitMovement constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
-	 * @param Resources $resources
+	 * @param Mission $mission
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Mission $mission)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
-		$this->resources = $resources;
+		$this->mission = $mission;
 	}
 
 	/**
@@ -63,7 +63,7 @@ class UnitMovement
 	 * @param $units
 	 * @return int
 	 */
-	private function getMaxCapacityTransport($units): int
+	public function getMaxCapacityTransport($units): int
 	{
 		$max_transport_weight = 0;
 
@@ -146,43 +146,10 @@ class UnitMovement
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN) {
 				// attack on the return
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_MISSION) {
-				$this->endMission($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
+				$this->mission->endMission($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
 			}
 		}
 	}
 
-	/**
-	 * method called to end a mission kill unit based on lost percentage of it and give food based
-	 * on win_resources percentage of mission
-	 * @param Base $base
-	 * @param \App\Entity\UnitMovement $unit_movement
-	 * @param \App\Entity\Mission $mission
-	 */
-	private function endMission(Base $base, \App\Entity\UnitMovement $unit_movement, \App\Entity\Mission $mission)
-	{
-		$current_mission_config = $this->globals->getMissionsConfig()[$mission->getMissionsConfigId()];
-		$lost_unit = round(count($unit_movement->getUnits())*(rand(0, $current_mission_config["lost_percentage"])/100));
 
-		for ($i=0 ; $i<$lost_unit ; $i++) {
-			$this->em->remove($unit_movement->getUnits()->get($i));
-			$unit_movement->getUnits()->remove($i);
-		}
-		$this->em->persist($unit_movement);
-		$this->em->flush();
-
-		$max_transport_capacity = $this->getMaxCapacityTransport($unit_movement->getUnits());
-		$win_resources = round(($max_transport_capacity*((100+$current_mission_config["win_resources"])/100))-$max_transport_capacity);
-
-		$this->resources->setBase($base);
-		$this->resources->addResource("food", $win_resources);
-
-		$mission->setInProgress(false);
-		$mission->setUnitMovement(null);
-		$this->em->persist($mission);
-		$unit_movement->clearUnits();
-		$this->em->persist($unit_movement);
-		$this->em->flush();
-		$this->em->remove($unit_movement);
-		$this->em->flush();
-	}
 }
