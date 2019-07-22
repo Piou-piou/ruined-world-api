@@ -74,7 +74,7 @@ class MissionsController extends AbstractController
 		}
 
 		if ($success === true) {
-			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getMissionsConfigId(), $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
+			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION, $mission->getMissionsConfigId());
 			$unit->putUnitsInMovement((array)$infos->units, $unit_movement);
 
 			$mission->setUnitMovement($unit_movement);

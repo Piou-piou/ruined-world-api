@@ -84,7 +84,7 @@ class UnitMovement
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
 	 */
-	public function create(int $type, int $config_id, int $type_id, int $movement_type):\App\Entity\UnitMovement
+	public function create(int $type, int $type_id, int $movement_type, int $config_id = null):\App\Entity\UnitMovement
 	{
 		$now = new DateTime();
 		$mission_config = $this->globals->getMissionsConfig()[$config_id];
