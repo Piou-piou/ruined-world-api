@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Base;
 use App\Entity\Unit;
 
 class Fight
@@ -61,5 +62,10 @@ class Fight
 		}
 
 		return $units;
+	}
+
+	public function attackBase(Base $base, \App\Entity\UnitMovement $unit_movement, Base $attacked_base)
+	{
+
 	}
 }

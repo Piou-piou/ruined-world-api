@@ -26,29 +26,38 @@ class UnitMovement
 	private $mission;
 
 	/**
+	 * @var Fight
+	 */
+	private $fight;
+
+	/**
 	 * UnitMovement constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 * @param Mission $mission
+	 * @param Fight $fight
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Mission $mission)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Mission $mission, Fight $fight)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
 		$this->mission = $mission;
+		$this->fight = $fight;
 	}
 
 	/**
 	 * method that get entity of current movement based on the type and type id of it
 	 * @param int $type
 	 * @param int $type_id
-	 * @return \App\Entity\Mission|null
+	 * @return \App\Entity\Mission|Base|null
 	 */
 	private function getEntityOfTypeMovement(int $type, int $type_id)
 	{
 		$entity = null;
 		if ($type === \App\Entity\UnitMovement::TYPE_MISSION) {
 			$entity = \App\Entity\Mission::class;
+		} else if ($type === \App\Entity\UnitMovement::TYPE_ATTACK) {
+			$entity = Base::class;
 		}
 
 		if (!$entity) {
@@ -131,7 +140,7 @@ class UnitMovement
 		/** @var \App\Entity\UnitMovement $unit_movement */
 		foreach ($unit_movements_ended as $unit_movement) {
 			if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_GO) {
-				// attack on the go
+				$this->fight->attackBase($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN) {
 				// attack on the return
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_MISSION) {
