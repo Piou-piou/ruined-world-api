@@ -11,11 +11,14 @@ class Fight
 	 */
 	private $globals;
 
+	/**
+	 * Fight constructor.
+	 * @param Globals $globals
+	 */
 	public function __construct(Globals $globals)
 	{
 		$this->globals = $globals;
 	}
-
 
 	/**
 	 * method that put damage on unit when is in defense or get damage from a defense unit
