@@ -31,6 +31,39 @@ class FightSimulatorController extends AbstractController
 	}
 
 	/**
+	 * @Route("/api/fight/simulate/", name="fight_simulate")
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function simulateFight(SessionInterface $session, Globals $globals): JsonResponse
+	{
+		$infos = $session->get("jwt_infos");
+		$base = new Base();
+		$base->setId(1);
+		$other_base_units = $this->createUnits($globals,"defense", $infos->defense_units);
+		$base_units = $this->createUnits($globals,"attack", $infos->attack_units);
+
+		$test = array_merge($other_base_units, $base_units);
+		shuffle($test);
+
+		foreach ($test as $unit) {
+			if ($unit->getBase()->getId() === $base->getId()) {
+				$other_base_units = $this->attackOrDefendUnit($globals, $unit, $other_base_units, "attack");
+			} else {
+				$base_units = $this->attackOrDefendUnit($globals, $unit, $base_units, "defense");
+			}
+		}
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"attack_units" => $this->createUnitsArrayForApp($globals, $base_units),
+			"defense_units" => $this->createUnitsArrayForApp($globals, $other_base_units)
+		]);
+	}
+
+	/**
 	 * method that create units of attack and defense
 	 * @param Globals $globals
 	 * @param string $type
@@ -129,38 +162,5 @@ class FightSimulatorController extends AbstractController
 		}
 
 		return $return_units;
-	}
-
-	/**
-	 * @Route("/api/fight/simulate/", name="fight_simulate")
-	 * @param SessionInterface $session
-	 * @param Globals $globals
-	 * @return JsonResponse
-	 */
-	public function simulateFight(SessionInterface $session, Globals $globals): JsonResponse
-	{
-		$infos = $session->get("jwt_infos");
-		$base = new Base();
-		$base->setId(1);
-		$other_base_units = $this->createUnits($globals,"defense", $infos->defense_units);
-		$base_units = $this->createUnits($globals,"attack", $infos->attack_units);
-
-		$test = array_merge($other_base_units, $base_units);
-		shuffle($test);
-
-		foreach ($test as $unit) {
-			if ($unit->getBase()->getId() === $base->getId()) {
-				$other_base_units = $this->attackOrDefendUnit($globals, $unit, $other_base_units, "attack");
-			} else {
-				$base_units = $this->attackOrDefendUnit($globals, $unit, $base_units, "defense");
-			}
-		}
-
-		return new JsonResponse([
-			"success" => true,
-			"token" => $session->get("user")->getToken(),
-			"attack_units" => $this->createUnitsArrayForApp($globals, $base_units),
-			"defense_units" => $this->createUnitsArrayForApp($globals, $other_base_units)
-		]);
 	}
 }
