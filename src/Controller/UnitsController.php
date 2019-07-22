@@ -62,4 +62,23 @@ class UnitsController extends AbstractController
 			"unit_movements" => $unitMovement->getCurrentMovementsInBase()
 		]);
 	}
+
+	/**
+	 * method that update all unit movements in the base
+	 * @Route("/api/units/update-movements/", name="units_update_movements", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Globals $globals
+	 * @param UnitMovement $unit_movement
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+	public function updateUnitMovements(SessionInterface $session, Globals $globals, UnitMovement $unit_movement): JsonResponse
+	{
+		$unit_movement->updateUnitMovement($globals->getCurrentBase(true));
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken()
+		]);
+	}
 }
