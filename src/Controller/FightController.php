@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FightController extends AbstractController
 {
 	/**
+	 * method to send units to attack a base
 	 * @Route("/api/fight/send-attack/", name="fight_send_attack", methods={"POST"})
 	 * @param SessionInterface $session
 	 * @param Unit $unit
