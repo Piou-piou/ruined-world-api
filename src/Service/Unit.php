@@ -30,6 +30,23 @@ class Unit
 	}
 
 	/**
+	 * method that return max transport weight that unit can carry durin movement
+	 * @param $units
+	 * @return int
+	 */
+	public function getMaxCapacityTransport($units): int
+	{
+		$max_transport_weight = 0;
+
+		/** @var \App\Entity\Unit $unit */
+		foreach ($units as $unit) {
+			$max_transport_weight += $this->globals->getUnitsConfig()[$unit->getArrayName()]["transport_weight"];
+		}
+
+		return $max_transport_weight;
+	}
+
+	/**
 	 * method that test if we have enough unit of a type in our base
 	 * @param array $units
 	 * @return bool

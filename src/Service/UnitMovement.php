@@ -59,40 +59,29 @@ class UnitMovement
 	}
 
 	/**
-	 * method that return max transport weight that unit can carry durin movement
-	 * @param $units
-	 * @return int
-	 */
-	public function getMaxCapacityTransport($units): int
-	{
-		$max_transport_weight = 0;
-
-		/** @var \App\Entity\Unit $unit */
-		foreach ($units as $unit) {
-			$max_transport_weight += $this->globals->getUnitsConfig()[$unit->getArrayName()]["transport_weight"];
-		}
-
-		return $max_transport_weight;
-	}
-
-	/**
 	 * method that create a unit movement
 	 * @param int $type
-	 * @param int $config_id
 	 * @param int $type_id
 	 * @param int $movement_type
+	 * @param int|null $config_id
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
 	 */
 	public function create(int $type, int $type_id, int $movement_type, int $config_id = null):\App\Entity\UnitMovement
 	{
 		$now = new DateTime();
-		$mission_config = $this->globals->getMissionsConfig()[$config_id];
+		if ($type === \App\Entity\UnitMovement::TYPE_MISSION) {
+			$mission_config = $this->globals->getMissionsConfig()[$config_id];
+			$duration = $mission_config["duration"];
+		} else {
+			$base_dest = $this->em->getRepository(Base::class)->find($type_id);
+			$duration = $this->globals->getTimeToTravel($this->globals->getCurrentBase(), $base_dest);
+		}
 
 		$unit_movement = new \App\Entity\UnitMovement();
 		$unit_movement->setBase($this->globals->getCurrentBase());
-		$unit_movement->setDuration($mission_config["duration"]);
-		$unit_movement->setEndDate($now->add(new DateInterval("PT". $mission_config["duration"] ."S")));
+		$unit_movement->setDuration($duration);
+		$unit_movement->setEndDate($now->add(new DateInterval("PT". $duration ."S")));
 		$unit_movement->setType($type);
 		$unit_movement->setTypeId($type_id);
 		$unit_movement->setMovementType($movement_type);
