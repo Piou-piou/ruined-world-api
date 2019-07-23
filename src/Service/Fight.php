@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Base;
 use App\Entity\Unit;
 use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
@@ -113,7 +114,7 @@ class Fight
 		if ($base_attack_units->count() === 0) {
 			$this->em->remove($unit_movement);
 		} else {
-			$now = new \DateTime();
+			$now = new DateTime();
 			$unit_movement->setMovementType(\App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN);
 			$unit_movement->setEndDate($now->add(new DateInterval("PT".$unit_movement->getDuration()."S")));
 			$this->em->persist($unit_movement);
