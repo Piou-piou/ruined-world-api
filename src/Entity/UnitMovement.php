@@ -352,6 +352,20 @@ class UnitMovement
 		}
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getStringMovementType()
+	{
+		if ($this->getMovementType() === self::MOVEMENT_TYPE_GO) {
+			return "go";
+		} else if ($this->getMovementType() === self::MOVEMENT_TYPE_RETURN) {
+			return "return";
+		} else {
+			return "mission";
+		}
+	}
+
 	public function clearUnits()
 	{
 		/** @var Unit $unit */

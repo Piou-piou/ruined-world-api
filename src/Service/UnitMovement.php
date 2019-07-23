@@ -122,7 +122,8 @@ class UnitMovement
 				"type" => $unit_movement->getType(),
 				"string_type" => $unit_movement->getStringType(),
 				"entity_type" => $entity_type,
-				"movement_type" => $unit_movement->getType(),
+				"movement_type" => $unit_movement->getMovementType(),
+				"movement_type_string" => $unit_movement->getStringMovementType(),
 				"units" => $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement)
 			];
 		}
