@@ -30,6 +30,27 @@ class Unit
 	}
 
 	/**
+	 * method that return slower unit speed
+	 * @param $units
+	 * @return int
+	 */
+	public function getSlowerUnitSpeed($units): int
+	{
+		$slower_speed = null;
+
+		foreach ($units as $array_name => $number) {
+			$speed_unit = $this->globals->getUnitsConfig()[$array_name]["speed"];
+			if ($slower_speed === null) {
+				$slower_speed = $speed_unit;
+			} else if ($speed_unit < $slower_speed) {
+				$slower_speed = $speed_unit;
+			}
+		}
+
+		return $slower_speed;
+	}
+
+	/**
 	 * method that return max transport weight that unit can carry durin movement
 	 * @param $units
 	 * @return int
