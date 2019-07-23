@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Entity\Base;
 use App\Entity\Unit;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class Fight
 {
@@ -72,30 +74,50 @@ class Fight
 		return $units;
 	}
 
+	/**
+	 * method that handle attack a base with units kill necessary units and if there is units in movement
+	 * after attack, put them on return
+	 * @param Base $base
+	 * @param \App\Entity\UnitMovement $unit_movement
+	 * @param Base $attacked_base
+	 * @throws Exception
+	 */
 	public function attackBase(Base $base, \App\Entity\UnitMovement $unit_movement, Base $attacked_base)
 	{
-		$attack_units = $unit_movement->getUnits()->toArray();
+		$base_attack_units = $unit_movement->getUnits();
+		$attack_units = $base_attack_units->toArray();
 		$defend_units = $this->em->getRepository(Unit::class)->findBy([
 			"base" => $attacked_base,
 			"in_recruitment" => false,
 			"unitMovement" => null
 		]);
 
-		$test = array_merge($attack_units, $defend_units);
-		shuffle($test);
+		$all_units = array_merge($attack_units, $defend_units);
+		shuffle($all_units);
 
-		foreach ($test as $unit) {
+		foreach ($all_units as $unit) {
 			if ($unit->getBase()->getId() === $base->getId()) {
-				$other_base_units = $this->attackOrDefendUnit($unit, $defend_units, "attack");
+				$this->attackOrDefendUnit($unit, $defend_units, "attack");
 			} else {
-				$base_units = $this->attackOrDefendUnit($unit, $attack_units, "defense");
+				$this->attackOrDefendUnit($unit, $attack_units, "defense");
+			}
+
+			if ($unit->getLife() <= 0) {
+				$this->em->remove($unit);
+			} else {
+				$this->em->persist($unit);
 			}
 		}
+		$this->em->flush();
 
-		dump($attack_units);
-		dump($defend_units);
-		dump('----------------------');
-		dump($other_base_units);
-		dump($base_units);
+		if ($base_attack_units->count() === 0) {
+			$this->em->remove($unit_movement);
+		} else {
+			$now = new \DateTime();
+			$unit_movement->setMovementType(\App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN);
+			$unit_movement->setEndDate($now->add(new DateInterval("PT".$unit_movement->getDuration()."S")));
+			$this->em->persist($unit_movement);
+			$this->em->flush();
+		}
 	}
 }
