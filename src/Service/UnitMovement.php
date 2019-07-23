@@ -80,10 +80,11 @@ class UnitMovement
 	 * @param int $type_id
 	 * @param int $movement_type
 	 * @param int|null $config_id
+	 * @param int $speed
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
 	 */
-	public function create(int $type, int $type_id, int $movement_type, int $config_id = null): \App\Entity\UnitMovement
+	public function create(int $type, int $type_id, int $movement_type, int $config_id = null, int $speed = 1): \App\Entity\UnitMovement
 	{
 		$now = new DateTime();
 		if ($type === \App\Entity\UnitMovement::TYPE_MISSION) {
@@ -91,7 +92,7 @@ class UnitMovement
 			$duration = $mission_config["duration"];
 		} else {
 			$base_dest = $this->em->getRepository(Base::class)->find($type_id);
-			$duration = $this->globals->getTimeToTravel($this->globals->getCurrentBase(), $base_dest);
+			$duration = $this->globals->getTimeToTravel($this->globals->getCurrentBase(), $base_dest, $speed);
 		}
 
 		$unit_movement = new \App\Entity\UnitMovement();
