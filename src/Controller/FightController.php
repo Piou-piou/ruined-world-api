@@ -35,11 +35,12 @@ class FightController extends AbstractController
 		if (!$dest_base) {
 			$success = false;
 			$error_message = "Impossible de trouver la base demandée";
-		}
-
-		if ($unit->testEnoughUnitInBaseToSend((array)$infos->units) === false) {
+		} else if (count((array)$infos->units)  > 0 && $unit->testEnoughUnitInBaseToSend((array)$infos->units) === false) {
 			$success = false;
 			$error_message = "Vous n'avez pas autant d'unités à envoyer en mission";
+		} else if (count((array)$infos->units) === 0) {
+			$success = false;
+			$error_message = "Vous devez envoyer au moins une unité en mission";
 		}
 
 		if ($success === true) {

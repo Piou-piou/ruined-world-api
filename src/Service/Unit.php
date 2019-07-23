@@ -54,9 +54,13 @@ class Unit
 	 */
 	public function testEnoughUnitInBaseToSend(array $units)
 	{
+		if (count($units) === 0) {
+			return false;
+		}
+
 		foreach ($units as $array_name => $number) {
 			$unit_base = $this->em->getRepository(\App\Entity\Unit::class)->countSameUnitInBase($this->globals->getCurrentBase(),$array_name);
-			if ($unit_base < $number->number) {
+			if ($unit_base < $number->number || $number->number === 0) {
 				return false;
 			}
 		}
