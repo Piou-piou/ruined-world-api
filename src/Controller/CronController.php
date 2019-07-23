@@ -123,7 +123,7 @@ class CronController extends AbstractController
 	public function cron(Request $request)
 	{
 		$ip = $request->server->get('REMOTE_ADDR');
-		$allowed_ip = ["127.0.0.1", "91.165.47.238", "90.100.133.37"];
+		$allowed_ip = explode(", ", $_ENV["IP_CRON"]);
 		
 		if (in_array($ip, $allowed_ip)) {
 			$this->crons = $this->getParameter("cron");
