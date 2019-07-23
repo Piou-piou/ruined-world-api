@@ -117,12 +117,9 @@ class UnitMovement
 			$entity_type = $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId());
 
 			$return_movements[] = [
-				"duration" => $unit_movement->getDuration(),
 				"end_date" => $unit_movement->getEndDate()->getTimestamp(),
-				"type" => $unit_movement->getType(),
 				"string_type" => $unit_movement->getStringType(),
-				"entity_type" => $entity_type,
-				"movement_type" => $unit_movement->getMovementType(),
+				"entity" => $entity_type,
 				"movement_type_string" => $unit_movement->getStringMovementType(),
 				"units" => $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement)
 			];
