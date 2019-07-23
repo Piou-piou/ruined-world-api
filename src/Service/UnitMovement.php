@@ -142,7 +142,11 @@ class UnitMovement
 			if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_GO) {
 				$this->fight->attackBase($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN) {
+				$unit_movement->clearUnits();
+				$this->em->persist($unit_movement);
+				$this->em->flush();
 				$this->em->remove($unit_movement);
+				$this->em->flush();
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_MISSION) {
 				$this->mission->endMission($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
 			}
