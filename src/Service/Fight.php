@@ -118,7 +118,7 @@ class Fight
 			$unit_movement->setMovementType(\App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN);
 			$unit_movement->setEndDate($now->add(new DateInterval("PT".$unit_movement->getDuration()."S")));
 			$this->em->persist($unit_movement);
-			$this->em->flush();
 		}
+		$this->em->flush();
 	}
 }
