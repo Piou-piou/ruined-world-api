@@ -123,9 +123,9 @@ class CronController extends AbstractController
 	public function cron(Request $request)
 	{
 		$ip = $request->server->get('REMOTE_ADDR');
-		$allowed_ip = explode(", ", $_ENV["IP_CRON"]);
+		$allowed_ip_external = explode(", ", $_ENV["IP_CRON_EXTERNAL"]);
 		
-		if (in_array($ip, $allowed_ip)) {
+		if (in_array($ip, $allowed_ip_external) || $ip === $_ENV["IP_CRON_INTERNAL"]) {
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
 			$now = new DateTime();
@@ -139,7 +139,7 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					if ($next_exec === null) {
+					if ($next_exec === null || in_array($ip, $allowed_ip_external)) {
 						$this->$key();
 					} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
 						$this->$key();
