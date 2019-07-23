@@ -76,7 +76,7 @@ class UnitMovement
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
 	 */
-	public function create(int $type, int $type_id, int $movement_type, int $config_id = null):\App\Entity\UnitMovement
+	public function create(int $type, int $type_id, int $movement_type, int $config_id = null): \App\Entity\UnitMovement
 	{
 		$now = new DateTime();
 		if ($type === \App\Entity\UnitMovement::TYPE_MISSION) {
@@ -102,9 +102,12 @@ class UnitMovement
 
 	/**
 	 * method that return current units movements in base
+	 * @return array
+	 * @throws Exception
 	 */
-	public function getCurrentMovementsInBase()
+	public function getCurrentMovementsInBase(): array
 	{
+		$this->updateUnitMovement($this->globals->getCurrentBase());
 		$unit_movements = $this->em->getRepository(\App\Entity\UnitMovement::class)->findBy([
 			"base" => $this->globals->getCurrentBase()
 		]);
