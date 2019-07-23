@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Unit;
 use App\Service\Globals;
 use App\Service\UnitMovement;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -53,6 +54,7 @@ class UnitsController extends AbstractController
 	 * @param Globals $globals
 	 * @param UnitMovement $unitMovement
 	 * @return JsonResponse
+	 * @throws Exception
 	 */
 	public function sendUnitsInMovement(SessionInterface $session, Globals $globals, UnitMovement $unitMovement): JsonResponse
 	{
@@ -70,7 +72,7 @@ class UnitsController extends AbstractController
 	 * @param Globals $globals
 	 * @param UnitMovement $unit_movement
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function updateUnitMovements(SessionInterface $session, Globals $globals, UnitMovement $unit_movement): JsonResponse
 	{
