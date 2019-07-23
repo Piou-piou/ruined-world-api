@@ -16,6 +16,11 @@ class UnitMovement
 	private $em;
 
 	/**
+	 * @var Api
+	 */
+	private $api;
+
+	/**
 	 * @var Globals
 	 */
 	private $globals;
@@ -33,13 +38,15 @@ class UnitMovement
 	/**
 	 * UnitMovement constructor.
 	 * @param EntityManagerInterface $em
+	 * @param Api $api
 	 * @param Globals $globals
 	 * @param Mission $mission
 	 * @param Fight $fight
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Mission $mission, Fight $fight)
+	public function __construct(EntityManagerInterface $em, Api $api, Globals $globals, Mission $mission, Fight $fight)
 	{
 		$this->em = $em;
+		$this->api = $api;
 		$this->globals = $globals;
 		$this->mission = $mission;
 		$this->fight = $fight;
@@ -115,11 +122,15 @@ class UnitMovement
 
 		foreach ($unit_movements as $unit_movement) {
 			$entity_type = $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId());
+			$name = "";
+			if ($entity_type instanceof Base) {
+				$name = $entity_type->getName();
+			}
 
 			$return_movements[] = [
 				"end_date" => $unit_movement->getEndDate()->getTimestamp(),
 				"string_type" => $unit_movement->getStringType(),
-				"entity" => $entity_type,
+				"entity_name" => $name,
 				"movement_type_string" => $unit_movement->getStringMovementType(),
 				"units" => $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement)
 			];
