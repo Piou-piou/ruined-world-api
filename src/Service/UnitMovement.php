@@ -125,12 +125,18 @@ class UnitMovement
 				$name = $entity_type->getName();
 			}
 
+			$units = [];
+			if ($unit_movement->getBase() === $this->globals->getCurrentBase()) {
+				$units = $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement);
+			}
+
 			$return_movements[] = [
 				"end_date" => $unit_movement->getEndDate()->getTimestamp(),
 				"string_type" => $unit_movement->getStringType(),
 				"entity_name" => $name,
+				"base_id" => $unit_movement->getBase()->getId(),
 				"movement_type_string" => $unit_movement->getStringMovementType(),
-				"units" => $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement)
+				"units" => $units
 			];
 		}
 

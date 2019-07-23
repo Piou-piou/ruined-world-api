@@ -19,10 +19,11 @@ class UnitMovementRepository extends EntityRepository
 	public function findMovementsByBase(Base $base)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT um FROM App:UnitMovement um
-			WHERE um.base = :base OR (um.type = :attack_type AND um.type_id = :base_id)
+			WHERE um.base = :base OR (um.type = :attack_type AND um.movement_type = :movement_type AND um.type_id = :base_id)
 		");
 		$query->setParameter("base", $base, Type::OBJECT);
 		$query->setParameter("attack_type", UnitMovement::TYPE_ATTACK, Type::INTEGER);
+		$query->setParameter("movement_type", UnitMovement::MOVEMENT_TYPE_GO, Type::INTEGER);
 		$query->setParameter("base_id", $base->getId(), Type::INTEGER);
 
 		return $query->getResult();
