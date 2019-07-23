@@ -115,9 +115,7 @@ class UnitMovement
 	public function getCurrentMovementsInBase(): array
 	{
 		$this->updateUnitMovement($this->globals->getCurrentBase());
-		$unit_movements = $this->em->getRepository(\App\Entity\UnitMovement::class)->findBy([
-			"base" => $this->globals->getCurrentBase()
-		]);
+		$unit_movements = $this->em->getRepository(\App\Entity\UnitMovement::class)->findMovementsByBase($this->globals->getCurrentBase());
 		$return_movements = [];
 
 		foreach ($unit_movements as $unit_movement) {
