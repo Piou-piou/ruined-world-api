@@ -52,6 +52,11 @@ class UnitMovement
 	 */
     protected $movement_type;
 
+	/**
+	 * @ORM\Column(type="json")
+	 */
+	protected $resources;
+
     /**
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="unitMovement")
      * @ORM\JoinColumn(name="id", referencedColumnName="unit_movement_id", nullable=false)
@@ -207,6 +212,29 @@ class UnitMovement
 		$this->movement_type = $movement_type;
 
 		return $this;
+	}
+
+	/**
+	 * Set the value of resources.
+	 *
+	 * @param string $resources
+	 * @return UnitMovement
+	 */
+	public function setResources($resources)
+	{
+		$this->resources = $resources;
+
+		return $this;
+	}
+
+	/**
+	 * Get the value of resources.
+	 *
+	 * @return string
+	 */
+	public function getResources()
+	{
+		return $this->resources;
 	}
 
     /**
@@ -372,5 +400,120 @@ class UnitMovement
 		foreach ($this->getUnits() as $unit) {
 			$unit->setUnitMovement(null);
 		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getElectricity(): int
+	{
+		if (is_array($this->resources) && array_key_exists("electricity", $this->resources)) {
+			return $this->resources["electricity"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $electricity
+	 * @return UnitMovement
+	 */
+	public function setElectricity(int $electricity): UnitMovement
+	{
+		$this->resources["electricity"] = $electricity;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFuel(): int
+	{
+		if (is_array($this->resources) && array_key_exists("fuel", $this->resources)) {
+			return $this->resources["fuel"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $fuel
+	 * @return UnitMovement
+	 */
+	public function setFuel(int $fuel): UnitMovement
+	{
+		$this->resources["fuel"] = $fuel;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIron(): int
+	{
+		if (is_array($this->resources) && array_key_exists("iron", $this->resources)) {
+			return $this->resources["iron"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $iron
+	 * @return UnitMovement
+	 */
+	public function setIron(int $iron): UnitMovement
+	{
+		$this->resources["iron"] = $iron;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getWater(): int
+	{
+		if (is_array($this->resources) && array_key_exists("water", $this->resources)) {
+			return $this->resources["water"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $water
+	 * @return UnitMovement
+	 */
+	public function setWater(int $water): UnitMovement
+	{
+		$this->resources["water"] = $water;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getFood(): int
+	{
+		if (is_array($this->resources) && array_key_exists("food", $this->resources)) {
+			return $this->resources["food"];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @param int $food
+	 * @return UnitMovement
+	 */
+	public function setFood(int $food): UnitMovement
+	{
+		$this->resources["food"] = $food;
+
+		return $this;
 	}
 }
