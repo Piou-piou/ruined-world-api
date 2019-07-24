@@ -45,7 +45,7 @@ class FightController extends AbstractController
 
 		if ($success === true) {
 			$slower_speed = $unit->getSlowerUnitSpeed((array)$infos->units);
-			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_ATTACK,  $dest_base->getId(), UnitMovement::MOVEMENT_TYPE_GO, $slower_speed);
+			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_ATTACK,  $dest_base->getId(), UnitMovement::MOVEMENT_TYPE_GO, null, $slower_speed);
 			$unit->putUnitsInMovement((array)$infos->units, $unit_movement);
 		}
 
