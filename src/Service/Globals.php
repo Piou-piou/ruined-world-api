@@ -112,7 +112,7 @@ class Globals
 		$multiplicator_time = $this->getGeneralConfig()["multiplicator_travel_time"];
 		$posx_calc = abs(($first_base->getPosx()-$second_base->getPosx())*$multiplicator_time);
 		$posy_calc = abs(($first_base->getPosy()-$second_base->getPosy())*$multiplicator_time);
-		$time = ($posx_calc+$posy_calc)/$speed;
+		$time = round(($posx_calc+$posy_calc)/$speed);
 
 		if ($to_hms) {
 			return Utils::secondsToHms($time);
