@@ -118,6 +118,9 @@ class Fight
 		}
 		$this->em->flush();
 		$this->putUnitsOnReturn($base_attack_units, $unit_movement);
+		if ($base_attack_units->count() > 0) {
+			$this->stealResources($base_attack_units, $unit_movement, $attacked_base);
+		}
 	}
 
 	/**
@@ -135,6 +138,37 @@ class Fight
 			$unit_movement->setEndDate($now->add(new DateInterval("PT".$unit_movement->getDuration()."S")));
 			$this->em->persist($unit_movement);
 		}
+		$this->em->flush();
+	}
+
+	/**
+	 * method to steal resources in base after attack it
+	 * @param $base_attack_units
+	 * @param \App\Entity\UnitMovement $unitMovement
+	 * @param Base $attacked_base
+	 */
+	private function stealResources($base_attack_units, \App\Entity\UnitMovement $unitMovement, Base $attacked_base)
+	{
+		$unit_config = $this->globals->getUnitsConfig();
+		$this->resources->setBase($attacked_base);
+		$resources_steal = $this->resources->getResourcesToSteal();
+		$resource_names = ["electricity", "iron", "fuel", "water"];
+
+		/** @var Unit $unit */
+		foreach ($base_attack_units as $unit) {
+			$transport_weight = $unit_config[$unit->getArrayname()]["transport_weight"];
+			$resource_name = $resource_names[rand(0, 3)];
+			$resource = $resources_steal[$resource_name];
+
+			if ($resource - $transport_weight > 0) {
+				$setter = "set".ucfirst($resource_name);
+				$getter = "get".ucfirst($resource_name);
+				$unitMovement->$setter($unitMovement->$getter() + $transport_weight);
+				$this->resources->withdrawResource($resource_name, $transport_weight);
+			}
+		}
+
+		$this->em->persist($unitMovement);
 		$this->em->flush();
 	}
 }
