@@ -53,7 +53,7 @@ class UnitMovement
     protected $movement_type;
 
 	/**
-	 * @ORM\Column(type="json")
+	 * @ORM\Column(type="json", nullable=true)
 	 */
 	protected $resources;
 
