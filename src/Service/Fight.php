@@ -131,7 +131,7 @@ class Fight
 	{
 		$this->resources->setBase($this->globals->getCurrentBase());
 		$this->resources->addResource("electricity", $unit_movement->getElectricity());
-		$this->resources->addResource("iron", $unit_movement->getFuel());
+		$this->resources->addResource("iron", $unit_movement->getIron());
 		$this->resources->addResource("fuel", $unit_movement->getFuel());
 		$this->resources->addResource("water", $unit_movement->getWater());
 
