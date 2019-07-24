@@ -30,6 +30,25 @@ class Unit
 	}
 
 	/**
+	 * method to get attack or defense power of a unit
+	 * @param \App\Entity\Unit $unit
+	 * @param $type
+	 * @return float
+	 */
+	public function getPower(\App\Entity\Unit $unit, $type): float
+	{
+		$default_power = $this->globals->getUnitsConfig()[$unit->getArrayName()][$type."_power"];
+
+		if ($type === "attack") {
+			$level = $unit->getAssaultLevel();
+		} else {
+			$level = $unit->getDefenseLevel();
+		}
+
+		return round($default_power * ((100+$level)/100));
+	}
+
+	/**
 	 * method that return slower unit speed
 	 * @param $units
 	 * @return int

@@ -27,16 +27,23 @@ class Fight
 	private $resources;
 
 	/**
+	 * @var \App\Service\Unit
+	 */
+	private $unit_service;
+
+	/**
 	 * Fight constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 * @param Resources $resources
+	 * @param \App\Service\Unit $unit_service
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
 		$this->resources = $resources;
+		$this->unit_service = $unit_service;
 	}
 
 	/**
@@ -48,8 +55,7 @@ class Fight
 	 */
 	public function attackOrDefendUnit(Unit $unit, array $units, string $type = "attack"): array
 	{
-		$units_config = $this->globals->getUnitsConfig();
-		$power = $units_config[$unit->getArrayName()][$type."_power"];
+		$power = $this->unit_service->getPower($unit, $type);
 		$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
 
 		if ($key !== null) {
