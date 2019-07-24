@@ -79,7 +79,7 @@ class UnitMovement
 	 * @param int $type
 	 * @param int $type_id
 	 * @param int $movement_type
-	 * @param int|null $config_id
+	 * @param int $config_id
 	 * @param int $speed
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
