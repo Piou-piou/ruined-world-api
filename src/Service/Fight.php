@@ -22,14 +22,21 @@ class Fight
 	private $globals;
 
 	/**
+	 * @var Resources
+	 */
+	private $resources;
+
+	/**
 	 * Fight constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
+	 * @param Resources $resources
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
+		$this->resources = $resources;
 	}
 
 	/**
