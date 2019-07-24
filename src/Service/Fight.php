@@ -124,6 +124,25 @@ class Fight
 	}
 
 	/**
+	 * method that add stolen resources to the base and end movement
+	 * @param \App\Entity\UnitMovement $unit_movement
+	 */
+	public function endMovement(\App\Entity\UnitMovement $unit_movement)
+	{
+		$this->resources->setBase($this->globals->getCurrentBase());
+		$this->resources->addResource("electricity", $unit_movement->getElectricity());
+		$this->resources->addResource("iron", $unit_movement->getFuel());
+		$this->resources->addResource("fuel", $unit_movement->getFuel());
+		$this->resources->addResource("water", $unit_movement->getWater());
+
+		$unit_movement->clearUnits();
+		$this->em->persist($unit_movement);
+		$this->em->flush();
+		$this->em->remove($unit_movement);
+		$this->em->flush();
+	}
+
+	/**
 	 * method to put units on return if there is units on movement else delete it
 	 * @param $base_attack_units
 	 * @param \App\Entity\UnitMovement $unit_movement
