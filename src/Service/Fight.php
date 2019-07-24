@@ -117,7 +117,16 @@ class Fight
 			}
 		}
 		$this->em->flush();
+		$this->putUnitsOnReturn($base_attack_units, $unit_movement);
+	}
 
+	/**
+	 * method to put units on return if there is units on movement else delete it
+	 * @param $base_attack_units
+	 * @param \App\Entity\UnitMovement $unit_movement
+	 * @throws Exception
+	 */
+	private function putUnitsOnReturn($base_attack_units, \App\Entity\UnitMovement $unit_movement) {
 		if ($base_attack_units->count() === 0) {
 			$this->em->remove($unit_movement);
 		} else {
