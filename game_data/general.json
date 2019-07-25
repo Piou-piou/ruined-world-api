@@ -3,5 +3,6 @@
   "number_missions_config": 8,
   "number_of_missions_base": 3,
   "unit_food_consumption_hour": 2,
-  "food_kill_divider": 6
+  "food_kill_divider": 6,
+  "seconds_before_show_attack": 120
 }

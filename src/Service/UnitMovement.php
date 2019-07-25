@@ -116,11 +116,17 @@ class UnitMovement
 	public function getCurrentMovementsInBase(): array
 	{
 		$this->updateUnitMovement($this->globals->getCurrentBase());
+		$time_before_show_attack = $this->globals->getGeneralConfig()["seconds_before_show_attack"];
 		$unit_movements = $this->em->getRepository(\App\Entity\UnitMovement::class)->findMovementsByBase($this->globals->getCurrentBase());
 		$return_movements = [];
+		$now = (new DateTime())->getTimestamp();
 
 		foreach ($unit_movements as $unit_movement) {
 			$entity_type = $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId());
+			if ($entity_type instanceof Base && $entity_type->getId() === $this->globals->getCurrentBase()->getId() && ($unit_movement->getEndDate()->getTimestamp() - $now > $time_before_show_attack)) {
+				continue;
+			}
+
 			$name = "";
 			if ($entity_type instanceof Base) {
 				$name = $entity_type->getName();
