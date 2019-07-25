@@ -10,7 +10,7 @@
     "armor": 0,
     "recruitment_time": 60,
     "explanation": "Le villageois est la plus pour boire de la bière qu'autre chose, néenmoins, il peut s'avérer très p)àratique pour les petites missions de chasse",
-    "transport_weight": 45,
+    "transport_weight": 50,
     "resources_recruit": {
       "electricity": 100,
       "fuel": 90,
