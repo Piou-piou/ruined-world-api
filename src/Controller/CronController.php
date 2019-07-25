@@ -123,9 +123,9 @@ class CronController extends AbstractController
 	public function cron(Request $request)
 	{
 		$ip = $request->server->get('REMOTE_ADDR');
-		$allowed_ip = ["127.0.0.1", "91.165.47.238", "90.100.133.37"];
+		$allowed_ip_external = explode(", ", $_ENV["IP_CRON_EXTERNAL"]);
 		
-		if (in_array($ip, $allowed_ip)) {
+		if (in_array($ip, $allowed_ip_external) || $ip === $_ENV["IP_CRON_INTERNAL"]) {
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
 			$now = new DateTime();
@@ -139,7 +139,7 @@ class CronController extends AbstractController
 				
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
-					if ($next_exec === null) {
+					if ($next_exec === null || in_array($ip, $allowed_ip_external)) {
 						$this->$key();
 					} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
 						$this->$key();
@@ -273,6 +273,32 @@ class CronController extends AbstractController
 			
 			$this->session->remove("current_base");
 			$this->session->remove("token");
+		}
+	}
+
+	/**
+	 * method to send mail to user before their account archiving
+	 * @throws Exception
+	 */
+	private function sendMailBeforeArchiveUser()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days")-3);
+
+		/**
+		 * @var $user User
+		 */
+		foreach ($users as $user) {
+			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y h:i:s");
+			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
+				->setSender("no-reply@anthony-pilloud.fr")
+				->setFrom("no-reply@anthony-pilloud.fr")
+				->setTo($user->getEmail())
+				->setBody(
+					$this->renderView('before_archive_account.html.twig', ["desactivation_date" => $desactivation_date]),
+					'text/html'
+				);
+			$this->mailer->send($message);
 		}
 	}
 	

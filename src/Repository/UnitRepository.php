@@ -92,34 +92,6 @@ class UnitRepository extends EntityRepository
 	}
 
 	/**
-	 * method to find units that are currently in movement
-	 * @param UnitMovement $unitMovement
-	 * @return array
-	 */
-	public function findByUnitsInMovement(UnitMovement $unitMovement): array
-	{
-		$query = $this->getEntityManager()->createQuery("SELECT u.id, u.name, u.array_name, count(u) as number FROM App:Unit u
-			WHERE u.unitMovement = :unit_movement
-			GROUP BY u.array_name
-		");
-		$query->setParameter("unit_movement", $unitMovement, Type::OBJECT);
-
-		$results = $query->getResult();
-		$return_results = [];
-
-		foreach ($results as $result) {
-			$return_results[] = [
-				"id" => $result["id"],
-				"name" => $result["name"],
-				"array_name" => $result["array_name"],
-				"number" => $result["number"]
-			];
-		}
-
-		return $return_results;
-	}
-
-	/**
 	 * method that count same unit array_name in a base
 	 * @param Base $base
 	 * @param string $array_name

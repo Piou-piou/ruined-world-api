@@ -4,16 +4,18 @@
     "array_name": "villager",
     "max_level": 10,
     "attack_power": 10,
-    "defense_power": 10,
-    "speed": 3,
+    "defense_power": 20,
+    "speed": 2,
+    "life": 100,
+    "armor": 0,
     "recruitment_time": 60,
     "explanation": "Le villageois est la plus pour boire de la bière qu'autre chose, néenmoins, il peut s'avérer très p)àratique pour les petites missions de chasse",
-    "transport_weight": 45,
+    "transport_weight": 50,
     "resources_recruit": {
-      "electricity": 130,
-      "fuel": 120,
-      "iron": 110,
-      "water": 160
+      "electricity": 100,
+      "fuel": 90,
+      "iron": 80,
+      "water": 130
     },
     "to_recruit": {
 
@@ -26,6 +28,8 @@
     "attack_power": 10,
     "defense_power": 70,
     "speed": 1,
+    "life": 100,
+    "armor": 50,
     "recruitment_time": 90,
     "explanation": "Le défenseur est une unité bien protégée et lourde qui ne marche pas vite. Il adore se battre chez lui et la défense c'est sa tasse de thé !",
     "transport_weight": 10,
@@ -34,6 +38,72 @@
       "fuel": 135,
       "iron": 170,
       "water": 140
+    },
+    "to_recruit": {
+
+    }
+  },
+  "attacker": {
+    "name": "Attacker",
+    "array_name": "attacker",
+    "max_level": 10,
+    "attack_power": 70,
+    "defense_power": 10,
+    "speed": 3,
+    "life": 100,
+    "armor": 50,
+    "recruitment_time": 90,
+    "explanation": "L'attaquer est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
+    "transport_weight": 10,
+    "resources_recruit": {
+      "electricity": 170,
+      "fuel": 140,
+      "iron": 120,
+      "water": 135
+    },
+    "to_recruit": {
+
+    }
+  },
+  "attacker_1": {
+    "name": "Attacker 1",
+    "array_name": "attacker_1",
+    "max_level": 10,
+    "attack_power": 160,
+    "defense_power": 50,
+    "speed": 6,
+    "life": 100,
+    "armor": 60,
+    "recruitment_time": 330,
+    "explanation": "L'attaquer 1 est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
+    "transport_weight": 100,
+    "resources_recruit": {
+      "electricity": 425,
+      "fuel": 350,
+      "iron": 380,
+      "water": 500
+    },
+    "to_recruit": {
+
+    }
+  },
+  "conquieror": {
+    "name": "Conquieror ",
+    "array_name": "conquieror",
+    "max_level": 10,
+    "attack_power": 180,
+    "defense_power": 144,
+    "speed": 4,
+    "life": 100,
+    "armor": 100,
+    "recruitment_time": 450,
+    "explanation": "Le Conquieror est l'unité ultime aussi doué pour l'attaque que la défnse. Elle ferait trembler n'importe qui !",
+    "transport_weight": 70,
+    "resources_recruit": {
+      "electricity": 520,
+      "fuel": 480,
+      "iron": 435,
+      "water": 380
     },
     "to_recruit": {
 

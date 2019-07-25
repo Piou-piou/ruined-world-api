@@ -41,6 +41,16 @@ class Unit
     protected $defense_level;
 
 	/**
+	 * @ORM\Column(type="integer", options={"default" : 100})
+	 */
+    protected $life = 100;
+
+	/**
+	 * @ORM\Column(type="integer", options={"default" : 0})
+	 */
+    protected $armor = 0;
+
+	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 */
     protected $in_recruitment;
@@ -182,6 +192,44 @@ class Unit
     {
         return $this->defense_level;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getLife()
+	{
+		return $this->life;
+	}
+
+	/**
+	 * @param mixed $life
+	 * @return Unit
+	 */
+	public function setLife($life)
+	{
+		$this->life = $life;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getArmor()
+	{
+		return $this->armor;
+	}
+
+	/**
+	 * @param mixed $armor
+	 * @return Unit
+	 */
+	public function setArmor($armor)
+	{
+		$this->armor = $armor;
+
+		return $this;
+	}
 
 	/**
 	 * @return mixed

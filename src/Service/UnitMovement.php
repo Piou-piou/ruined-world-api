@@ -16,39 +16,55 @@ class UnitMovement
 	private $em;
 
 	/**
+	 * @var Api
+	 */
+	private $api;
+
+	/**
 	 * @var Globals
 	 */
 	private $globals;
 
 	/**
-	 * @var Resources
+	 * @var Mission
 	 */
-	private $resources;
+	private $mission;
+
+	/**
+	 * @var Fight
+	 */
+	private $fight;
 
 	/**
 	 * UnitMovement constructor.
 	 * @param EntityManagerInterface $em
+	 * @param Api $api
 	 * @param Globals $globals
-	 * @param Resources $resources
+	 * @param Mission $mission
+	 * @param Fight $fight
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
+	public function __construct(EntityManagerInterface $em, Api $api, Globals $globals, Mission $mission, Fight $fight)
 	{
 		$this->em = $em;
+		$this->api = $api;
 		$this->globals = $globals;
-		$this->resources = $resources;
+		$this->mission = $mission;
+		$this->fight = $fight;
 	}
 
 	/**
 	 * method that get entity of current movement based on the type and type id of it
 	 * @param int $type
 	 * @param int $type_id
-	 * @return \App\Entity\Mission|null
+	 * @return \App\Entity\Mission|Base|null
 	 */
 	private function getEntityOfTypeMovement(int $type, int $type_id)
 	{
 		$entity = null;
 		if ($type === \App\Entity\UnitMovement::TYPE_MISSION) {
 			$entity = \App\Entity\Mission::class;
+		} else if ($type === \App\Entity\UnitMovement::TYPE_ATTACK) {
+			$entity = Base::class;
 		}
 
 		if (!$entity) {
@@ -59,40 +75,30 @@ class UnitMovement
 	}
 
 	/**
-	 * method that return max transport weight that unit can carry durin movement
-	 * @param $units
-	 * @return int
-	 */
-	private function getMaxCapacityTransport($units): int
-	{
-		$max_transport_weight = 0;
-
-		/** @var \App\Entity\Unit $unit */
-		foreach ($units as $unit) {
-			$max_transport_weight += $this->globals->getUnitsConfig()[$unit->getArrayName()]["transport_weight"];
-		}
-
-		return $max_transport_weight;
-	}
-
-	/**
 	 * method that create a unit movement
 	 * @param int $type
-	 * @param int $config_id
 	 * @param int $type_id
 	 * @param int $movement_type
+	 * @param int $config_id
+	 * @param int $speed
 	 * @return \App\Entity\UnitMovement
 	 * @throws Exception
 	 */
-	public function create(int $type, int $config_id, int $type_id, int $movement_type):\App\Entity\UnitMovement
+	public function create(int $type, int $type_id, int $movement_type, int $config_id = null, int $speed = 1): \App\Entity\UnitMovement
 	{
 		$now = new DateTime();
-		$mission_config = $this->globals->getMissionsConfig()[$config_id];
+		if ($type === \App\Entity\UnitMovement::TYPE_MISSION) {
+			$mission_config = $this->globals->getMissionsConfig()[$config_id];
+			$duration = $mission_config["duration"];
+		} else {
+			$base_dest = $this->em->getRepository(Base::class)->find($type_id);
+			$duration = $this->globals->getTimeToTravel($this->globals->getCurrentBase(), $base_dest, $speed);
+		}
 
 		$unit_movement = new \App\Entity\UnitMovement();
 		$unit_movement->setBase($this->globals->getCurrentBase());
-		$unit_movement->setDuration($mission_config["duration"]);
-		$unit_movement->setEndDate($now->add(new DateInterval("PT". $mission_config["duration"] ."S")));
+		$unit_movement->setDuration($duration);
+		$unit_movement->setEndDate($now->add(new DateInterval("PT". $duration ."S")));
 		$unit_movement->setType($type);
 		$unit_movement->setTypeId($type_id);
 		$unit_movement->setMovementType($movement_type);
@@ -104,26 +110,41 @@ class UnitMovement
 
 	/**
 	 * method that return current units movements in base
+	 * @return array
+	 * @throws Exception
 	 */
-	public function getCurrentMovementsInBase()
+	public function getCurrentMovementsInBase(): array
 	{
-		$unit_movements = $this->em->getRepository(\App\Entity\UnitMovement::class)->findBy([
-			"base" => $this->globals->getCurrentBase()
-		]);
+		$base = $this->globals->getCurrentBase();
+		$this->updateUnitMovement($base);
+		$time_before_show_attack = $this->globals->getGeneralConfig()["seconds_before_show_attack"];
+		$unit_movements = $this->em->getRepository(\App\Entity\UnitMovement::class)->findMovementsByBase($base);
 		$return_movements = [];
+		$now = (new DateTime())->getTimestamp();
 
 		foreach ($unit_movements as $unit_movement) {
 			$entity_type = $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId());
+			$end_date = $unit_movement->getEndDate()->getTimestamp();
+			if (($entity_type instanceof Base && $entity_type->getId() === $base->getId() && ($end_date - $now <= $time_before_show_attack) || ($unit_movement->getBase() === $base))) {
+				$name = "";
+				if ($entity_type instanceof Base) {
+					$name = $entity_type->getName();
+				}
 
-			$return_movements[] = [
-				"duration" => $unit_movement->getDuration(),
-				"end_date" => $unit_movement->getEndDate()->getTimestamp(),
-				"type" => $unit_movement->getType(),
-				"string_type" => $unit_movement->getStringType(),
-				"entity_type" => $entity_type,
-				"movement_type" => $unit_movement->getType(),
-				"units" => $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement)
-			];
+				$units = [];
+				if ($unit_movement->getBase() === $base) {
+					$units = $this->em->getRepository(\App\Entity\UnitMovement::class)->findByUnitsInMovement($unit_movement);
+				}
+
+				$return_movements[] = [
+					"end_date" => $end_date,
+					"string_type" => $unit_movement->getStringType(),
+					"entity_name" => $name,
+					"base_id" => $unit_movement->getBase()->getId(),
+					"movement_type_string" => $unit_movement->getStringMovementType(),
+					"units" => $units
+				];
+			}
 		}
 
 		return $return_movements;
@@ -142,47 +163,12 @@ class UnitMovement
 		/** @var \App\Entity\UnitMovement $unit_movement */
 		foreach ($unit_movements_ended as $unit_movement) {
 			if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_GO) {
-				// attack on the go
+				$this->fight->attackBase($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_ATTACK && $unit_movement->getMovementType() === \App\Entity\UnitMovement::MOVEMENT_TYPE_RETURN) {
-				// attack on the return
+				$this->fight->endMovement($unit_movement);
 			} else if ($unit_movement->getType() === \App\Entity\UnitMovement::TYPE_MISSION) {
-				$this->endMission($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
+				$this->mission->endMission($base, $unit_movement, $this->getEntityOfTypeMovement($unit_movement->getType(), $unit_movement->getTypeId()));
 			}
 		}
-	}
-
-	/**
-	 * method called to end a mission kill unit based on lost percentage of it and give food based
-	 * on win_resources percentage of mission
-	 * @param Base $base
-	 * @param \App\Entity\UnitMovement $unit_movement
-	 * @param \App\Entity\Mission $mission
-	 */
-	private function endMission(Base $base, \App\Entity\UnitMovement $unit_movement, \App\Entity\Mission $mission)
-	{
-		$current_mission_config = $this->globals->getMissionsConfig()[$mission->getMissionsConfigId()];
-		$lost_unit = round(count($unit_movement->getUnits())*(rand(0, $current_mission_config["lost_percentage"])/100));
-
-		for ($i=0 ; $i<$lost_unit ; $i++) {
-			$this->em->remove($unit_movement->getUnits()->get($i));
-			$unit_movement->getUnits()->remove($i);
-		}
-		$this->em->persist($unit_movement);
-		$this->em->flush();
-
-		$max_transport_capacity = $this->getMaxCapacityTransport($unit_movement->getUnits());
-		$win_resources = round(($max_transport_capacity*((100+$current_mission_config["win_resources"])/100))-$max_transport_capacity);
-
-		$this->resources->setBase($base);
-		$this->resources->addResource("food", $win_resources);
-
-		$mission->setInProgress(false);
-		$mission->setUnitMovement(null);
-		$this->em->persist($mission);
-		$unit_movement->clearUnits();
-		$this->em->persist($unit_movement);
-		$this->em->flush();
-		$this->em->remove($unit_movement);
-		$this->em->flush();
 	}
 }

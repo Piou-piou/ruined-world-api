@@ -67,14 +67,16 @@ class MissionsController extends AbstractController
 		if (!$mission) {
 			$success = false;
 			$error_message = "Impossible de trouver la mission demandée";
-		}
-		if ($unit->testEnoughUnitInBaseToSend((array)$infos->units) === false) {
+		} else if (count((array)$infos->units)  > 0 && $unit->testEnoughUnitInBaseToSend((array)$infos->units) === false) {
 			$success = false;
 			$error_message = "Vous n'avez pas autant d'unités à envoyer en mission";
+		} else if (count((array)$infos->units) === 0) {
+			$success = false;
+			$error_message = "Vous devez envoyer au moins une unité en mission";
 		}
 
 		if ($success === true) {
-			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getMissionsConfigId(), $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION);
+			$unit_movement = $unit_movement_service->create(UnitMovement::TYPE_MISSION, $mission->getId(), UnitMovement::MOVEMENT_TYPE_MISSION, $mission->getMissionsConfigId());
 			$unit->putUnitsInMovement((array)$infos->units, $unit_movement);
 
 			$mission->setUnitMovement($unit_movement);
@@ -88,24 +90,6 @@ class MissionsController extends AbstractController
 			"token" => $session->get("user")->getToken(),
 			"error_message" => $error_message,
 			"success_message" => "Vos unités se mettent en route"
-		]);
-	}
-
-	/**
-	 * @Route("/api/missions/update-movements/", name="missions_update_movements", methods={"POST"})
-	 * @param SessionInterface $session
-	 * @param Globals $globals
-	 * @param \App\Service\UnitMovement $unit_movement
-	 * @return JsonResponse
-	 * @throws \Exception
-	 */
-	public function updateUnitMovements(SessionInterface $session, Globals $globals, \App\Service\UnitMovement $unit_movement): JsonResponse
-	{
-		$unit_movement->updateUnitMovement($globals->getCurrentBase(true));
-
-		return new JsonResponse([
-			"success" => true,
-			"token" => $session->get("user")->getToken()
 		]);
 	}
 }

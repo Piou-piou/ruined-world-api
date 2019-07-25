@@ -62,7 +62,7 @@ class Resources
 	 * @var int
 	 */
 	private $water_production;
-	
+
 	/**
 	 * Resources constructor.
 	 * @param EntityManagerInterface $em
@@ -256,6 +256,28 @@ class Resources
 			"fuel" => (int)round($resource_tobuild["fuel"] * ($level + 1) * ((double)$coef[$level+1])),
 			"iron" => (int)round($resource_tobuild["iron"] * ($level + 1) * ((double)$coef[$level+1])),
 			"water" => (int)round($resource_tobuild["water"] * ($level + 1) * ((double)$coef[$level+1])),
+		];
+	}
+
+	/**
+	 * method that send number of each resource we can steal in a base
+	 * @return array
+	 */
+	public function getResourcesToSteal(): array
+	{
+		$building = new Building($this->em, $this->globals, $this);
+		$bunker = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
+			"base" => $this->getBase(),
+			"array_name" => "bunker",
+		]);
+
+		$protection = $bunker ? $building->getCurrentPower($bunker->getArrayName(), $bunker->getLevel()) : 0;
+
+		return [
+			"electricity" => $this->getBase()->getElectricity()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getElectricity()*((100-$protection)/100)),
+			"iron" => $this->getBase()->getIron()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getIron()*((100-$protection)/100)),
+			"fuel" => $this->getBase()->getFuel()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getFuel()*((100-$protection)/100)),
+			"water" => $this->getBase()->getWater()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getWater()*((100-$protection)/100))
 		];
 	}
 }

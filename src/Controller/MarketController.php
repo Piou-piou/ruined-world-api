@@ -90,7 +90,9 @@ class MarketController extends AbstractController
 				"type" => $market_movement->getType(),
 				"endTransport" => $market_movement->getEndDate()->getTimestamp(),
 				"base_dest_name" => $market_movement->getBaseDest()->getName(),
-				"base_dest_guid" => $market_movement->getBaseDest()->getGuid()
+				"base_dest_guid" => $market_movement->getBaseDest()->getGuid(),
+				"base_name" => $market_movement->getBase()->getName(),
+				"base_guid" => $market_movement->getBase()->getGuid(),
 			];
 		}
 
