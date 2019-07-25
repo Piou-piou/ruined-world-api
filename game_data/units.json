@@ -4,18 +4,18 @@
     "array_name": "villager",
     "max_level": 10,
     "attack_power": 10,
-    "defense_power": 30,
-    "speed": 3,
+    "defense_power": 20,
+    "speed": 2,
     "life": 100,
     "armor": 0,
     "recruitment_time": 60,
     "explanation": "Le villageois est la plus pour boire de la bière qu'autre chose, néenmoins, il peut s'avérer très p)àratique pour les petites missions de chasse",
     "transport_weight": 45,
     "resources_recruit": {
-      "electricity": 130,
-      "fuel": 120,
-      "iron": 110,
-      "water": 160
+      "electricity": 100,
+      "fuel": 90,
+      "iron": 80,
+      "water": 130
     },
     "to_recruit": {
 
