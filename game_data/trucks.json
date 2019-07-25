@@ -1,0 +1,24 @@
+{
+  "steal_resources": {
+    "name": "Steal resources",
+    "array_name": "steal_resources",
+    "max_level": 1,
+    "attack_power": 0,
+    "defense_power": 0,
+    "speed": 6,
+    "life": 500,
+    "armor": 0,
+    "recruitment_time": 600,
+    "explanation": "Le camion voleur de ressources ne sert qu'à une chose : accompagner tes troupes et voler des ressources. Simple rapide et efficace",
+    "transport_weight": 500,
+    "resources_recruit": {
+      "electricity": 600,
+      "fuel": 500,
+      "iron": 550,
+      "water": 720
+    },
+    "to_recruit": {
+
+    }
+  }
+}
