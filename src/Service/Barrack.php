@@ -89,7 +89,7 @@ class Barrack
 	 */
 	public function getUnitsPossibleToRecruit()
 	{
-		$units = $this->globals->getUnitsConfig();
+		$units = $this->globals->getUnitsConfig("units");
 
 		foreach ($units as $unit) {
 			$units[$unit["array_name"]]["recruitment_time"] = $this->getTimeToRecruit($unit["recruitment_time"]);
@@ -109,7 +109,7 @@ class Barrack
 	{
 		$base = $this->globals->getCurrentBase(true);
 		$resources = $this->resources;
-		$resources_torecruit = $this->globals->getUnitsConfig()[$array_name]["resources_recruit"];;
+		$resources_torecruit = $this->globals->getUnitsConfig("units")[$array_name]["resources_recruit"];;
 
 		$rest_electricity = $base->getElectricity() - ($resources_torecruit["electricity"] * $number_to_recruit);
 		$rest_fuel = $base->getFuel() - ($resources_torecruit["fuel"] * $number_to_recruit);

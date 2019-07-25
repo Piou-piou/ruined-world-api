@@ -186,16 +186,24 @@ class Globals
 		
 		return $points;
 	}
-	
+
 	/**
 	 * method that return the array of the units config json file
+	 * @param string $type
 	 * @return mixed
 	 */
-	public function getUnitsConfig()
+	public function getUnitsConfig(string $type = "all")
 	{
-		$units = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "units.json"), true);
-		
-		return $units;
+		$units = [];
+		$trucks = [];
+		if ($type === "all") {
+			$units = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "units.json"), true);
+			$trucks = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "trucks.json"), true);
+		} else if ($type === "units") {
+			$units = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "units.json"), true);
+		}
+
+		return array_merge($units, $trucks);
 	}
 
 	/**

@@ -85,7 +85,7 @@ class BarrackController extends AbstractController
 		$infos = $session->get("jwt_infos");
 		$unit_array_name = $infos->unit_array_name;
 		$number_to_recruit = (int)$infos->number_to_recruit;
-		$unit_config = $globals->getUnitsConfig()[$unit_array_name];
+		$unit_config = $globals->getUnitsConfig("units")[$unit_array_name];
 
 		if ($barrack->testWithdrawResourcesToRecruit($unit_array_name, $number_to_recruit)) {
 			for ($i = 0; $i < $number_to_recruit; $i++) {
