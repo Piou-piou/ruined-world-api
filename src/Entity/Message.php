@@ -41,6 +41,12 @@ class Message
 	 */
 	protected $messages_box;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="bases")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 */
+	protected $user;
+
 	public function __construct()
 	{
 		$this->messages_box = new ArrayCollection();
@@ -154,5 +160,28 @@ class Message
 	public function getMessagesBox()
 	{
 		return $this->messages_box;
+	}
+
+	/**
+	 * Set User entity (many to one).
+	 *
+	 * @param User $user
+	 * @return Message
+	 */
+	public function setUser(User $user = null)
+	{
+		$this->user = $user;
+
+		return $this;
+	}
+
+	/**
+	 * Get User entity (many to one).
+	 *
+	 * @return User
+	 */
+	public function getUser()
+	{
+		return $this->user;
 	}
 }
