@@ -13,6 +13,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class MessageBox
 {
+	const TYPE_RECEIVED = 1,
+		TYPE_SEND = 2,
+		FIGHT_REPORT = 3;
+
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
