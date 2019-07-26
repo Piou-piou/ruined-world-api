@@ -31,8 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-		 	"PiouPiou\\RibsMessagingBundle\\": "lib/RibsMessagingBundle"
+            "App\\": "src/"
 		}
     },
     "autoload-dev": {

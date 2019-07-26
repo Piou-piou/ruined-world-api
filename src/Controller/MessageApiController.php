@@ -1,6 +1,6 @@
 <?php
 
-namespace PiouPiou\RibsMessagingBundle\Controller;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
