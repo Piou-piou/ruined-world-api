@@ -184,4 +184,9 @@ class Message
 	{
 		return $this->user;
 	}
+
+	public function getFormattedSendAt()
+	{
+		return $this->getSendAt()->format("m/d/Y H:i:s");
+	}
 }
