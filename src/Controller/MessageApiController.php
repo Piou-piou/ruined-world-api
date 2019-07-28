@@ -52,4 +52,34 @@ class MessageApiController extends AbstractController
 			"message" => $api->serializeObject($message)
 		]);
 	}
+
+	/**
+	 * method to delete a message
+	 * @Route("/api/message/delete/", name="message_delete", methods={"POST"})
+	 * @param Session $session
+	 * @return JsonResponse
+	 */
+	public function deleteMessage(Session $session): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+		$message = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->find($infos->message_id);
+		$error_message = "";
+		$success_message = "";
+
+		if ($message) {
+			$em->remove($message);
+			$em->flush();
+			$success_message = "Le message a été supprimé";
+		} else {
+			$error_message = "Le message demandé n'existe pas ou plus";
+		}
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"success_message" => $success_message,
+			"error_message" => $error_message
+		]);
+	}
 }
