@@ -54,7 +54,7 @@ class MessageApiController extends AbstractController
 	}
 
 	/**
-	 * method to delete a message
+	 * method to delete a message of the box
 	 * @Route("/api/message/delete/", name="message_delete", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
