@@ -15,11 +15,10 @@ class MessageApiController extends AbstractController
 	/**
 	 * @Route("/api/message/list/", name="message_list", methods={"POST"})
 	 * @param Session $session
-	 * @param Globals $globals
 	 * @param Api $api
 	 * @return JsonResponse
 	 */
-	public function getMessagesOfBox(Session $session, Globals $globals, Api $api): JsonResponse
+	public function showMessagesOfBox(Session $session, Api $api): JsonResponse
 	{
 		$user = $session->get("user");
 
@@ -32,6 +31,25 @@ class MessageApiController extends AbstractController
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
 			"messages" => $api->serializeObject($messages_box)
+		]);
+	}
+
+	/**
+	 * method to send a message
+	 * @Route("/api/message/show/", name="message_show", methods={"POST"})
+	 * @param Session $session
+	 * @param Api $api
+	 * @return JsonResponse
+	 */
+	public function showMessage(Session $session, Api $api): JsonResponse
+	{
+		$infos = $session->get("jwt_infos");
+		$message = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->find($infos->message_id);
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"message" => $api->serializeObject($message)
 		]);
 	}
 }
