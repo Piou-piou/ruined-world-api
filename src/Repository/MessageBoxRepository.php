@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityRepository;
 class MessageBoxRepository extends EntityRepository
 {
 	/**
+	 * method to get sent messages
 	 * @param User $user
 	 * @return mixed
 	 */
