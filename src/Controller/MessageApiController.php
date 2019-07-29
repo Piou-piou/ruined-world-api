@@ -173,6 +173,7 @@ class MessageApiController extends AbstractController
 
 	/**
 	 * method to send a message to a player
+	 * @Route("/api/message/send/", name="message_send", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
 	 * @throws Exception
@@ -185,7 +186,7 @@ class MessageApiController extends AbstractController
 
 		if (!$dest_user) {
 			return new JsonResponse([
-				"success" => true,
+				"success" => false,
 				"token" => $session->get("user")->getToken(),
 				"error_message" => "Le joueur " . $infos->pseudo . " n'a pas été trouvé"
 			]);
@@ -211,6 +212,7 @@ class MessageApiController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
+			"success_message" => "Message envoyé"
 		]);
 	}
 }
