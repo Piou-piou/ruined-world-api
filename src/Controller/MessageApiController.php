@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\MessageBox;
 use App\Service\Api;
-use App\Service\Globals;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -50,6 +49,31 @@ class MessageApiController extends AbstractController
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
 			"message" => $api->serializeObject($message)
+		]);
+	}
+
+	/**
+	 * method to set a message as read
+	 * Route("/api/message/read/", name="message_read", methods={"POST"})
+	 * @param Session $session
+	 * @return JsonResponse
+	 * @throws \Exception
+	 */
+	public function readMessage(Session $session): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+		$message =$em->getRepository(MessageBox::class)->find($infos->message_id);
+
+		if ($message) {
+			$message->setReadAt(new \DateTime());
+			$em->persist($message);
+			$em->flush();
+		}
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
 		]);
 	}
 
