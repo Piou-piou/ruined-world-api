@@ -19,16 +19,26 @@ class MessageApiController extends AbstractController
 	 */
 	public function showMessagesOfBox(Session $session, Api $api): JsonResponse
 	{
+		$infos = $session->get("jwt_infos");
 		$user = $session->get("user");
+		$message_type = MessageBox::TYPE_RECEIVED;
+
+		if (isset($infos->type)) {
+			if ($infos->type === "received") {
+				$message_type = MessageBox::TYPE_RECEIVED;
+			} else if ($infos->type === "send") {
+				$message_type = MessageBox::TYPE_SEND;
+			}
+		}
 
 		$messages_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->findBy([
 			"user" => $user,
-			"type" => MessageBox::TYPE_RECEIVED
+			"type" => $message_type
 		]);
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $user->getToken(),
 			"messages" => $api->serializeObject($messages_box)
 		]);
 	}
@@ -129,7 +139,7 @@ class MessageApiController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
-			"success_message" => "Les messages ont été supprimés",
+			"success_message" => "Les messages ont été supprimés"
 		]);
 	}
 }
