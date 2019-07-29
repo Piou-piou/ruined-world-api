@@ -54,7 +54,7 @@ class MessageApiController extends AbstractController
 
 	/**
 	 * method to set a message as read
-	 * Route("/api/message/read/", name="message_read", methods={"POST"})
+	 * @Route("/api/message/read/", name="message_read", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
 	 * @throws \Exception
