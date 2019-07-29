@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\MessageBox;
+use App\Entity\User;
 use App\Service\Api;
+use DateTime;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -67,7 +71,7 @@ class MessageApiController extends AbstractController
 	 * @Route("/api/message/read/", name="message_read", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function readMessage(Session $session): JsonResponse
 	{
@@ -76,7 +80,7 @@ class MessageApiController extends AbstractController
 		$message = $em->getRepository(MessageBox::class)->find($infos->message_id);
 
 		if ($message) {
-			$message->setReadAt(new \DateTime());
+			$message->setReadAt(new DateTime());
 			$em->persist($message);
 			$em->flush();
 		}
@@ -147,9 +151,31 @@ class MessageApiController extends AbstractController
 	 * method to send a message to a player
 	 * @param Session $session
 	 * @return JsonResponse
+	 * @throws Exception
 	 */
 	public function sendMessage(Session $session): JsonResponse
 	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+		$dest_user = $em->getRepository(User::class)->find($infos->user_id);
+
+		if ($infos->subject && $dest_user) {
+			$message = new Message();
+			$message->setSubject($infos->subject);
+			$message->setMessage($infos->message);
+			$message->setSendAt(new DateTime());
+			$message->setUser($session->get("user"));
+			$em->persist($message);
+
+			$message_box = new MessageBox();
+			$message_box->setUser($dest_user);
+			$message_box->setMessage($message);
+			$message_box->setType(MessageBox::TYPE_RECEIVED);
+			$em->persist($message_box);
+
+			$em->flush();
+		}
+
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
