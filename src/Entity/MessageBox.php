@@ -40,6 +40,11 @@ class MessageBox
 	protected $archived = 0;
 
 	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $archived_sent = 0;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Message", inversedBy="messages_box")
 	 * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
 	 */
@@ -122,6 +127,25 @@ class MessageBox
 	public function setArchived($archived): void
 	{
 		$this->archived = $archived;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getArchivedSent()
+	{
+		return $this->archived_sent;
+	}
+
+	/**
+	 * @param mixed $archived_sent
+	 * @return MessageBox
+	 */
+	public function setArchivedSent($archived_sent)
+	{
+		$this->archived_sent = $archived_sent;
+
+		return $this;
 	}
 
 	/**
