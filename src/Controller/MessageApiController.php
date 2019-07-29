@@ -104,7 +104,8 @@ class MessageApiController extends AbstractController
 		$success_message = "";
 
 		if ($message) {
-			$em->remove($message);
+			$message->setArchived(true);
+			$em->persist($message);
 			$em->flush();
 			$success_message = "Le message a été supprimé";
 		} else {
@@ -133,7 +134,8 @@ class MessageApiController extends AbstractController
 		foreach ($infos->messages as $id_message) {
 			$message = $em->getRepository(MessageBox::class)->find($id_message);
 			if ($message) {
-				$em->remove($message);
+				$message->setArchived(true);
+				$em->persist($message);
 				$em->flush();
 			}
 		}
