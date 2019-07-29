@@ -123,10 +123,13 @@ class MessageBox
 
 	/**
 	 * @param mixed $archived
+	 * @return MessageBox
 	 */
-	public function setArchived($archived): void
+	public function setArchived($archived)
 	{
 		$this->archived = $archived;
+
+		return $this;
 	}
 
 	/**
