@@ -25,25 +25,23 @@ class MessageApiController extends AbstractController
 	{
 		$infos = $session->get("jwt_infos");
 		$user = $session->get("user");
-		$message_type = MessageBox::TYPE_RECEIVED;
+		$message_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class);
 
 		if (isset($infos->type)) {
 			if ($infos->type === "received") {
-				$message_type = MessageBox::TYPE_RECEIVED;
+				$messages = $message_box->findBy([
+					"user" => $user,
+					"type" => MessageBox::TYPE_RECEIVED
+				]);
 			} else if ($infos->type === "send") {
-				$message_type = MessageBox::TYPE_SEND;
+				$messages = $message_box->findBySentMessageBox($user);
 			}
 		}
-
-		$messages_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->findBy([
-			"user" => $user,
-			"type" => $message_type
-		]);
 
 		return new JsonResponse([
 			"success" => true,
 			"token" => $user->getToken(),
-			"messages" => $api->serializeObject($messages_box)
+			"messages" => $api->serializeObject($messages)
 		]);
 	}
 
