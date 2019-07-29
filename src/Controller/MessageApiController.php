@@ -142,4 +142,17 @@ class MessageApiController extends AbstractController
 			"success_message" => "Les messages ont été supprimés"
 		]);
 	}
+
+	/**
+	 * method to send a message to a player
+	 * @param Session $session
+	 * @return JsonResponse
+	 */
+	public function sendMessage(Session $session): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+		]);
+	}
 }
