@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Entity\Message
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\MessageBoxRepository")
  * @ORM\Table(name="message_box")
  */
 class MessageBox
@@ -33,6 +33,11 @@ class MessageBox
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	protected $read_at;
+
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 */
+	protected $archived = 0;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Message", inversedBy="messages_box")
@@ -101,6 +106,22 @@ class MessageBox
 		$this->read_at = $read_at;
 
 		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getArchived()
+	{
+		return $this->archived;
+	}
+
+	/**
+	 * @param mixed $archived
+	 */
+	public function setArchived($archived): void
+	{
+		$this->archived = $archived;
 	}
 
 	/**
