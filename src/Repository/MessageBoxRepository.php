@@ -15,7 +15,7 @@ class MessageBoxRepository extends EntityRepository
 	public function findBySentMessageBox(User $user)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT mb FROM App:MessageBox mb
-			JOIN App:Message m WITH m = mb.message AND m.user = :user
+			JOIN App:Message m WITH m = mb.message AND m.user = :user AND mb.archived_sent = false
 		");
 		$query->setParameter("user", $user, Type::OBJECT);
 
