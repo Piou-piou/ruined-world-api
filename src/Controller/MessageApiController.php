@@ -63,7 +63,7 @@ class MessageApiController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$message =$em->getRepository(MessageBox::class)->find($infos->message_id);
+		$message = $em->getRepository(MessageBox::class)->find($infos->message_id);
 
 		if ($message) {
 			$message->setReadAt(new \DateTime());
@@ -87,7 +87,7 @@ class MessageApiController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$message = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->find($infos->message_id);
+		$message = $em->getRepository(MessageBox::class)->find($infos->message_id);
 		$error_message = "";
 		$success_message = "";
 
@@ -117,7 +117,7 @@ class MessageApiController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		
+
 		foreach ($infos->messages as $id_message) {
 			$message = $em->getRepository(MessageBox::class)->find($id_message);
 			if ($message) {
