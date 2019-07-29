@@ -148,6 +148,30 @@ class MessageApiController extends AbstractController
 	}
 
 	/**
+	 * @param $infos
+	 * @return User|null
+	 */
+	private function getUserForMessage($infos)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$user = null;
+
+		if (isset($infos->user_id) && $infos->user_id !== null) {
+			$user = $em->getRepository(User::class)->findOneBy([
+				"id" => $infos->user_id,
+				"archived" => false
+			]);
+		} else if (isset($infos->pseudo) && $infos->pseudo !== null)  {
+			$user = $em->getRepository(User::class)->findOneBy([
+				"pseudo" => $infos->pseudo,
+				"archived" => false
+			]);
+		}
+
+		return $user;
+	}
+
+	/**
 	 * method to send a message to a player
 	 * @param Session $session
 	 * @return JsonResponse
@@ -157,7 +181,15 @@ class MessageApiController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$dest_user = $em->getRepository(User::class)->find($infos->user_id);
+		$dest_user = $this->getUserForMessage($infos);
+
+		if (!$dest_user) {
+			return new JsonResponse([
+				"success" => true,
+				"token" => $session->get("user")->getToken(),
+				"error_message" => "Le joueur " . $infos->pseudo . " n'a pas été trouvé"
+			]);
+		}
 
 		if ($infos->subject && $dest_user) {
 			$message = new Message();
