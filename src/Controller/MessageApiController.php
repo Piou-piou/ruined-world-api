@@ -31,7 +31,8 @@ class MessageApiController extends AbstractController
 			if ($infos->type === "received") {
 				$messages = $message_box->findBy([
 					"user" => $user,
-					"type" => MessageBox::TYPE_RECEIVED
+					"type" => MessageBox::TYPE_RECEIVED,
+					"archived" => false
 				]);
 			} else if ($infos->type === "send") {
 				$messages = $message_box->findBySentMessageBox($user);
