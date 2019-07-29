@@ -135,7 +135,9 @@ class MessageApiController extends AbstractController
 		foreach ($infos->messages as $id_message) {
 			$message = $em->getRepository(MessageBox::class)->find($id_message);
 			if ($message) {
-				$message->setArchived(true);
+				if (!$infos->type !== "send") {
+					$message->setArchived(true);
+				}
 				$em->persist($message);
 				$em->flush();
 			}
