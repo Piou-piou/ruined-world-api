@@ -74,31 +74,6 @@ class MessageApiController extends AbstractController
 	}
 
 	/**
-	 * method to set a message as read
-	 * @Route("/api/message/read/", name="message_read", methods={"POST"})
-	 * @param Session $session
-	 * @return JsonResponse
-	 * @throws Exception
-	 */
-	public function readMessage(Session $session): JsonResponse
-	{
-		$em = $this->getDoctrine()->getManager();
-		$infos = $session->get("jwt_infos");
-		$message = $em->getRepository(MessageBox::class)->find($infos->message_id);
-
-		if ($message) {
-			$message->setReadAt(new DateTime());
-			$em->persist($message);
-			$em->flush();
-		}
-
-		return new JsonResponse([
-			"success" => true,
-			"token" => $session->get("user")->getToken(),
-		]);
-	}
-
-	/**
 	 * method to delete a message of the box
 	 * @Route("/api/message/delete/", name="message_delete", methods={"POST"})
 	 * @param Session $session
@@ -157,6 +132,35 @@ class MessageApiController extends AbstractController
 			"success" => true,
 			"token" => $session->get("user")->getToken(),
 			"success_message" => "Les messages ont été supprimés"
+		]);
+	}
+
+	/**
+	 * method to set some messages of the box as read
+	 * @Route("/api/messages/read/", name="messages_read", methods={"POST"})
+	 * @param Session $session
+	 * @return JsonResponse
+	 * @throws Exception
+	 */
+	public function readMessages(Session $session): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+
+		foreach ($infos->messages as $id_message) {
+			$message = $em->getRepository(MessageBox::class)->find($id_message);
+
+			if ($message) {
+				$message->setReadAt(new DateTime());
+				$em->persist($message);
+				$em->flush();
+			}
+		}
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $session->get("user")->getToken(),
+			"success_message" => "Les messages ont été marqué comme lu"
 		]);
 	}
 
