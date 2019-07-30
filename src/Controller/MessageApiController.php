@@ -47,6 +47,28 @@ class MessageApiController extends AbstractController
 	}
 
 	/**
+	 * @Route("/api/message/unread-number/", name="message_unread_number", methods={"POST"})
+	 * @param Session $session
+	 * @return JsonResponse
+	 */
+	public function sendUnreadMessages(Session $session): JsonResponse
+	{
+		$user = $session->get("user");
+		$message_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->findBy([
+			"user" => $user,
+			"type" => MessageBox::TYPE_RECEIVED,
+			"archived" => false,
+			"read_at" => null
+		]);
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $user->getToken(),
+			"nb_unread" => count($message_box)
+		]);
+	}
+
+	/**
 	 * method to send a message
 	 * @Route("/api/message/show/", name="message_show", methods={"POST"})
 	 * @param Session $session
