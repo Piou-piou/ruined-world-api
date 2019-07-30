@@ -86,9 +86,23 @@ class User
      */
     protected $bases;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="MessageBox", mappedBy="user")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
+	 */
+	protected $messages_box;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Message", mappedBy="user")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
+	 */
+	protected $sent_messages;
+
     public function __construct()
     {
         $this->bases = new ArrayCollection();
+        $this->messages_box = new ArrayCollection();
+        $this->sent_messages = new ArrayCollection();
     }
 	
 	/**
@@ -388,4 +402,72 @@ class User
     {
         return $this->bases;
     }
+
+	/**
+	 * Add MessageBox entity to collection (one to many).
+	 *
+	 * @param MessageBox $message
+	 * @return User
+	 */
+	public function addMessagesBox(MessageBox $message)
+	{
+		$this->messages_box[] = $message;
+
+		return $this;
+	}
+
+	/**
+	 * Remove MessageBox entity from collection (one to many).
+	 *
+	 * @param MessageBox $message
+	 * @return User
+	 */
+	public function removeMessagesBox(MessageBox $message)
+	{
+		$this->messages_box->removeElement($message);
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMessagesBox()
+	{
+		return $this->messages_box;
+	}
+
+	/**
+	 * Add MessageBox entity to collection (one to many).
+	 *
+	 * @param Message $message
+	 * @return User
+	 */
+	public function addSentMessages(Message $message)
+	{
+		$this->sent_messages[] = $message;
+
+		return $this;
+	}
+
+	/**
+	 * Remove MessageBox entity from collection (one to many).
+	 *
+	 * @param Message $message
+	 * @return User
+	 */
+	public function removeSentMessages(Message $message)
+	{
+		$this->sent_messages->removeElement($message);
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSentMessages()
+	{
+		return $this->sent_messages;
+	}
 }
