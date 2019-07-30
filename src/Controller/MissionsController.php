@@ -51,11 +51,12 @@ class MissionsController extends AbstractController
 	 * @param SessionInterface $session
 	 * @param \App\Service\Unit $unit
 	 * @param \App\Service\UnitMovement $unit_movement_service
+	 * @param Globals $globals
 	 * @return JsonResponse
-	 * @throws NonUniqueResultException
 	 * @throws DBALException
+	 * @throws NonUniqueResultException
 	 */
-	public function sendUnitsInMission(SessionInterface $session, \App\Service\Unit $unit, \App\Service\UnitMovement $unit_movement_service): JsonResponse
+	public function sendUnitsInMission(SessionInterface $session, \App\Service\Unit $unit, \App\Service\UnitMovement $unit_movement_service, Globals $globals): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
@@ -63,7 +64,10 @@ class MissionsController extends AbstractController
 		$error_message = "";
 
 		/** @var Mission $mission */
-		$mission = $em->getRepository(Mission::class)->findOneBy(["missions_config_id" => $infos->mission_id]);
+		$mission = $em->getRepository(Mission::class)->findOneBy([
+			"missions_config_id" => $infos->mission_id,
+			"base" => $globals->getCurrentBase()
+		]);
 		if (!$mission) {
 			$success = false;
 			$error_message = "Impossible de trouver la mission demandée";

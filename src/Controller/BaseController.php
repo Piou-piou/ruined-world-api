@@ -152,15 +152,23 @@ class BaseController extends AbstractController
 					"token" => $session->get("user")->getToken(),
 				];
 			} else {
-				$base->setName($base_name);
-				$em->persist($base);
-				$em->flush();
-				$return_infos = [
-					"success" => true,
-					"success_message" => "Le nom de la base a été changé",
-					"base_name" => $base_name,
-					"token" => $session->get("user")->getToken(),
-				];
+				if (strlen($base_name) > 20) {
+					$return_infos = [
+						"success" => false,
+						"error_message" => "Le nom de la base ne doit pas exéder 20 catactères",
+						"token" => $session->get("user")->getToken(),
+					];
+				} else {
+					$base->setName($base_name);
+					$em->persist($base);
+					$em->flush();
+					$return_infos = [
+						"success" => true,
+						"success_message" => "Le nom de la base a été changé",
+						"base_name" => $base_name,
+						"token" => $session->get("user")->getToken(),
+					];
+				}
 			}
 		}
 
