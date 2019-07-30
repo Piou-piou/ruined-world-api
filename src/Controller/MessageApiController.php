@@ -52,11 +52,19 @@ class MessageApiController extends AbstractController
 	 * @param Session $session
 	 * @param Api $api
 	 * @return JsonResponse
+	 * @throws Exception
 	 */
 	public function showMessage(Session $session, Api $api): JsonResponse
 	{
+		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$message = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->find($infos->message_id);
+		$message = $em->getRepository(MessageBox::class)->find($infos->message_id);
+
+		if ($message) {
+			$message->setReadAt(new DateTime());
+			$em->persist($message);
+			$em->flush();
+		}
 
 		return new JsonResponse([
 			"success" => true,
