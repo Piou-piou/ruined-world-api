@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MessageApiController extends AbstractController
 {
 	/**
+	 * method to get message received in box based on a given type
 	 * @Route("/api/message/list/", name="message_list", methods={"POST"})
 	 * @param Session $session
 	 * @param Api $api
@@ -47,6 +48,7 @@ class MessageApiController extends AbstractController
 	}
 
 	/**
+	 * method to send number of unread messages
 	 * @Route("/api/message/unread-number/", name="message_unread_number", methods={"POST"})
 	 * @param Session $session
 	 * @return JsonResponse
@@ -195,7 +197,7 @@ class MessageApiController extends AbstractController
 				"id" => $infos->user_id,
 				"archived" => false
 			]);
-		} else if (isset($infos->pseudo) && $infos->pseudo !== null)  {
+		} else if (isset($infos->pseudo) && $infos->pseudo !== null) {
 			$user = $em->getRepository(User::class)->findOneBy([
 				"pseudo" => $infos->pseudo,
 				"archived" => false
