@@ -51,7 +51,7 @@ class MessageApiController extends AbstractController
 	 * @param Session $session
 	 * @return JsonResponse
 	 */
-	public function sendUnreadMessages(Session $session): JsonResponse
+	public function sendUnreadMessagesNumber(Session $session): JsonResponse
 	{
 		$user = $session->get("user");
 		$message_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->findByNumberUnreadMessages($user);
