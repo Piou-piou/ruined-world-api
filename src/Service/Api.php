@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -141,18 +142,19 @@ class Api
 		
 		return $token;
 	}
-	
+
 	/**
 	 * method that encode an object to a json
 	 * @param $object
 	 * @param string $type
 	 * @return mixed
+	 * @throws ExceptionInterface
 	 */
 	public function serializeObject($object, $type = "json")
 	{
 		$serializer = new Serializer([new DateTimeNormalizer(), new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
 		
-		return $serializer->serialize($object, $type, [
+		return $serializer->normalize($object, $type, [
 			'circular_reference_handler' => function ($object) {
 				return $object->getId();
 			},
