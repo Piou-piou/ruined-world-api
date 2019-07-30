@@ -32,7 +32,7 @@ class MessageBoxRepository extends EntityRepository
 	public function findByNumberUnreadMessages(User $user): int
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT mb.id FROM App:MessageBox mb
-			WHERE mb.user = :user AND mb.archived_sent = false AND mb.archived = false AND mb.read_at IS NULL
+			WHERE mb.user = :user AND mb.archived = false AND mb.read_at IS NULL
 			AND mb.type != :send
 		");
 		$query->setParameter("user", $user, Type::OBJECT);
