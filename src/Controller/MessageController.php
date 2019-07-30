@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MessageApiController extends AbstractController
+class MessageController extends AbstractController
 {
 	/**
 	 * method to get message received in box based on a given type
