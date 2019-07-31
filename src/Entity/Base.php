@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Entity\Base
@@ -30,31 +31,37 @@ class Base
 	
 	/**
 	 * @ORM\Column(name="guid", type="string", length=36, nullable=false, options={"fixed"=true})
+	 * @Groups("main")
 	 */
 	private $guid;
 	
 	/**
 	 * @ORM\Column(name="`name`", type="string", length=20)
+	 * @Groups("main")
 	 */
 	protected $name;
 	
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Groups("main")
 	 */
 	protected $points;
 	
 	/**
 	 * @ORM\Column(type="json")
+	 * @Groups("main")
 	 */
 	protected $resources;
 	
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Groups("main")
 	 */
 	protected $posx;
 	
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Groups("main")
 	 */
 	protected $posy;
 	
@@ -81,6 +88,7 @@ class Base
 	/**
 	 * @ORM\OneToMany(targetEntity="Building", mappedBy="base")
 	 * @ORM\JoinColumn(name="id", referencedColumnName="base_id", nullable=false)
+	 * @Groups("main")
 	 */
 	protected $buildings;
 	
@@ -117,6 +125,7 @@ class Base
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="bases")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 * @Groups("main")
 	 */
 	protected $user;
 	

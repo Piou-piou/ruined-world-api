@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -14,7 +15,7 @@ class AccessRights
 	private $container;
 	
 	/**
-	 * @var null|\Symfony\Component\HttpFoundation\Request
+	 * @var null|Request
 	 */
 	private $request;
 	

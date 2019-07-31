@@ -6,6 +6,7 @@ use App\Entity\Base;
 use App\Entity\MarketMovement;
 use App\Service\Globals;
 use App\Service\Market;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -20,7 +21,7 @@ class MarketController extends AbstractController
 	 * @param Globals $globals
 	 * @param Market $market
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
     public function sendResources(Session $session, Globals $globals, Market $market): JsonResponse
     {
@@ -77,7 +78,7 @@ class MarketController extends AbstractController
 	 * @param Globals $globals
 	 * @param Session $session
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
     public function sendMarketMovements(Globals $globals, Session $session): JsonResponse
 	{
@@ -109,7 +110,7 @@ class MarketController extends AbstractController
 	 * @param Globals $globals
 	 * @param Market $market
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function updateMarketMovements(Globals $globals, Market $market): JsonResponse
 	{
