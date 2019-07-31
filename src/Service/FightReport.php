@@ -6,25 +6,43 @@ use App\Entity\Message;
 use App\Entity\MessageBox;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class FightReport
 {
 	private $attack_units;
+
 	private $defend_units;
 
 	private $end_attack_units;
+
 	private $end_defend_units;
 
+	/**
+	 * @var EntityManagerInterface
+	 */
 	private $em;
+
+	/**
+	 * @var SessionInterface
+	 */
 	private $session;
 
+	/**
+	 * FightReport constructor.
+	 * @param EntityManagerInterface $em
+	 * @param SessionInterface $session
+	 */
 	public function __construct(EntityManagerInterface $em, SessionInterface $session)
 	{
 		$this->em = $em;
 		$this->session = $session;
 	}
 
+	/**
+	 * @param $attack_units
+	 */
 	public function setStartAttackUnits($attack_units)
 	{
 		$start_attack = [];
@@ -35,23 +53,37 @@ class FightReport
 		$this->attack_units = $start_attack;
 	}
 
+	/**
+	 * @param $defend_units
+	 */
 	public function setStartDefendUnits($defend_units)
 	{
 		$start_defend = $defend_units;
 		$this->defend_units = $start_defend;
 	}
 
+	/**
+	 * @param $attack_units
+	 */
 	public function setEndAttackUnits($attack_units)
 	{
 		$this->end_attack_units = $attack_units;
 	}
 
+	/**
+	 * @param $defend_units
+	 */
 	public function setEndDefendUnits($defend_units)
 	{
 		$this->end_defend_units = $defend_units;
 	}
 
-	private function getUnitsNumberSentAndReturned($type) {
+	/**
+	 * @param $type
+	 * @return array
+	 */
+	private function getUnitsNumberSentAndReturned($type): array
+	{
 		$var = $type === "attack" ? "attack_units" : "defend_units";
 		$endvar = $type === "attack" ? "end_attack_units" : "end_defend_units";
 		$units = [];
@@ -63,7 +95,7 @@ class FightReport
 				$units[$unit->getArrayName()] = [
 					"name" => $unit->getName(),
 					"number" => 1,
-					"return_number" => 0
+					"return_number" => 0,
 				];
 			}
 		}
@@ -74,6 +106,10 @@ class FightReport
 		return $units;
 	}
 
+	/**
+	 * @param \App\Entity\UnitMovement $unitMovement
+	 * @throws Exception
+	 */
 	public function createReport(\App\Entity\UnitMovement $unitMovement)
 	{
 		$attack_units = $this->getUnitsNumberSentAndReturned("attack");
@@ -91,10 +127,10 @@ class FightReport
 
 		$text .= "<h2>Ressources volées</h2>";
 		$text .= "<ul>";
-		$text .= "<li>Electricité : ". $unitMovement->getElectricity() ."</li>";
-		$text .= "<li>Fer : ". $unitMovement->getIron() ."</li>";
-		$text .= "<li>Fuel : ". $unitMovement->getFuel() ."</li>";
-		$text .= "<li>Eau : ". $unitMovement->getWater() ."</li>";
+		$text .= "<li>Electricité : " . $unitMovement->getElectricity() . "</li>";
+		$text .= "<li>Fer : " . $unitMovement->getIron() . "</li>";
+		$text .= "<li>Fuel : " . $unitMovement->getFuel() . "</li>";
+		$text .= "<li>Eau : " . $unitMovement->getWater() . "</li>";
 		$text .= "</ul>";
 
 		$message = new Message();
