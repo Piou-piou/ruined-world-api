@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Entity\User
@@ -22,6 +23,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=50)
+	 * @Groups("main")
      */
     protected $pseudo;
 	
@@ -32,6 +34,7 @@ class User
 	
 	/**
 	 * @ORM\Column(type="string", length=200)
+	 * @Groups("main")
 	 */
     protected $token;
 	
@@ -52,6 +55,7 @@ class User
 
     /**
      * @ORM\Column(type="integer")
+	 * @Groups("main")
      */
     protected $points;
 
@@ -62,11 +66,13 @@ class User
 	
 	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 * @Groups("main")
 	 */
 	protected $holidays;
 	
 	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 * @Groups("main")
 	 */
 	protected $archived;
 	
