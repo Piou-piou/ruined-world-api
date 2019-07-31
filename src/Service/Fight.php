@@ -113,8 +113,8 @@ class Fight
 			"unitMovement" => null
 		]);
 
-		/*$this->fight_report->setStartAttackUnits($base_attack_units);
-		$this->fight_report->setStartDefendUnits($defend_units);*/
+		$this->fight_report->setStartAttackUnits($base_attack_units);
+		$this->fight_report->setStartDefendUnits($defend_units);
 
 		$all_units = array_merge($attack_units, $defend_units);
 		shuffle($all_units);
@@ -138,9 +138,9 @@ class Fight
 			$this->stealResources($base_attack_units, $unit_movement, $attacked_base);
 		}
 
-		/*$this->fight_report->setEndAttackUnits($base_attack_units);
+		$this->fight_report->setEndAttackUnits($base_attack_units);
 		$this->fight_report->setEndDefendUnits($defend_units);
-		$this->fight_report->createReport($unit_movement);*/
+		$this->fight_report->createReport($unit_movement);
 	}
 
 	/**

@@ -107,14 +107,9 @@ class FightReport
 		$message_box = new MessageBox();
 		$message_box->setUser($this->session->get("user"));
 		$message_box->setMessage($message);
-		$message_box->setType(MessageBox::TYPE_RECEIVED);
+		$message_box->setType(MessageBox::FIGHT_REPORT);
 		$this->em->persist($message_box);
 
 		$this->em->flush();
-
-		dump($attack_units);
-		dump($defend_units);
-		dump('--------');
-		dump($unitMovement);
 	}
 }
