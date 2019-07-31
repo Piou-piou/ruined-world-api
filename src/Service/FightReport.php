@@ -107,15 +107,15 @@ class FightReport
 	}
 
 	/**
-	 * @param \App\Entity\UnitMovement $unitMovement
-	 * @throws Exception
+	 * @param $unitMovement
+	 * @param $attack_units
+	 * @param $defend_units
+	 * @param string $type
+	 * @return string
 	 */
-	public function createReport(\App\Entity\UnitMovement $unitMovement)
+	private function createTextForReport($unitMovement, $attack_units, $defend_units, string $type): string
 	{
-		$attack_units = $this->getUnitsNumberSentAndReturned("attack");
-		$defend_units = $this->getUnitsNumberSentAndReturned("defend");
-
-		$text = "<h2>rapport des unités envoyées</h2>";
+		$text = $type === "attack" ? "<h2>rapport des unités envoyées</h2>" : "<h2>rapport des unités qui ont attaquées</h2>";
 		foreach ($attack_units as $attack_unit) {
 			$text .= $attack_unit["name"] . " qui ont survécus  : " . $attack_unit["return_number"] . " / " . $attack_unit["number"] . "<br>";
 		}
@@ -133,18 +133,37 @@ class FightReport
 		$text .= "<li>Eau : " . $unitMovement->getWater() . "</li>";
 		$text .= "</ul>";
 
-		$message = new Message();
-		$message->setSubject("rapport de combat");
-		$message->setMessage($text);
-		$message->setSendAt(new DateTime());
-		$message->setUser($this->session->get("user"));
-		$this->em->persist($message);
+		return $text;
+	}
 
-		$message_box = new MessageBox();
-		$message_box->setUser($this->session->get("user"));
-		$message_box->setMessage($message);
-		$message_box->setType(MessageBox::FIGHT_REPORT);
-		$this->em->persist($message_box);
+	/**
+	 * @param \App\Entity\UnitMovement $unit_movement
+	 * @throws Exception
+	 */
+	public function createReport(\App\Entity\UnitMovement $unit_movement)
+	{
+		$types = ["attack", "defend"];
+		$attack_units = $this->getUnitsNumberSentAndReturned("attack");
+		$defend_units = $this->getUnitsNumberSentAndReturned("defend");
+
+		foreach ($types as $type) {
+			$message = new Message();
+			$user = $unit_movement->getBase()->getUser();
+
+			$text = $this->createTextForReport($unit_movement, $attack_units, $defend_units, $type);
+
+			$message->setSubject("rapport de combat");
+			$message->setMessage($text);
+			$message->setSendAt(new DateTime());
+			$message->setUser($user);
+			$this->em->persist($message);
+
+			$message_box = new MessageBox();
+			$message_box->setUser($user);
+			$message_box->setMessage($message);
+			$message_box->setType(MessageBox::FIGHT_REPORT);
+			$this->em->persist($message_box);
+		}
 
 		$this->em->flush();
 	}
