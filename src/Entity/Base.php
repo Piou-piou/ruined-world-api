@@ -55,11 +55,13 @@ class Base
 	
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Groups("main")
 	 */
 	protected $posx;
 	
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Groups("main")
 	 */
 	protected $posy;
 	
@@ -123,6 +125,7 @@ class Base
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="bases")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 * @Groups("main")
 	 */
 	protected $user;
 	
