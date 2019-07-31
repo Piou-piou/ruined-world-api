@@ -112,6 +112,7 @@ class Fight
 			"in_recruitment" => false,
 			"unitMovement" => null
 		]);
+
 		/*$this->fight_report->setStartAttackUnits($base_attack_units);
 		$this->fight_report->setStartDefendUnits($defend_units);*/
 
@@ -138,6 +139,7 @@ class Fight
 		}
 
 		/*$this->fight_report->setEndAttackUnits($base_attack_units);
+		$this->fight_report->setEndDefendUnits($defend_units);
 		$this->fight_report->createReport($unit_movement);*/
 	}
 
