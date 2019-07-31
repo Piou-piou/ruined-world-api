@@ -59,6 +59,7 @@ class Building
     /**
      * @ORM\ManyToOne(targetEntity="Base", inversedBy="buildings")
      * @ORM\JoinColumn(name="base_id", referencedColumnName="id", nullable=false)
+	 * @Groups("main")
      */
     protected $base;
 
