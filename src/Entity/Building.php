@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Entity\Building
@@ -21,31 +22,37 @@ class Building
 
     /**
      * @ORM\Column(name="`name`", type="string", length=40)
+	 * @Groups("main")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", length=40)
+	 * @Groups("main")
      */
     protected $array_name;
 
     /**
      * @ORM\Column(name="level", type="integer")
+	 * @Groups("main")
      */
     protected $level = 0;
 
     /**
      * @ORM\Column(name="location", type="integer")
+	 * @Groups("main")
      */
     protected $location;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : 0})
+	 * @Groups("main")
      */
     protected $in_construction;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+	 * @Groups("main")
      */
     protected $end_construction;
 
