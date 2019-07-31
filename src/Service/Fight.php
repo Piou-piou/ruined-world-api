@@ -32,18 +32,25 @@ class Fight
 	private $unit_service;
 
 	/**
+	 * @var FightReport
+	 */
+	private $fight_report;
+
+	/**
 	 * Fight constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 * @param Resources $resources
 	 * @param \App\Service\Unit $unit_service
+	 * @param FightReport $fightReport
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service, FightReport $fightReport)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
 		$this->resources = $resources;
 		$this->unit_service = $unit_service;
+		$this->fight_report = $fightReport;
 	}
 
 	/**
@@ -105,6 +112,8 @@ class Fight
 			"in_recruitment" => false,
 			"unitMovement" => null
 		]);
+		/*$this->fight_report->setStartAttackUnits($base_attack_units);
+		$this->fight_report->setStartDefendUnits($defend_units);*/
 
 		$all_units = array_merge($attack_units, $defend_units);
 		shuffle($all_units);
@@ -127,6 +136,9 @@ class Fight
 		if ($base_attack_units->count() > 0) {
 			$this->stealResources($base_attack_units, $unit_movement, $attacked_base);
 		}
+
+		/*$this->fight_report->setEndAttackUnits($base_attack_units);
+		$this->fight_report->createReport($unit_movement);*/
 	}
 
 	/**
