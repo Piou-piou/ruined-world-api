@@ -121,9 +121,9 @@ class Fight
 
 		foreach ($all_units as $unit) {
 			if ($unit->getBase()->getId() === $base->getId()) {
-				$this->attackOrDefendUnit($unit, $defend_units, "attack");
+				$defend_units = $this->attackOrDefendUnit($unit, $defend_units, "attack");
 			} else {
-				$this->attackOrDefendUnit($unit, $attack_units, "defense");
+				$attack_units = $this->attackOrDefendUnit($unit, $attack_units, "defense");
 			}
 
 			if ($unit->getLife() <= 0) {
