@@ -7,11 +7,13 @@ use App\Entity\MessageBox;
 use App\Entity\User;
 use App\Service\Api;
 use DateTime;
+use Doctrine\Common\Annotations\AnnotationException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class MessageController extends AbstractController
 {
@@ -21,6 +23,8 @@ class MessageController extends AbstractController
 	 * @param Session $session
 	 * @param Api $api
 	 * @return JsonResponse
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
 	 */
 	public function showMessagesOfBox(Session $session, Api $api): JsonResponse
 	{
@@ -72,6 +76,7 @@ class MessageController extends AbstractController
 	 * @param Api $api
 	 * @return JsonResponse
 	 * @throws Exception
+	 * @throws ExceptionInterface
 	 */
 	public function showMessage(Session $session, Api $api): JsonResponse
 	{
