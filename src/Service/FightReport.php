@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Base;
 use App\Entity\Message;
 use App\Entity\MessageBox;
 use DateTime;
@@ -148,7 +149,19 @@ class FightReport
 
 		foreach ($types as $type) {
 			$message = new Message();
-			$user = $unit_movement->getBase()->getUser();
+
+			if ($type === "attack") {
+				$user = $unit_movement->getBase()->getUser();
+			} else {
+				$base_dest = $this->em->getRepository(Base::class)->find($unit_movement->getTypeId());
+				if ($base_dest) {
+					$user = $base_dest->getUser();
+				}
+			}
+
+			if (!$user) {
+				continue;
+			}
 
 			$text = $this->createTextForReport($unit_movement, $attack_units, $defend_units, $type);
 
