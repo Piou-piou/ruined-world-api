@@ -6,10 +6,12 @@ use App\Entity\Base;
 use App\Service\Api;
 use App\Service\Globals;
 use App\Service\Resources;
+use Doctrine\Common\Annotations\AnnotationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class BaseController extends AbstractController
 {
@@ -39,7 +41,7 @@ class BaseController extends AbstractController
 			"token" => $session->get("user")->getToken(),
 		]);
 	}
-	
+
 	/**
 	 * method that send all infos about the current base
 	 * @Route("/api/base/", name="base", methods={"POST"})
@@ -48,6 +50,8 @@ class BaseController extends AbstractController
 	 * @param Api $api
 	 * @param Resources $resources
 	 * @return JsonResponse
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
 	 */
 	public function sendInfosCurrentBase(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
 	{
@@ -80,6 +84,8 @@ class BaseController extends AbstractController
 	 * @param Globals $globals
 	 * @param Api $api
 	 * @return JsonResponse
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
 	 */
 	public function sendInfosAboutABase(Session $session, Globals $globals, Api $api): JsonResponse
 	{
