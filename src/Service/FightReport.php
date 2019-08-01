@@ -80,10 +80,11 @@ class FightReport
 	}
 
 	/**
-	 * @param $type
+	 * method that give the number of unit send and returned after fight grouped by array_name
+	 * @param string $type
 	 * @return array
 	 */
-	private function getUnitsNumberSentAndReturned($type): array
+	private function getUnitsNumberSentAndReturned(string $type): array
 	{
 		$var = $type === "attack" ? "attack_units" : "defend_units";
 		$endvar = $type === "attack" ? "end_attack_units" : "end_defend_units";
@@ -108,13 +109,14 @@ class FightReport
 	}
 
 	/**
-	 * @param $unitMovement
-	 * @param $attack_units
-	 * @param $defend_units
+	 * method that create text of fight report based on type of fight attack or defend
+	 * @param \App\Entity\UnitMovement $unitMovement
+	 * @param array $attack_units
+	 * @param array $defend_units
 	 * @param string $type
 	 * @return string
 	 */
-	private function createTextForReport($unitMovement, $attack_units, $defend_units, string $type): string
+	private function createTextForReport(\App\Entity\UnitMovement $unitMovement, array $attack_units, array $defend_units, string $type): string
 	{
 		$text = $type === "attack" ? "<h2>rapport des unités envoyées</h2>" : "<h2>rapport des unités qui ont attaquées</h2>";
 		foreach ($attack_units as $attack_unit) {
@@ -138,6 +140,7 @@ class FightReport
 	}
 
 	/**
+	 * method that create fight report for attacker and defender
 	 * @param \App\Entity\UnitMovement $unit_movement
 	 * @throws Exception
 	 */
