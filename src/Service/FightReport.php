@@ -31,14 +31,21 @@ class FightReport
 	private $session;
 
 	/**
+	 * @var Globals
+	 */
+	private $globals;
+
+	/**
 	 * FightReport constructor.
 	 * @param EntityManagerInterface $em
 	 * @param SessionInterface $session
+	 * @param Globals $globals
 	 */
-	public function __construct(EntityManagerInterface $em, SessionInterface $session)
+	public function __construct(EntityManagerInterface $em, SessionInterface $session, Globals $globals)
 	{
 		$this->em = $em;
 		$this->session = $session;
+		$this->globals = $globals;
 	}
 
 	/**
@@ -171,7 +178,7 @@ class FightReport
 			$message->setSubject("rapport de combat");
 			$message->setMessage($text);
 			$message->setSendAt(new DateTime());
-			$message->setUser($user);
+			$message->setUser($this->globals->getWorldCenterUser());
 			$this->em->persist($message);
 
 			$message_box = new MessageBox();
