@@ -41,6 +41,12 @@ class MessageController extends AbstractController
 				]);
 			} else if ($infos->type === "send") {
 				$messages = $message_box->findBySentMessageBox($user);
+			} else if ($infos->type === "fight-report") {
+				$messages = $message_box->findBy([
+					"user" => $user,
+					"type" => MessageBox::FIGHT_REPORT,
+					"archived" => false
+				]);
 			}
 		}
 
