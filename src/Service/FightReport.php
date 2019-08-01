@@ -121,7 +121,7 @@ class FightReport
 			$text .= $attack_unit["name"] . " qui ont survécus  : " . $attack_unit["return_number"] . " / " . $attack_unit["number"] . "<br>";
 		}
 
-		$text .= "<h2>rapport des unités attaquées</h2>";
+		$text .= $type === "attack" ? "<h2>rapport des unités attaquées</h2>" : "<h2>rapport de vos unités</h2>";
 		foreach ($defend_units as $defend_unit) {
 			$text .= $defend_unit["name"] . " qui ont survécus  : " . $defend_unit["return_number"] . " / " . $defend_unit["number"] . "<br>";
 		}
