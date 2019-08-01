@@ -96,6 +96,22 @@ class Fight
 	}
 
 	/**
+	 * method to kill units with life equal to 0 after fight
+	 * @param array $units
+	 */
+	public function killUnitAfterFight(array $units)
+	{
+		foreach ($units as $unit) {
+			if ($unit->getLife() <= 0) {
+				$this->em->remove($unit);
+			} else {
+				$this->em->persist($unit);
+			}
+		}
+		$this->em->flush();
+	}
+
+	/**
 	 * method that handle attack a base with units kill necessary units and if there is units in movement
 	 * after attack, put them on return
 	 * @param Base $base
@@ -133,6 +149,10 @@ class Fight
 			}
 		}
 		$this->em->flush();
+
+		$this->killUnitAfterFight($defend_units);
+		$this->killUnitAfterFight($base_attack_units->toArray());
+
 		$this->putUnitsOnReturn($base_attack_units, $unit_movement);
 		if ($base_attack_units->count() > 0) {
 			$this->stealResources($base_attack_units, $unit_movement, $attacked_base);
