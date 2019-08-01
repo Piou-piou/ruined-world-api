@@ -33,26 +33,20 @@ class MessageController extends AbstractController
 		$message_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class);
 
 		if (isset($infos->type)) {
-			if ($infos->type === "received") {
-				$messages = $message_box->findBy([
-					"user" => $user,
-					"type" => MessageBox::TYPE_RECEIVED,
-					"archived" => false
-				]);
-			} else if ($infos->type === "send") {
+			if ($infos->type === "send") {
 				$messages = $message_box->findBySentMessageBox($user);
-			} else if ($infos->type === "fight-report") {
+			} else {
+				$types = [
+					"received" => MessageBox::TYPE_RECEIVED,
+					"fight-report" => MessageBox::FIGHT_REPORT,
+					"other-report" => MessageBox::TYPE_OTHER,
+				];
+
 				$messages = $message_box->findBy([
 					"user" => $user,
-					"type" => MessageBox::FIGHT_REPORT,
+					"type" => $types[$infos->type],
 					"archived" => false
-				]);
-			} else if ($infos->type === "other-report") {
-				$messages = $message_box->findBy([
-					"user" => $user,
-					"type" => MessageBox::TYPE_OTHER,
-					"archived" => false
-				]);
+				], ["id" => "DESC"]);
 			}
 		}
 
