@@ -123,7 +123,7 @@ class FightReport
 
 		$text .= "<h2>rapport des unités attaquées</h2>";
 		foreach ($defend_units as $defend_unit) {
-			$text .= $defend_unit["name"] . " tués  : " . $defend_unit["return_number"] . " / " . $defend_unit["number"] . "<br>";
+			$text .= $defend_unit["name"] . " qui ont survécus  : " . $defend_unit["return_number"] . " / " . $defend_unit["number"] . "<br>";
 		}
 
 		$text .= "<h2>Ressources volées</h2>";
