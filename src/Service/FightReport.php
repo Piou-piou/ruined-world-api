@@ -185,6 +185,7 @@ class FightReport
 			$message_box->setUser($user);
 			$message_box->setMessage($message);
 			$message_box->setType(MessageBox::FIGHT_REPORT);
+			$message_box->setArchivedSent(true);
 			$this->em->persist($message_box);
 		}
 
