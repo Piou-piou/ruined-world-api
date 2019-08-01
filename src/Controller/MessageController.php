@@ -47,6 +47,12 @@ class MessageController extends AbstractController
 					"type" => MessageBox::FIGHT_REPORT,
 					"archived" => false
 				]);
+			} else if ($infos->type === "other-report") {
+				$messages = $message_box->findBy([
+					"user" => $user,
+					"type" => MessageBox::TYPE_OTHER,
+					"archived" => false
+				]);
 			}
 		}
 
