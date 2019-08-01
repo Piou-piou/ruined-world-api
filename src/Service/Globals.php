@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Base;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,11 @@ class Globals
 	 * @var Request|null
 	 */
 	private $request;
+
+	/**
+	 * @var User
+	 */
+	private $world_user;
 	
 	public function __construct(ContainerInterface $container, EntityManagerInterface $em, SessionInterface $session, RequestStack $request_stack)
 	{
@@ -97,6 +103,19 @@ class Globals
 		}
 		
 		return false;
+	}
+
+	/**
+	 * method to get world center user
+	 * @return User
+	 */
+	public function getWorldCenterUser(): User
+	{
+		if (!$this->world_user) {
+			$this->world_user = $this->em->getRepository(User::class)->findOneBy(["pseudo" => "world-center"]);
+		}
+
+		return $this->world_user;
 	}
 
 	/**
