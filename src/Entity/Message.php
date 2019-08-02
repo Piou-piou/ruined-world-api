@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Entity\Message
@@ -22,28 +23,33 @@ class Message
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups("main")
 	 */
 	protected $subject;
 
 	/**
 	 * @ORM\Column(type="text")
+	 * @Groups("main")
 	 */
 	protected $message;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups("main")
 	 */
 	protected $send_at;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="MessageBox", mappedBy="message")
 	 * @ORM\JoinColumn(name="id", referencedColumnName="message_id", nullable=true)
+	 * @Groups("main")
 	 */
 	protected $messages_box;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="bases")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 * @Groups("main")
 	 */
 	protected $user;
 
@@ -185,8 +191,12 @@ class Message
 		return $this->user;
 	}
 
+	/**
+	 * @return mixed
+	 * @Groups("main")
+	 */
 	public function getFormattedSendAt()
 	{
-		return $this->getSendAt()->format("m/d/Y H:i:s");
+		return $this->getSendAt()->format("d/m/Y H:i:s");
 	}
 }

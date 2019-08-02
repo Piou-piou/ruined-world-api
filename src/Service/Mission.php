@@ -3,7 +3,11 @@
 namespace App\Service;
 
 use App\Entity\Base;
+use App\Entity\Message;
+use App\Entity\MessageBox;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class Mission
 {
@@ -111,11 +115,13 @@ class Mission
 	 * @param Base $base
 	 * @param \App\Entity\UnitMovement $unit_movement
 	 * @param \App\Entity\Mission $mission
+	 * @throws Exception
 	 */
 	public function endMission(Base $base, \App\Entity\UnitMovement $unit_movement, \App\Entity\Mission $mission)
 	{
 		$current_mission_config = $this->globals->getMissionsConfig()[$mission->getMissionsConfigId()];
-		$lost_unit = round(count($unit_movement->getUnits())*(rand(0, $current_mission_config["lost_percentage"])/100));
+		$units_sent = count($unit_movement->getUnits());
+		$lost_unit = round($units_sent*(rand(0, $current_mission_config["lost_percentage"])/100));
 
 		for ($i=0 ; $i<$lost_unit ; $i++) {
 			$this->em->remove($unit_movement->getUnits()->get($i));
@@ -137,6 +143,43 @@ class Mission
 		$this->em->persist($unit_movement);
 		$this->em->flush();
 		$this->em->remove($unit_movement);
+		$this->em->flush();
+
+		$this->setReportOfMission($unit_movement, $units_sent, $lost_unit, $win_resources);
+	}
+
+	/**
+	 * method to create report of the mission
+	 * @param \App\Entity\UnitMovement $unit_movement
+	 * @param int $units_sent
+	 * @param int $lost_unit
+	 * @param int $win_resources
+	 * @throws Exception
+	 */
+	private function setReportOfMission(\App\Entity\UnitMovement $unit_movement, int $units_sent, int $lost_unit, int $win_resources)
+	{
+		$text = "<h2>Rapport de mission</h2>";
+		$text .= "Unités envoyées : ".$units_sent;
+		$text .= "<br>Unités morte en mission : ".$lost_unit;
+		$text .= "<h3>Ressources trouvées</h3>";
+		$text .= "<ul>";
+		$text .= "<li>Nourriture : " . $win_resources . "</li>";
+		$text .= "</ul>";
+
+		$message = new Message();
+		$message->setSubject("Rapport de mission");
+		$message->setMessage($text);
+		$message->setSendAt(new DateTime());
+		$message->setUser($this->globals->getWorldCenterUser());
+		$this->em->persist($message);
+
+		$message_box = new MessageBox();
+		$message_box->setUser($unit_movement->getBase()->getUser());
+		$message_box->setMessage($message);
+		$message_box->setType(MessageBox::TYPE_OTHER);
+		$message_box->setArchivedSent(true);
+		$this->em->persist($message_box);
+
 		$this->em->flush();
 	}
 }

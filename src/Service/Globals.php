@@ -3,7 +3,10 @@
 namespace App\Service;
 
 use App\Entity\Base;
+use App\Entity\User;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,6 +33,11 @@ class Globals
 	 * @var Request|null
 	 */
 	private $request;
+
+	/**
+	 * @var User
+	 */
+	private $world_user;
 	
 	public function __construct(ContainerInterface $container, EntityManagerInterface $em, SessionInterface $session, RequestStack $request_stack)
 	{
@@ -100,6 +108,19 @@ class Globals
 	}
 
 	/**
+	 * method to get world center user
+	 * @return User
+	 */
+	public function getWorldCenterUser(): User
+	{
+		if (!$this->world_user) {
+			$this->world_user = $this->em->getRepository(User::class)->findOneBy(["pseudo" => "world-center"]);
+		}
+
+		return $this->world_user;
+	}
+
+	/**
 	 * method that calcul the time to travel between to bases based on speed of unit
 	 * @param Base $first_base
 	 * @param Base $second_base
@@ -119,6 +140,27 @@ class Globals
 		}
 
 		return $time;
+	}
+
+	/**
+	 * method that send true if we can attack a player
+	 * @param User $user
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function canAttackPlayer(User $user)
+	{
+		$created_at = $user->getCreatedAt();
+		$now = new \DateTime();
+		$protection_days = $this->getGeneralConfig()["beginner_fight_protection_days"];
+
+		if ($user->getHolidays() === true) {
+			return false;
+		} else if ($now->sub(new DateInterval("P".$protection_days."D")) > $created_at) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

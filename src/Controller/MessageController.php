@@ -7,11 +7,13 @@ use App\Entity\MessageBox;
 use App\Entity\User;
 use App\Service\Api;
 use DateTime;
+use Doctrine\Common\Annotations\AnnotationException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class MessageController extends AbstractController
 {
@@ -21,6 +23,8 @@ class MessageController extends AbstractController
 	 * @param Session $session
 	 * @param Api $api
 	 * @return JsonResponse
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
 	 */
 	public function showMessagesOfBox(Session $session, Api $api): JsonResponse
 	{
@@ -29,14 +33,20 @@ class MessageController extends AbstractController
 		$message_box = $this->getDoctrine()->getManager()->getRepository(MessageBox::class);
 
 		if (isset($infos->type)) {
-			if ($infos->type === "received") {
+			if ($infos->type === "send") {
+				$messages = $message_box->findBySentMessageBox($user);
+			} else {
+				$types = [
+					"received" => MessageBox::TYPE_RECEIVED,
+					"fight-report" => MessageBox::FIGHT_REPORT,
+					"other-report" => MessageBox::TYPE_OTHER,
+				];
+
 				$messages = $message_box->findBy([
 					"user" => $user,
-					"type" => MessageBox::TYPE_RECEIVED,
+					"type" => $types[$infos->type],
 					"archived" => false
-				]);
-			} else if ($infos->type === "send") {
-				$messages = $message_box->findBySentMessageBox($user);
+				], ["id" => "DESC"]);
 			}
 		}
 
@@ -72,6 +82,7 @@ class MessageController extends AbstractController
 	 * @param Api $api
 	 * @return JsonResponse
 	 * @throws Exception
+	 * @throws ExceptionInterface
 	 */
 	public function showMessage(Session $session, Api $api): JsonResponse
 	{
@@ -168,8 +179,7 @@ class MessageController extends AbstractController
 
 		foreach ($infos->messages as $id_message) {
 			$message = $em->getRepository(MessageBox::class)->find($id_message);
-
-			if ($message) {
+			if ($message && $session->get("user") !== $message->getMessage()->getUser()) {
 				$message->setReadAt(new DateTime());
 				$em->persist($message);
 				$em->flush();

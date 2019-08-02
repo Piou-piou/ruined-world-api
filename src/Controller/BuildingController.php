@@ -9,6 +9,7 @@ use App\Service\Point;
 use App\Service\Resources;
 use DateInterval;
 use DateTime;
+use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class BuildingController extends AbstractController
 {
@@ -92,6 +94,8 @@ class BuildingController extends AbstractController
 	 * @param \App\Service\Building $building_service
 	 * @return JsonResponse
 	 * @throws NonUniqueResultException
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
 	 */
 	public function sendBuildingInfo(SessionInterface $session, Globals $globals, Api $api, Resources $resources, \App\Service\Building $building_service): JsonResponse
 	{

@@ -350,7 +350,7 @@ class CronController extends AbstractController
 	private function disableHolidaysMode()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$users = $em->getRepository(User::class)->findByUserEndHolidays($this->getParameter("max_inactivation_days"));
+		$users = $em->getRepository(User::class)->findByUserEndHolidays($this->getParameter("max_holidays_days"));
 		
 		/**
 		 * @var $user User

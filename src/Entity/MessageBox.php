@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Entity\Message
@@ -15,22 +16,26 @@ class MessageBox
 {
 	const TYPE_RECEIVED = 1,
 		TYPE_SEND = 2,
-		FIGHT_REPORT = 3;
+		FIGHT_REPORT = 3,
+		TYPE_OTHER = 4;
 
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
+	 * @Groups("main")
 	 */
 	protected $id;
 
 	/**
 	 * @ORM\Column(name="`type`", type="integer")
+	 * @Groups("main")
 	 */
 	protected $type;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Groups("main")
 	 */
 	protected $read_at;
 
@@ -47,12 +52,14 @@ class MessageBox
 	/**
 	 * @ORM\ManyToOne(targetEntity="Message", inversedBy="messages_box")
 	 * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
+	 * @Groups("main")
 	 */
 	protected $message;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="messages_box")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 * @Groups("main")
 	 */
 	protected $user;
 
@@ -187,5 +194,22 @@ class MessageBox
 		$this->user = $user;
 
 		return $this;
+	}
+
+	/**
+	 * @return string
+	 * @Groups("main")
+	 */
+	public function getStringMessageType()
+	{
+		if ($this->getType() === self::TYPE_RECEIVED) {
+			return "received";
+		} else if ($this->getType() === self::TYPE_SEND) {
+			return "send";
+		}  else if ($this->getType() === self::FIGHT_REPORT) {
+			return "fight-report";
+		} elseif ($this->getType() === self::TYPE_OTHER) {
+			return "other";
+		}
 	}
 }
