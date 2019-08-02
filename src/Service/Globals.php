@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Base;
 use App\Entity\User;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -153,7 +154,7 @@ class Globals
 		$now = new \DateTime();
 		$protection_days = $this->getGeneralConfig()["beginner_fight_protection_days"];
 
-		if ($now->sub(new \DateInterval("P".$protection_days."D")) > $created_at) {
+		if ($now->sub(new DateInterval("P".$protection_days."D")) > $created_at) {
 			return true;
 		}
 
