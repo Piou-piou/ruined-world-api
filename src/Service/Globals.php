@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Entity\Base;
 use App\Entity\User;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -138,6 +140,27 @@ class Globals
 		}
 
 		return $time;
+	}
+
+	/**
+	 * method that send true if we can attack a player
+	 * @param User $user
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function canAttackPlayer(User $user)
+	{
+		$created_at = $user->getCreatedAt();
+		$now = new \DateTime();
+		$protection_days = $this->getGeneralConfig()["beginner_fight_protection_days"];
+
+		if ($user->getHolidays() === true) {
+			return false;
+		} else if ($now->sub(new DateInterval("P".$protection_days."D")) > $created_at) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

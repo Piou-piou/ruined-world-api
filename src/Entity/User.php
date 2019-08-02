@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -86,6 +87,11 @@ class User
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
 	protected $validate_account_key;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=false)
+	 */
+	protected $created_at;
 
     /**
      * @ORM\OneToMany(targetEntity="Base", mappedBy="user")
@@ -476,5 +482,33 @@ class User
 	public function getSentMessages()
 	{
 		return $this->sent_messages;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCreatedAt()
+	{
+		return $this->created_at;
+	}
+
+	/**
+	 * @param mixed $created_at
+	 */
+	public function setCreatedAt($created_at): void
+	{
+		$this->created_at = $created_at;
+	}
+
+	/**
+	 * @ORM\PrePersist
+	 * @ORM\PreUpdate
+	 */
+	public function updatedTimestamps(): void
+	{
+		$now = new DateTime();
+		if ($this->getCreatedAt() === null) {
+			$this->setCreatedAt($now);
+		}
 	}
 }

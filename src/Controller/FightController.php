@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Base;
 use App\Entity\UnitMovement;
+use App\Service\Globals;
 use App\Service\Unit;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -20,11 +22,13 @@ class FightController extends AbstractController
 	 * @param SessionInterface $session
 	 * @param Unit $unit
 	 * @param \App\Service\UnitMovement $unit_movement_service
+	 * @param Globals $globals
 	 * @return JsonResponse
 	 * @throws DBALException
 	 * @throws NonUniqueResultException
+	 * @throws Exception
 	 */
-	public function sendUnitsToAttack(SessionInterface $session, Unit $unit, \App\Service\UnitMovement $unit_movement_service): JsonResponse
+	public function sendUnitsToAttack(SessionInterface $session, Unit $unit, \App\Service\UnitMovement $unit_movement_service, Globals $globals): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
@@ -41,6 +45,9 @@ class FightController extends AbstractController
 		} else if (count((array)$infos->units) === 0) {
 			$success = false;
 			$error_message = "Vous devez envoyer au moins une unité en mission";
+		} else if (!$globals->canAttackPlayer($dest_base->getUser())) {
+			$success = false;
+			$error_message = "Vous ne pouvez pas attaquer ce joueur";
 		}
 
 		if ($success === true) {

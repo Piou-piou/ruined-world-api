@@ -4,5 +4,6 @@
   "number_of_missions_base": 3,
   "unit_food_consumption_hour": 1,
   "food_kill_divider": 6,
-  "seconds_before_show_attack": 120
+  "seconds_before_show_attack": 120,
+  "beginner_fight_protection_days": 15
 }

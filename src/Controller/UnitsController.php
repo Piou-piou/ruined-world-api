@@ -35,12 +35,11 @@ class UnitsController extends AbstractController
 	 * method that send units currently in movement
 	 * @Route("/api/units/list-movements/", name="units_list_movements", methods={"POST"})
 	 * @param SessionInterface $session
-	 * @param Globals $globals
 	 * @param UnitMovement $unitMovement
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function sendUnitsInMovement(SessionInterface $session, Globals $globals, UnitMovement $unitMovement): JsonResponse
+	public function sendUnitsInMovement(SessionInterface $session, UnitMovement $unitMovement): JsonResponse
 	{
 		return new JsonResponse([
 			"success" => true,
