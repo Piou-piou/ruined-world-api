@@ -179,8 +179,7 @@ class MessageController extends AbstractController
 
 		foreach ($infos->messages as $id_message) {
 			$message = $em->getRepository(MessageBox::class)->find($id_message);
-
-			if ($message) {
+			if ($message && $session->get("user") !== $message->getMessage()->getUser()) {
 				$message->setReadAt(new DateTime());
 				$em->persist($message);
 				$em->flush();
