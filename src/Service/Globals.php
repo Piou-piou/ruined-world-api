@@ -154,10 +154,10 @@ class Globals
 		$now = new \DateTime();
 		$protection_days = $this->getGeneralConfig()["beginner_fight_protection_days"];
 
-		if ($now->sub(new DateInterval("P".$protection_days."D")) > $created_at) {
-			return true;
-		} else if ($user->getHolidays() === true) {
+		if ($user->getHolidays() === true) {
 			return false;
+		} else if ($now->sub(new DateInterval("P".$protection_days."D")) > $created_at) {
+			return true;
 		}
 
 		return false;
