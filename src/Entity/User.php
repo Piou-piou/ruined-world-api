@@ -18,6 +18,7 @@ class User
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+	 * @Groups("main")
      */
     protected $id;
 
