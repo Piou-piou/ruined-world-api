@@ -16,7 +16,8 @@ class MessageBox
 {
 	const TYPE_RECEIVED = 1,
 		TYPE_SEND = 2,
-		FIGHT_REPORT = 3;
+		FIGHT_REPORT = 3,
+		TYPE_OTHER = 4;
 
 	/**
 	 * @ORM\Id

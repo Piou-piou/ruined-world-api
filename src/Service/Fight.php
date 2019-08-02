@@ -32,18 +32,25 @@ class Fight
 	private $unit_service;
 
 	/**
+	 * @var FightReport
+	 */
+	private $fight_report;
+
+	/**
 	 * Fight constructor.
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 * @param Resources $resources
 	 * @param \App\Service\Unit $unit_service
+	 * @param FightReport $fightReport
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service, FightReport $fightReport)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
 		$this->resources = $resources;
 		$this->unit_service = $unit_service;
+		$this->fight_report = $fightReport;
 	}
 
 	/**
@@ -89,6 +96,22 @@ class Fight
 	}
 
 	/**
+	 * method to kill units with life equal to 0 after fight
+	 * @param array $units
+	 */
+	public function killUnitAfterFight(array $units)
+	{
+		foreach ($units as $unit) {
+			if ($unit->getLife() <= 0) {
+				$this->em->remove($unit);
+			} else {
+				$this->em->persist($unit);
+			}
+		}
+		$this->em->flush();
+	}
+
+	/**
 	 * method that handle attack a base with units kill necessary units and if there is units in movement
 	 * after attack, put them on return
 	 * @param Base $base
@@ -106,14 +129,17 @@ class Fight
 			"unitMovement" => null
 		]);
 
+		$this->fight_report->setStartAttackUnits($base_attack_units);
+		$this->fight_report->setStartDefendUnits($defend_units);
+
 		$all_units = array_merge($attack_units, $defend_units);
 		shuffle($all_units);
 
 		foreach ($all_units as $unit) {
 			if ($unit->getBase()->getId() === $base->getId()) {
-				$this->attackOrDefendUnit($unit, $defend_units, "attack");
+				$defend_units = $this->attackOrDefendUnit($unit, $defend_units, "attack");
 			} else {
-				$this->attackOrDefendUnit($unit, $attack_units, "defense");
+				$attack_units = $this->attackOrDefendUnit($unit, $attack_units, "defense");
 			}
 
 			if ($unit->getLife() <= 0) {
@@ -123,10 +149,18 @@ class Fight
 			}
 		}
 		$this->em->flush();
+
+		$this->killUnitAfterFight($defend_units);
+		$this->killUnitAfterFight($base_attack_units->toArray());
+
 		$this->putUnitsOnReturn($base_attack_units, $unit_movement);
 		if ($base_attack_units->count() > 0) {
 			$this->stealResources($base_attack_units, $unit_movement, $attacked_base);
 		}
+
+		$this->fight_report->setEndAttackUnits($base_attack_units);
+		$this->fight_report->setEndDefendUnits($defend_units);
+		$this->fight_report->createReport($unit_movement);
 	}
 
 	/**
