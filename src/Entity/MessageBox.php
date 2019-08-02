@@ -195,4 +195,21 @@ class MessageBox
 
 		return $this;
 	}
+
+	/**
+	 * @return string
+	 * @Groups("main")
+	 */
+	public function getStringMessageType()
+	{
+		if ($this->getType() === self::TYPE_RECEIVED) {
+			return "received";
+		} else if ($this->getType() === self::TYPE_SEND) {
+			return "send";
+		}  else if ($this->getType() === self::FIGHT_REPORT) {
+			return "fight-report";
+		} elseif ($this->getType() === self::TYPE_OTHER) {
+			return "other";
+		}
+	}
 }
