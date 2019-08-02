@@ -156,6 +156,8 @@ class Globals
 
 		if ($now->sub(new DateInterval("P".$protection_days."D")) > $created_at) {
 			return true;
+		} else if ($user->getHolidays() === true) {
+			return false;
 		}
 
 		return false;
