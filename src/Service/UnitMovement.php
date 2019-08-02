@@ -141,6 +141,7 @@ class UnitMovement
 					"string_type" => $unit_movement->getStringType(),
 					"entity_name" => $name,
 					"base_id" => $unit_movement->getBase()->getId(),
+					"base_name" => $unit_movement->getBase()->getName(),
 					"movement_type_string" => $unit_movement->getStringMovementType(),
 					"units" => $units
 				];
