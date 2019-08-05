@@ -4,14 +4,30 @@ namespace App\Repository;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 
 class UserRepository extends EntityRepository
 {
 	/**
+	 * method to count number of players that aren't archived
+	 * @return mixed
+	 * @throws NonUniqueResultException
+	 */
+	public function findByCountRankedPlayers()
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT count(u) FROM App:User u WHERE
+			u.archived = false
+		");
+
+		return $query->getOneOrNullResult()[1];
+	}
+
+	/**
 	 * method to get users that hasn't connected to the game for a certain time and that are not archived yet
 	 * @param int $max_inactivation_days
 	 * @return mixed
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function findByUserToArchive(int $max_inactivation_days)
 	{
@@ -32,7 +48,7 @@ class UserRepository extends EntityRepository
 	/**
 	 * @param int $max_holidays_days
 	 * @return mixed
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function findByUserEndHolidays(int $max_holidays_days)
 	{
