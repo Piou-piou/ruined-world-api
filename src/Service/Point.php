@@ -48,6 +48,17 @@ class Point
 	{
 		if (array_key_exists($type, $this->points)) {
 			$this->base->setPoints($this->base->getPoints() + $this->points[$type]);
+			$user = $this->base->getUser();
+			$user_points = 0;
+
+			foreach ($user->getBases() as $base) {
+				$user_points += $base->getPoints();
+			}
+
+			$user->setPoints($user_points);
+
+			$this->em->persist($user);
+			$this->em->persist($this->base);
 			$this->em->flush();
 		}
 	}
