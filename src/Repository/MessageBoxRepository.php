@@ -40,4 +40,22 @@ class MessageBoxRepository extends EntityRepository
 
 		return count($query->getResult());
 	}
+
+	/**
+	 * method to send number of unread messages per box
+	 * @param User $user
+	 * @return mixed
+	 */
+	public function findByNumberUnreadMessagesPerBox(User $user)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT count(mb.id) as nb_unread, mb.type FROM App:MessageBox mb
+			WHERE mb.user = :user AND mb.archived = false AND mb.read_at IS NULL
+			AND mb.type != :send
+			GROUP BY mb.type
+		");
+		$query->setParameter("user", $user, Type::OBJECT);
+		$query->setParameter("send", MessageBox::TYPE_SEND, Type::INTEGER);
+
+		return $query->getResult();
+	}
 }

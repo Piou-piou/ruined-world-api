@@ -76,6 +76,39 @@ class MessageController extends AbstractController
 	}
 
 	/**
+	 * method to send number of unread messages grouped by box
+	 * @Route("/api/message/unread-number-box/", name="message_unread_number_box", methods={"POST"})
+	 * @param Session $session
+	 * @return JsonResponse
+	 */
+	public function sendUnreadMessagesNumberPerBox(Session $session): JsonResponse
+	{
+		$user = $session->get("user");
+		$unread_messages = $this->getDoctrine()->getManager()->getRepository(MessageBox::class)->findByNumberUnreadMessagesPerBox($user);
+		$unread = 0;
+		$unread_fight_report = 0;
+		$unread_other_report = 0;
+
+		foreach ($unread_messages as $unread_message) {
+			if ($unread_message["type"] === MessageBox::TYPE_RECEIVED) {
+				$unread = $unread_message["nb_unread"];
+			} else if ($unread_message["type"] === MessageBox::FIGHT_REPORT) {
+				$unread_fight_report = $unread_message["nb_unread"];
+			} else if ($unread_message["type"] === MessageBox::TYPE_OTHER) {
+				$unread_other_report = $unread_message["nb_unread"];
+			}
+		}
+
+		return new JsonResponse([
+			"success" => true,
+			"token" => $user->getToken(),
+			"unread_messages" => $unread,
+			"unread_fight_report" => $unread_fight_report,
+			"unread_other_report" => $unread_other_report,
+		]);
+	}
+
+	/**
 	 * method to send a message
 	 * @Route("/api/message/show/", name="message_show", methods={"POST"})
 	 * @param Session $session
