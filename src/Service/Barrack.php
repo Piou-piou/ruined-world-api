@@ -84,6 +84,25 @@ class Barrack
 	}
 
 	/**
+	 * method to get max unit that is possible to recruit
+	 * @param string $array_name
+	 * @return mixed
+	 */
+	private function getMaxNUmberOfUnitToRecruit(string $array_name)
+	{
+		$base = $this->globals->getCurrentBase(true);
+		$resources_torecruit = $this->globals->getUnitsConfig("units")[$array_name]["resources_recruit"];
+		$resources = [
+			floor($base->getElectricity() / $resources_torecruit["electricity"]),
+			floor($base->getFuel() / $resources_torecruit["fuel"]),
+			floor($base->getIron() / $resources_torecruit["iron"]),
+			floor($base->getWater() / $resources_torecruit["water"])
+		];
+
+		return min($resources);
+	}
+
+	/**
 	 * method that send units possible to recruit with time reduced (depend on barrack lvl for power)
 	 * @return mixed
 	 */
@@ -93,6 +112,7 @@ class Barrack
 
 		foreach ($units as $unit) {
 			$units[$unit["array_name"]]["recruitment_time"] = $this->getTimeToRecruit($unit["recruitment_time"]);
+			$units[$unit["array_name"]]["max_recruit_possible"] = $this->getMaxNUmberOfUnitToRecruit($unit["array_name"]);
 		}
 
 		return $units;

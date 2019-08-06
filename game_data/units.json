@@ -12,10 +12,10 @@
     "explanation": "Le villageois est la plus pour boire de la bière qu'autre chose, néenmoins, il peut s'avérer très p)àratique pour les petites missions de chasse",
     "transport_weight": 100,
     "resources_recruit": {
-      "electricity": 70,
-      "fuel": 60,
+      "electricity": 50,
+      "fuel": 50,
       "iron": 50,
-      "water": 100
+      "water": 50
     },
     "to_recruit": {
 
