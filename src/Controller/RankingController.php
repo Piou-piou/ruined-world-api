@@ -30,20 +30,21 @@ class RankingController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		$page_number = isset($infos->page_number) ? $infos->page_number : 0;
 		$users_per_page = $globals->getGeneralConfig()["rank_user_per_page"];
-		$max_pages = round($em->getRepository(User::class)->findByCountRankedPlayers() / $users_per_page);
+		$max_pages = round($em->getRepository(User::class)->findByCountRankedPlayers() / $users_per_page)-1;
+		$page_number = isset($infos->page_number) ? $infos->page_number : $max_pages;
 
 		$players = $em->getRepository(User::class)->findBy([
 			"archived" => false
 		], [
 			"points" => "DESC"
-		], $users_per_page, $page_number);
+		], $users_per_page, $page_number*$users_per_page);
 
 		return new JsonResponse([
 			"success" => true,
 			"players" => $api->serializeObject($players),
-			"max_pages" => $max_pages
+			"max_pages" => $max_pages,
+			"current_page" => $page_number
 		]);
 	}
 }
