@@ -511,4 +511,14 @@ class User
 			$this->setCreatedAt($now);
 		}
 	}
+
+	/**
+	 * method to get bases number for a user
+	 * @Groups("main")
+	 * @return int
+	 */
+	public function getBasesNumber(): int
+	{
+		return $this->bases->count();
+	}
 }
