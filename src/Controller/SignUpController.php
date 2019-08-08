@@ -10,7 +10,7 @@ class SignUpController extends AbstractController
 {
 
 	/**
-	 * @Route("/api/signup/cjeck-pseudo-used/", name="signup_check_pseudo_used", methods={"POST"})
+	 * @Route("/api/signup/check-pseudo-used/", name="signup_check_pseudo_used", methods={"POST"})
 	 * @return JsonResponse
 	 */
 	public function checkIfPseudoIsAvailable(): JsonResponse
