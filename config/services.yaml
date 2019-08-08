@@ -8,7 +8,7 @@ parameters:
     game_data_directory: '%kernel.project_dir%/game_data/'
     max_inactivation_days: 15
     max_holidays_days: 40
-    route_rights_exluded: ["cron", "api_login", "api_test_token"]
+    route_rights_exluded: ["cron", "api_login", "api_test_token", "signup_check_pseudo_used"]
     cron:
         updateResources: "* * * * *"
         endConstructions: "* * * * *"
