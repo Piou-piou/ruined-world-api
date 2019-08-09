@@ -32,7 +32,7 @@ class User
 	/**
 	 * @ORM\Column(type="string", length=255)
 	 */
-    protected $email;
+    protected $mail;
 	
 	/**
 	 * @ORM\Column(type="string", length=200)
@@ -167,17 +167,20 @@ class User
 	/**
 	 * @return mixed
 	 */
-	public function getEmail()
+	public function getMail()
 	{
-		return $this->email;
+		return $this->mail;
 	}
-	
+
 	/**
-	 * @param mixed $email
+	 * @param $mail
+	 * @return $this
 	 */
-	public function setEmail($email): void
+	public function setMail($mail)
 	{
-		$this->email = $email;
+		$this->mail = $mail;
+
+		return $this;
 	}
 	
 	/**
