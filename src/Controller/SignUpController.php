@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SignUpController extends AbstractController
 {
@@ -49,11 +50,12 @@ class SignUpController extends AbstractController
 	 * method to register a user, create his base with command center
 	 * @Route("/api/signup/register/", name="signup_register", methods={"POST"})
 	 * @param Request $request
-	 * @param PasswordEncoderInterface $password_encoder
+	 * @param UserPasswordEncoderInterface $password_encoder
 	 * @param Api $api
 	 * @return JsonResponse
+	 * @throws \Exception
 	 */
-	public function registerUser(Request $request, PasswordEncoderInterface $password_encoder, Api $api)
+	public function registerUser(Request $request, UserPasswordEncoderInterface $password_encoder, Api $api)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$pseudo = $request->get("pseudo");
@@ -86,8 +88,11 @@ class SignUpController extends AbstractController
 		$user->setPassword($password);
 		$user->setPoints(10);
 		$user->setValidateAccountKey($api->generateToken());
+		$user->setToken($api->generateToken());
+		$em->persist($user);
 		$password = $password_encoder->encodePassword($user, $user->getPassword());
 		$user->setPassword($password);
+		$user->setCreatedAt(new \DateTime());
 		$em->persist($user);
 
 		$base = new Base();
