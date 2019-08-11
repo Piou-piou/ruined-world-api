@@ -135,7 +135,7 @@ class Api
 	 * @param int $length
 	 * @return string
 	 */
-	private function generateToken(int $length = 200): string
+	public function generateToken(int $length = 200): string
 	{
 		$string = "abcdefghijklmnopqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789";
 		$token = "";
