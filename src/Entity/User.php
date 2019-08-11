@@ -70,18 +70,18 @@ class User
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 * @Groups("main")
 	 */
-	protected $holidays;
+	protected $holidays = false;
 	
 	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 * @Groups("main")
 	 */
-	protected $archived;
+	protected $archived = false;
 	
 	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
 	 */
-	protected $verified_account;
+	protected $verified_account =false;
 	
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
