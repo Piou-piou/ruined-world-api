@@ -159,7 +159,7 @@ class SignUpController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"success_message" => "Ton compte a été créé. Tu peux maintenant t'y connecter, pense également à le valider avec le amil que tu vas recevoir"
+			"success_message" => "Ton compte a été créé. Tu peux maintenant t'y connecter. Pense également à le valider avec le amil que tu vas recevoir"
 		]);
 	}
 }
