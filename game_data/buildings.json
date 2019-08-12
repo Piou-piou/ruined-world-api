@@ -98,17 +98,17 @@
     "name": "Garner",
     "array_name": "garner",
     "max_level": 50,
-    "construction_time": 1000,
+    "construction_time": 500,
     "default_power": 1000,
     "power_type": "storage",
     "explanation": "Le grenier permet le stockage de la nourriture que tes soldats ramènent des expéditions. Chaque amélioration augmente sa capacité de stockage.",
     "explanation_current_power": "La capacité de stockage est actuellement de [[to_replace]] unités.",
     "explanation_next_power": "Le capacité de stockage sera de [[to_replace]] unités au prochain niveau.",
     "resources_build": {
-      "electricity": 340,
-      "fuel": 395,
-      "iron": 405,
-      "water": 440
+      "electricity": 240,
+      "fuel": 295,
+      "iron": 305,
+      "water": 340
     },
     "to_build": {
       "electricity_station": 3,
