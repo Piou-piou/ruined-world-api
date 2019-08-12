@@ -6,6 +6,8 @@ use App\Entity\Base;
 use App\Entity\Building;
 use App\Entity\User;
 use App\Service\Api;
+use App\Service\Globals;
+use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,15 +49,46 @@ class SignUpController extends AbstractController
 	}
 
 	/**
+	 * method to get random posx and posy of the base
+	 * @param Globals $globals
+	 * @return array
+	 */
+	private function getRandomBasePosition(Globals $globals): array
+	{
+		$map_size = $globals->getGeneralConfig()["map_size"];
+		$center_map = $map_size / 2;
+		$min_center = $center_map / 2;
+		$max_center = $center_map + $min_center;
+
+		$posx = rand($min_center, $max_center);
+		$posy = rand($min_center, $max_center);
+
+		$base = $this->getDoctrine()->getManager()->getRepository(Base::class)->findOneBy([
+			"posx" => $posx,
+			"posy" => $posy
+		]);
+
+		if ($base) {
+			$this->getRandomBasePosition($globals);
+		}
+
+		return [
+			"posx" => $posx,
+			"posy" => $posy,
+		];
+	}
+
+	/**
 	 * method to register a user, create his base with command center
 	 * @Route("/api/signup/register/", name="signup_register", methods={"POST"})
 	 * @param Request $request
 	 * @param UserPasswordEncoderInterface $password_encoder
 	 * @param Api $api
+	 * @param Globals $globals
 	 * @return JsonResponse
 	 * @throws Exception
 	 */
-	public function registerUser(Request $request, UserPasswordEncoderInterface $password_encoder, Api $api)
+	public function registerUser(Request $request, UserPasswordEncoderInterface $password_encoder, Api $api, Globals $globals)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$pseudo = $request->get("pseudo");
@@ -82,6 +115,8 @@ class SignUpController extends AbstractController
 			]);
 		}
 
+		$now = new DateTime();
+
 		$user = new User();
 		$user->setPseudo($pseudo);
 		$user->setMail($mail);
@@ -92,12 +127,19 @@ class SignUpController extends AbstractController
 		$em->persist($user);
 		$password = $password_encoder->encodePassword($user, $user->getPassword());
 		$user->setPassword($password);
-		$user->setCreatedAt(new \DateTime());
+		$user->setCreatedAt($now);
+		$user->setLastConnection($now);
+		$user->setEndToken($now);
 		$em->persist($user);
+
+		$pos = $this->getRandomBasePosition($globals);
 
 		$base = new Base();
 		$base->setName($pseudo."'s base");
 		$base->setPoints(10);
+		$base->setLastUpdateResources($now);
+		$base->setPosx($pos["posx"]);
+		$base->setPosy($pos["posy"]);
 		$base->setElectricity(1000);
 		$base->setIron(1000);
 		$base->setFuel(1000);
@@ -117,7 +159,7 @@ class SignUpController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"error_message" => "Ton compte a été créé. Tu peux maintenant t'y connecter, pense également à le valider avec le amil que tu vas recevoir"
+			"success_message" => "Ton compte a été créé. Tu peux maintenant t'y connecter, pense également à le valider avec le amil que tu vas recevoir"
 		]);
 	}
 }
