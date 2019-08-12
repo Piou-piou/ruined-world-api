@@ -6,6 +6,7 @@ use App\Entity\Base;
 use App\Entity\Building;
 use App\Entity\User;
 use App\Service\Api;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +53,7 @@ class SignUpController extends AbstractController
 	 * @param UserPasswordEncoderInterface $password_encoder
 	 * @param Api $api
 	 * @return JsonResponse
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function registerUser(Request $request, UserPasswordEncoderInterface $password_encoder, Api $api)
 	{
