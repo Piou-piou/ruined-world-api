@@ -28,7 +28,7 @@ class BarrackController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"units" => $barrack->getUnitsPossibleToRecruit(),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -44,7 +44,7 @@ class BarrackController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"units_in_recruitment" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInRecruitment($globals->getCurrentBase()),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -64,7 +64,7 @@ class BarrackController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"units_in_recruitment" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInRecruitment($globals->getCurrentBase()),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 

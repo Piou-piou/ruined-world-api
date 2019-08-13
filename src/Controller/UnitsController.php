@@ -26,7 +26,7 @@ class UnitsController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"units" => $units
 		]);
 	}
@@ -43,7 +43,7 @@ class UnitsController extends AbstractController
 	{
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"unit_movements" => $unitMovement->getCurrentMovementsInBase()
 		]);
 	}
@@ -63,7 +63,7 @@ class UnitsController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken()
+			"token" => $session->get("user_token")->getToken()
 		]);
 	}
 }

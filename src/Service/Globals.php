@@ -70,7 +70,7 @@ class Globals
 			]);
 			$this->em->refresh($current_base);
 			$this->session->set("current_base", $current_base);
-			$this->session->set("token", $user->getToken());
+			$this->session->set("token", $this->session->get("user_token")->getToken());
 			
 			return true;
 		} else if (!$this->session->has("current_base") && !$this->session->has("token")) {

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -111,6 +112,12 @@ class User implements UserInterface
 	 * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
 	 */
 	protected $sent_messages;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="UserToken", mappedBy="user")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=false)
+	 */
+	protected $tokens;
 
     public function __construct()
     {
@@ -413,7 +420,7 @@ class User implements UserInterface
     /**
      * Get Base entity collection (one to many).
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getBases()
     {
@@ -486,6 +493,42 @@ class User implements UserInterface
 	public function getSentMessages()
 	{
 		return $this->sent_messages;
+	}
+
+	/**
+	 * Add Base entity to collection (one to many).
+	 *
+	 * @param UserToken $user_token
+	 * @return User
+	 */
+	public function addToken(UserToken $user_token)
+	{
+		$this->tokens[] = $user_token;
+
+		return $this;
+	}
+
+	/**
+	 * Remove Base entity from collection (one to many).
+	 *
+	 * @param UserToken $user_token
+	 * @return User
+	 */
+	public function removeToken(UserToken $user_token)
+	{
+		$this->tokens->removeElement($user_token);
+
+		return $this;
+	}
+
+	/**
+	 * Get Base entity collection (one to many).
+	 *
+	 * @return Collection
+	 */
+	public function getTokens()
+	{
+		return $this->tokens;
 	}
 
 	/**

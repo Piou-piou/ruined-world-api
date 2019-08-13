@@ -33,7 +33,7 @@ class FoodController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"food_consumption" => $food_consumption,
 			"food_string" => $string
 		]);

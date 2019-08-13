@@ -58,7 +58,7 @@ class BuildingController extends AbstractController
 			return new JsonResponse([
 				"success" => false,
 				"message" => "A building is already in construction in your base.",
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
 		
@@ -70,7 +70,7 @@ class BuildingController extends AbstractController
 			return new JsonResponse([
 				"success" => false,
 				"message" => "You haven't enough resources",
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
 		
@@ -80,7 +80,7 @@ class BuildingController extends AbstractController
 		
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -108,7 +108,7 @@ class BuildingController extends AbstractController
 			return new JsonResponse([
 				"success" => false,
 				"message" => "This building doesn't exist in your base.",
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
 
@@ -121,7 +121,7 @@ class BuildingController extends AbstractController
 			"explanation_next_power" => $explanation_string["next"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -153,7 +153,7 @@ class BuildingController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"buildings" => $return_buildings,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -233,7 +233,7 @@ class BuildingController extends AbstractController
 			"success" => true,
 			"buildings" => $return_buildings,
 			"nb_buildings" => count($return_buildings),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 }
