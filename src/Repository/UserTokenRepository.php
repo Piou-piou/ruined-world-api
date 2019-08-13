@@ -20,7 +20,7 @@ class UserTokenRepository extends EntityRepository
 		$now->sub(new \DateInterval("P" . $max_inactivation_days . "D"));
 
 		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:UserToken u WHERE
-			u.end_token < :max_inactivation_days
+			u.endToken < :max_inactivation_days
 		");
 
 		$query->setParameter("max_inactivation_days", $now, Type::DATETIME);
