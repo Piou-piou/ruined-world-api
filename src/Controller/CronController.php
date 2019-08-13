@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Base;
 use App\Entity\User;
+use App\Entity\UserToken;
 use App\Service\Barrack;
 use App\Service\Building;
 use App\Service\Food;
@@ -452,6 +453,20 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->unit_movement->updateUnitMovement($base);
+		}
+	}
+
+	/**
+	 * method to remove unused token
+	 * @throws Exception
+	 */
+	private function removeUnusedTokens()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$user_tokens = $em->getRepository(UserToken::class)->findByExpiredToken($this->getParameter("max_inactivation_days"));
+
+		foreach ($user_tokens as $user_token) {
+			$em->remove($user_token);
 		}
 	}
 }

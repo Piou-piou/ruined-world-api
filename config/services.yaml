@@ -18,6 +18,7 @@ parameters:
         updateUnitMovement: "* * * * *"
         archiveUsers: "0 0 * * *"
         disableHolidaysMode: "0 5 * * *"
+        removeUnusedTokens: "0 5 * * *"
         sendMailBeforeArchiveUser: "0 10 * * *"
         updateMissionsForBase: "0 */3 * * *"
 
