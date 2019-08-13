@@ -59,7 +59,7 @@
     }
   },
   "electricity_station": {
-    "name": "electricity station",
+    "name": "Electricity station",
     "array_name": "electricity_station",
     "max_level": 50,
     "construction_time": 30,
@@ -77,7 +77,7 @@
     "to_build": {}
   },
   "fuel_station": {
-    "name": "fuel station",
+    "name": "Fuel station",
     "array_name": "fuel_station",
     "max_level": 50,
     "construction_time": 30,
@@ -118,7 +118,7 @@
     }
   },
   "iron_station": {
-    "name": "iron station",
+    "name": "Iron station",
     "array_name": "iron_station",
     "max_level": 50,
     "construction_time": 30,
@@ -157,7 +157,7 @@
     }
   },
   "water_station": {
-    "name": "water station",
+    "name": "Water station",
     "array_name": "water_station",
     "max_level": 50,
     "construction_time": 30,
@@ -175,7 +175,7 @@
     "to_build": {}
   },
   "warehouse": {
-    "name": "warehouse",
+    "name": "Warehouse",
     "array_name": "warehouse",
     "max_level": 50,
     "construction_time": 1200,
