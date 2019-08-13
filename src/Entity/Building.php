@@ -48,7 +48,7 @@ class Building
      * @ORM\Column(type="boolean", options={"default" : 0})
 	 * @Groups("main")
      */
-    protected $in_construction;
+    protected $in_construction = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)

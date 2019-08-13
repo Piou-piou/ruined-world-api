@@ -116,7 +116,7 @@ class Api
 	{
 		$token = $this->generateToken();
 		$now = new \DateTime();
-		$end_token = $now->add(new \DateInterval('PT20M'));
+		$end_token = $now->add(new \DateInterval("PT".$this->container->getParameter("api_token_duration")."M"));
 		
 		$user->setToken($token);
 		$user->setEndToken($end_token);
@@ -135,7 +135,7 @@ class Api
 	 * @param int $length
 	 * @return string
 	 */
-	private function generateToken(int $length = 200): string
+	public function generateToken(int $length = 200): string
 	{
 		$string = "abcdefghijklmnopqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789";
 		$token = "";
