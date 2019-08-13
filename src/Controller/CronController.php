@@ -293,7 +293,7 @@ class CronController extends AbstractController
 			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
 				->setSender("no-reply@anthony-pilloud.fr")
 				->setFrom("no-reply@anthony-pilloud.fr")
-				->setTo($user->getEmail())
+				->setTo($user->getMail())
 				->setBody(
 					$this->renderView('before_archive_account.html.twig', ["desactivation_date" => $desactivation_date]),
 					'text/html'
