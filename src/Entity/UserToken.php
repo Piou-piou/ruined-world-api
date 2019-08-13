@@ -38,6 +38,11 @@ class UserToken
 	protected $userAgent;
 
 	/**
+	 * @ORM\Column(type="string", length=200)
+	 */
+	protected $ip;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="tokens")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
 	 */
@@ -53,10 +58,13 @@ class UserToken
 
 	/**
 	 * @param mixed $id
+	 * @return UserToken
 	 */
-	public function setId($id): void
+	public function setId($id)
 	{
 		$this->id = $id;
+
+		return $this;
 	}
 
 	/**
@@ -69,10 +77,13 @@ class UserToken
 
 	/**
 	 * @param mixed $token
+	 * @return UserToken
 	 */
-	public function setToken($token): void
+	public function setToken($token)
 	{
 		$this->token = $token;
+
+		return $this;
 	}
 
 	/**
@@ -85,10 +96,13 @@ class UserToken
 
 	/**
 	 * @param mixed $endToken
+	 * @return UserToken
 	 */
-	public function setEndToken($endToken): void
+	public function setEndToken($endToken)
 	{
 		$this->endToken = $endToken;
+
+		return $this;
 	}
 
 	/**
@@ -101,10 +115,32 @@ class UserToken
 
 	/**
 	 * @param mixed $userAgent
+	 * @return UserToken
 	 */
-	public function setUserAgent($userAgent): void
+	public function setUserAgent($userAgent)
 	{
 		$this->userAgent = $userAgent;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIp()
+	{
+		return $this->ip;
+	}
+
+	/**
+	 * @param mixed $ip
+	 * @return UserToken
+	 */
+	public function setIp($ip)
+	{
+		$this->ip = $ip;
+
+		return $this;
 	}
 
 	/**
