@@ -52,7 +52,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $user->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"messages" => $api->serializeObject($messages)
 		]);
 	}
@@ -70,7 +70,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $user->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"nb_unread" => $message_box
 		]);
 	}
@@ -101,7 +101,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $user->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"unread_messages" => $unread,
 			"unread_fight_report" => $unread_fight_report,
 			"unread_other_report" => $unread_other_report,
@@ -131,7 +131,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"message" => $api->serializeObject($message)
 		]);
 	}
@@ -161,7 +161,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"success_message" => $success_message,
 			"error_message" => $error_message
 		]);
@@ -193,7 +193,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"success_message" => "Les messages ont été supprimés"
 		]);
 	}
@@ -221,7 +221,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"success_message" => "Les messages ont été marqué comme lu"
 		]);
 	}
@@ -266,7 +266,7 @@ class MessageController extends AbstractController
 		if (!$dest_user) {
 			return new JsonResponse([
 				"success" => false,
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 				"error_message" => "Le joueur " . $infos->pseudo . " n'a pas été trouvé"
 			]);
 		}
@@ -290,7 +290,7 @@ class MessageController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"success_message" => "Message envoyé"
 		]);
 	}

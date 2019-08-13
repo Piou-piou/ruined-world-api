@@ -39,7 +39,7 @@ class BaseController extends AbstractController
 		return new JsonResponse([
 			"success" => $success,
 			"guid_base" => $guid_base,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -75,7 +75,7 @@ class BaseController extends AbstractController
 				"fuel_production" => $resources->getFuelProduction(),
 				"water_production" => $resources->getWaterProduction(),
 			],
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -100,13 +100,13 @@ class BaseController extends AbstractController
 				"base" => $api->serializeObject($base),
 				"can_attack" => $globals->canAttackPlayer($base->getUser()),
 				"travel_time" => $globals->getTimeToTravel($globals->getCurrentBase(), $base, 1, true),
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 			]);
 		} else {
 			return new JsonResponse([
 				"success" => false,
 				"error_message" => "Aucune base n'existe à ces positions",
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
 	}
@@ -128,7 +128,7 @@ class BaseController extends AbstractController
 			"fuel" => $base->getFuel(),
 			"water" => $base->getWater(),
 			"food" => $base->getFood(),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -148,7 +148,7 @@ class BaseController extends AbstractController
 		$return_infos = [
 			"success" => false,
 			"error_message" => "Le nom de la base ne peut pas être vide",
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		];
 
 		if ($base_name) {
@@ -158,14 +158,14 @@ class BaseController extends AbstractController
 				$return_infos = [
 					"success" => false,
 					"error_message" => "Une base existe déjà avec ce nom, merci d'en choisir un autre",
-					"token" => $session->get("user")->getToken(),
+					"token" => $session->get("user_token")->getToken(),
 				];
 			} else {
 				if (strlen($base_name) > 20) {
 					$return_infos = [
 						"success" => false,
 						"error_message" => "Le nom de la base ne doit pas exéder 20 catactères",
-						"token" => $session->get("user")->getToken(),
+						"token" => $session->get("user_token")->getToken(),
 					];
 				} else {
 					$base->setName($base_name);
@@ -175,7 +175,7 @@ class BaseController extends AbstractController
 						"success" => true,
 						"success_message" => "Le nom de la base a été changé",
 						"base_name" => $base_name,
-						"token" => $session->get("user")->getToken(),
+						"token" => $session->get("user_token")->getToken(),
 					];
 				}
 			}
@@ -204,7 +204,7 @@ class BaseController extends AbstractController
 			"success" => true,
 			"guids_player_bases" => $guids_player_bases,
 			"bases" => $bases,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -227,7 +227,7 @@ class BaseController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"travel_time" => $travel_time,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 }

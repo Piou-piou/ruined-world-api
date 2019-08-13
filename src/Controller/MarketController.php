@@ -38,7 +38,7 @@ class MarketController extends AbstractController
             return new JsonResponse([
                 "success" => false,
                 "error_message" => "Aucune base trouvée aux positions " . $posx . ", " . $posy,
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
             ]);
         }
         
@@ -47,7 +47,7 @@ class MarketController extends AbstractController
 			return new JsonResponse([
 				"success" => false,
 				"error_message" => "Vous n'avez pas assez de marchand disponible dans votre base pour ce transport",
-				"token" => $session->get("user")->getToken(),
+				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
 
@@ -68,7 +68,7 @@ class MarketController extends AbstractController
         return new JsonResponse([
             "success" => true,
 			"success_message" => "Vos marchands, se mettent en route immédiatement !",
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
         ]);
     }
 
@@ -100,7 +100,7 @@ class MarketController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"market_movements" => $movements,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 
@@ -132,7 +132,7 @@ class MarketController extends AbstractController
 			"success" => true,
 			"trader_number" => $market->getTraderNumberInBase(),
 			"max_trader_number" => $market->getMaxtraderInBase(),
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
 }

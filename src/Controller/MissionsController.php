@@ -39,7 +39,7 @@ class MissionsController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"missions" => $return_missions,
 			"units" => $em->getRepository(Unit::class)->findByUnitsInBase($globals->getCurrentBase())
 		]);
@@ -91,7 +91,7 @@ class MissionsController extends AbstractController
 
 		return new JsonResponse([
 			"success" => $success,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"error_message" => $error_message,
 			"success_message" => "Vos unités se mettent en route"
 		]);

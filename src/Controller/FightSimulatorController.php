@@ -26,7 +26,7 @@ class FightSimulatorController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"units" => $units_config
 		]);
 	}
@@ -59,7 +59,7 @@ class FightSimulatorController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"token" => $session->get("user")->getToken(),
+			"token" => $session->get("user_token")->getToken(),
 			"attack_units" => $this->createUnitsArrayForApp($globals, $base_units),
 			"defense_units" => $this->createUnitsArrayForApp($globals, $other_base_units)
 		]);
