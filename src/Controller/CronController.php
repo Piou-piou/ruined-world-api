@@ -319,6 +319,12 @@ class CronController extends AbstractController
 			$user->setArchived(true);
 			$user->setHolidays(false);
 			$bases = $user->getBases();
+
+			foreach ($user->getTokens() as $token) {
+				$user->removeToken($token);
+				$em->persist($user);
+				$em->remove($token);
+			}
 			
 			/**
 			 * @var $base Base
