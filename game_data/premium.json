@@ -1,0 +1,18 @@
+{
+  "waiting_linne": {
+    "array_name": "waiting_line",
+    "title": "Amélioration construction",
+    "description": "Avec ce bonus, recrute pendant un temps un chef des constructions qui pourra ajouter un bâtiment de plus à la file d'attente des constructions.",
+    "cost3": 5,
+    "cost15": 20,
+    "cost30": 30
+  },
+  "full_storage": {
+    "array_name": "full_storage",
+    "title": "Visualisation stockage",
+    "description": "Avec ce bonus tu sauras quand chaque ressource arrivera à son stockage maximal",
+    "cost3": 5,
+    "cost15": 20,
+    "cost30": 30
+  }
+}
