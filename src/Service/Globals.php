@@ -258,4 +258,15 @@ class Globals
 
 		return $missions;
 	}
+
+	/**
+	 * method that return the array of the premium config json file
+	 * @return mixed
+	 */
+	public function getPremiumConfig()
+	{
+		$premium = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "premium.json"), true);
+
+		return $premium;
+	}
 }
