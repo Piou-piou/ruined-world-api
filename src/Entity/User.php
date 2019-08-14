@@ -63,6 +63,12 @@ class User implements UserInterface
      */
     protected $points;
 
+	/**
+	 * @ORM\Column(type="json", nullable=true)
+	 * @Groups("main")
+	 */
+    protected $premium_advantages;
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -297,6 +303,25 @@ class User implements UserInterface
     {
         return $this->points;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getPremiumAdvantages()
+	{
+		return $this->premium_advantages;
+	}
+
+	/**
+	 * @param mixed $premium_advantages
+	 * @return User
+	 */
+	public function setPremiumAdvantages($premium_advantages)
+	{
+		$this->premium_advantages = $premium_advantages;
+
+		return $this;
+	}
 	
 	/**
 	 * Set the value of last_connection.
