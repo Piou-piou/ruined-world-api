@@ -164,6 +164,21 @@ class Globals
 	}
 
 	/**
+	 * method to get max building can be put in waiting to build
+	 * @return mixed
+	 */
+	public function getMaxConstructionInConstructionWaiting()
+	{
+		$construction_length = $this->getUserNationConfig()["construction_line_length"];
+
+		if ($this->session->get("user")->hasPremiumWaitingLine()) {
+			$construction_length++;
+		}
+
+		return $construction_length;
+	}
+
+	/**
 	 * method that return the array of the building's config json file
 	 * @return mixed
 	 */
