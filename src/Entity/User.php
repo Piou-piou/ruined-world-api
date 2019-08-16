@@ -595,6 +595,32 @@ class User implements UserInterface
 	}
 
 	/**
+	 * method to test if user has premium waiting line
+	 * @return bool
+	 */
+	public function hasPremiumWaitingLine(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("wainting_line", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * method to test if user has premium storage
+	 * @return bool
+	 */
+	public function hasPremiumFullStorage(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns the roles granted to the user.
 	 *
 	 *     public function getRoles()
