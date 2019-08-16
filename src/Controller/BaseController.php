@@ -74,6 +74,7 @@ class BaseController extends AbstractController
 				"iron_production" => $resources->getIronProduction(),
 				"fuel_production" => $resources->getFuelProduction(),
 				"water_production" => $resources->getWaterProduction(),
+				"premuim_storage" => $resources->getFullStorageInHour()
 			],
 			"token" => $session->get("user_token")->getToken(),
 		]);
