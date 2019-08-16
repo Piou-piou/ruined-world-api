@@ -68,17 +68,17 @@ class BuildingController extends AbstractController
 		$end_construction = $now->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
 		$building->setEndConstruction($end_construction);
 
-		if ($last_construction_building && $last_construction_building->getArrayName() != $building->getArrayName()) {
-			$building->setStartConstruction($last_construction_building->getEndConstruction());
-			$end_construction = clone $last_construction_building->getEndConstruction();
-			$end_construction = $end_construction->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
-			$building->setEndConstruction($end_construction);
-		} else {
+		if ($last_construction_building && $last_construction_building->getArrayName() === $building->getArrayName()) {
 			return new JsonResponse([
 				"success" => false,
 				"error_message" => "Ce batiment est déjà dans la file",
 				"token" => $session->get("user_token")->getToken(),
 			]);
+		} else if ($last_construction_building) {
+			$building->setStartConstruction($last_construction_building->getEndConstruction());
+			$end_construction = clone $last_construction_building->getEndConstruction();
+			$end_construction = $end_construction->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
+			$building->setEndConstruction($end_construction);
 		}
 		
 		if ($building_service->testWithdrawResourcesToBuild($infos->array_name) === false) {
@@ -160,6 +160,7 @@ class BuildingController extends AbstractController
 				$return_buildings[] = [
 					"id" => $building->getId(),
 					"name" => $building->getName(),
+					"startConstruction" => $building->getStartConstruction() ? $building->getStartConstruction()->getTimestamp() : null,
 					"endConstruction" => $building->getEndConstruction()->getTimestamp()
 				];
 			}
