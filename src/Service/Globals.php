@@ -269,4 +269,15 @@ class Globals
 
 		return $premium;
 	}
+
+	/**
+	 * method that return the array of the premium config json file
+	 * @return mixed
+	 */
+	public function getNationsConfig()
+	{
+		$nations = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "nations.json"), true);
+
+		return $nations;
+	}
 }
