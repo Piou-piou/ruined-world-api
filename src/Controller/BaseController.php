@@ -74,7 +74,7 @@ class BaseController extends AbstractController
 				"iron_production" => $resources->getIronProduction(),
 				"fuel_production" => $resources->getFuelProduction(),
 				"water_production" => $resources->getWaterProduction(),
-				"premuim_storage" => $resources->getFullStorageInHour()
+				"premium_storage" => $resources->getFullStorageInHour()
 			],
 			"token" => $session->get("user_token")->getToken(),
 		]);
@@ -111,15 +111,16 @@ class BaseController extends AbstractController
 			]);
 		}
 	}
-	
+
 	/**
 	 * method that send actual resources of the base
 	 * @Route("/api/refresh-resources/", name="refresh_resources", methods={"POST"})
 	 * @param Session $session
 	 * @param Globals $globals
+	 * @param Resources $resources
 	 * @return JsonResponse
 	 */
-	public function sendResources(Session $session, Globals $globals): JsonResponse
+	public function sendResources(Session $session, Globals $globals, Resources $resources): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
 		
@@ -129,6 +130,7 @@ class BaseController extends AbstractController
 			"fuel" => $base->getFuel(),
 			"water" => $base->getWater(),
 			"food" => $base->getFood(),
+			"premium_storage" => $resources->getFullStorageInHour(),
 			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
