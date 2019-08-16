@@ -280,4 +280,13 @@ class Globals
 
 		return $nations;
 	}
+
+	/**
+	 * method to get nation config for current user
+	 * @return mixed
+	 */
+	public function getUserNationConfig()
+	{
+		return $this->getNationsConfig()[$this->session->get("user")->getNation()];
+	}
 }
