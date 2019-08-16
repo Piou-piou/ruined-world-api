@@ -35,6 +35,11 @@ class User implements UserInterface
 	 * @ORM\Column(type="string", length=255)
 	 */
     protected $mail;
+
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+    protected $nation;
 	
 	/**
 	 * @ORM\Column(type="string", length=200)
@@ -193,6 +198,25 @@ class User implements UserInterface
 	public function setMail($mail)
 	{
 		$this->mail = $mail;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getNation()
+	{
+		return $this->nation;
+	}
+
+	/**
+	 * @param mixed $nation
+	 * @return User
+	 */
+	public function setNation($nation)
+	{
+		$this->nation = $nation;
 
 		return $this;
 	}
