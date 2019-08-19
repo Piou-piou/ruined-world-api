@@ -646,7 +646,10 @@ class User implements UserInterface
 	 */
 	public function setPremiumWaitingLine($end_date)
 	{
-		$this->premium_advantages["waiting_line"] = $end_date;
+		$this->premium_advantages["waiting_line"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date
+		];
 
 		return $this;
 	}
@@ -657,7 +660,10 @@ class User implements UserInterface
 	 */
 	public function setPremiumFullStorage($end_date)
 	{
-		$this->premium_advantages["full_storage"] = $end_date;
+		$this->premium_advantages["full_storage"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date
+		];
 
 		return $this;
 	}
