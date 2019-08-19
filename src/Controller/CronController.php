@@ -290,7 +290,7 @@ class CronController extends AbstractController
 		 * @var $user User
 		 */
 		foreach ($users as $user) {
-			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y h:i:s");
+			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y H:i:s");
 			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
 				->setSender("no-reply@anthony-pilloud.fr")
 				->setFrom("no-reply@anthony-pilloud.fr")

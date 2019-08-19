@@ -648,7 +648,7 @@ class User implements UserInterface
 	{
 		$this->premium_advantages["waiting_line"] = [
 			"timestamp" => $end_date->getTimeStamp(),
-			"end_date" => $end_date->format("Y-m-d h:i:s")
+			"end_date" => $end_date->format("Y-m-d H:i:s")
 		];
 
 		return $this;
@@ -662,7 +662,7 @@ class User implements UserInterface
 	{
 		$now = new DateTime();
 		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages)) {
-			$end_date = DateTime::createFromFormat("Y-m-d h:i:s", $this->premium_advantages["waiting_line"]["end_date"]);
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["waiting_line"]["end_date"]);
 			if ($end_date < $now) {
 				return true;
 			}
@@ -704,7 +704,7 @@ class User implements UserInterface
 	{
 		$this->premium_advantages["full_storage"] = [
 			"timestamp" => $end_date->getTimeStamp(),
-			"end_date" => $end_date->format("Y-m-d h:i:s")
+			"end_date" => $end_date->format("Y-m-d H:i:s")
 		];
 
 		return $this;
@@ -718,7 +718,7 @@ class User implements UserInterface
 	{
 		$now = new DateTime();
 		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages)) {
-			$end_date = DateTime::createFromFormat("Y-m-d h:i:s", $this->premium_advantages["full_storage"]["end_date"]);
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["full_storage"]["end_date"]);
 			if ($end_date < $now) {
 				return true;
 			}
