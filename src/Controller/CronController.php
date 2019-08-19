@@ -469,4 +469,27 @@ class CronController extends AbstractController
 			$em->remove($user_token);
 		}
 	}
+
+	/**
+	 * method to disable all finished premium advantages
+	 * @throws Exception
+	 */
+	private function disableFinishedPremiumAdvantages() {
+		$em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository(User::class)->findAll();
+
+		/** @var User $user */
+		foreach ($users as $user) {
+			if ($user->isPremiumFullStorageFinished()) {
+				$user->removePremiumFullStorage();
+			}
+			if ($user->isPremiumWaitingLineFinished()) {
+				$user->removePremiumWaitingLine();
+			}
+
+			$em->persist($user);
+		}
+
+		$em->flush();
+	}
 }
