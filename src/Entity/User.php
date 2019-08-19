@@ -641,23 +641,23 @@ class User implements UserInterface
 	}
 
 	/**
-	 * @param bool $wainting_line
+	 * @param $end_date
 	 * @return $this
 	 */
-	public function setPremiumWaitingLine(bool $wainting_line)
+	public function setPremiumWaitingLine($end_date)
 	{
-		$this->premium_advantages["wainting_line"] = $wainting_line;
+		$this->premium_advantages["wainting_line"] = $end_date;
 
 		return $this;
 	}
 
 	/**
-	 * @param bool $full_storage
+	 * @param $end_date
 	 * @return $this
 	 */
-	public function setPremiumFullStorage(bool $full_storage)
+	public function setPremiumFullStorage($end_date)
 	{
-		$this->premium_advantages["full_storage"] = $full_storage;
+		$this->premium_advantages["full_storage"] = $end_date;
 
 		return $this;
 	}
