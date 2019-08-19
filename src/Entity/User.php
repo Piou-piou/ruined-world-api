@@ -655,15 +655,13 @@ class User implements UserInterface
 	}
 
 	/**
-	 * @param $end_date
 	 * @return $this
 	 */
-	public function setPremiumFullStorage($end_date)
+	public function removePremiumWaitingLine()
 	{
-		$this->premium_advantages["full_storage"] = [
-			"timestamp" => $end_date->getTimeStamp(),
-			"end_date" => $end_date
-		];
+		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages)) {
+			unset($this->premium_advantages["waiting_line"]);
+		}
 
 		return $this;
 	}
@@ -679,6 +677,32 @@ class User implements UserInterface
 		}
 
 		return false;
+	}
+
+	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumFullStorage($end_date)
+	{
+		$this->premium_advantages["full_storage"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumFullStorage()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages)) {
+			unset($this->premium_advantages["full_storage"]);
+		}
+
+		return $this;
 	}
 
 	/**
