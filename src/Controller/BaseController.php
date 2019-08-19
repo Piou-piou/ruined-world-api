@@ -68,7 +68,7 @@ class BaseController extends AbstractController
 			]);
 		}
 
-		$food_infos = $food->getFoodStriingsInfo();
+		$food_infos = $food->getFoodStringsInfo();
 		$premium_storage = array_merge($resources->getFullStorageInHour(), $food->getEmptyStorageInHour());
 		
 		return new JsonResponse([
@@ -135,7 +135,7 @@ class BaseController extends AbstractController
 	{
 		$base = $globals->getCurrentBase();
 
-		$food_infos = $food->getFoodStriingsInfo();
+		$food_infos = $food->getFoodStringsInfo();
 		$premium_storage = array_merge($resources->getFullStorageInHour(), $food->getEmptyStorageInHour());
 		
 		return new JsonResponse([

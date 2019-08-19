@@ -105,7 +105,7 @@ class Food
 	 * @return array
 	 * @throws NonUniqueResultException
 	 */
-	public function getFoodStriingsInfo(): array
+	public function getFoodStringsInfo(): array
 	{
 		$food_consumption = $this->getFoodConsumedPerHour();
 		$string = "consommé par heure";
