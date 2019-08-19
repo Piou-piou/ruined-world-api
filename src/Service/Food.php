@@ -99,4 +99,41 @@ class Food
 			$this->em->getRepository(Unit::class)->killRandomUnitBecauseFood($this->globals->getCurrentBase(), $this->getUnitKilledPerHour($negative_food));
 		}
 	}
+
+	/**
+	 * method to get strings for front infos
+	 * @return array
+	 * @throws NonUniqueResultException
+	 */
+	public function getFoodStriingsInfo(): array
+	{
+		$food_consumption = $this->getFoodConsumedPerHour();
+		$string = "consommé par heure";
+
+		if ($this->globals->getCurrentBase()->getFood() === 0 && $food_consumption > 0) {
+			$food_consumption = $this->getUnitKilledPerHour();
+			$string = "mort par heure";
+		}
+
+		return [
+			"food_consumption" => $food_consumption,
+			"string" => $string
+		];
+	}
+
+	/**
+	 * method to get when garner will be empty for premium
+	 * @return array
+	 * @throws NonUniqueResultException
+	 */
+	public function getEmptyStorageInHour(): array
+	{
+		if (!$this->session->get("user")->hasPremiumFullStorage()) {
+			return [];
+		}
+
+		return [
+			"food" => round($this->globals->getCurrentBase()->getFood() / $this->getFoodConsumedPerHour(), 1),
+		];
+	}
 }
