@@ -641,6 +641,28 @@ class User implements UserInterface
 	}
 
 	/**
+	 * @param bool $wainting_line
+	 * @return $this
+	 */
+	public function setPremiumWaitingLine(bool $wainting_line)
+	{
+		$this->premium_advantages["wainting_line"] = $wainting_line;
+
+		return $this;
+	}
+
+	/**
+	 * @param bool $full_storage
+	 * @return $this
+	 */
+	public function setPremiumFullStorage(bool $full_storage)
+	{
+		$this->premium_advantages["full_storage"] = $full_storage;
+
+		return $this;
+	}
+
+	/**
 	 * method to test if user has premium waiting line
 	 * @return bool
 	 */
