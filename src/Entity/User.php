@@ -655,6 +655,20 @@ class User implements UserInterface
 	}
 
 	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumWaitingLineFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages) && $this->premium_advantages["waiting_line"]["end_date"] < $now) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * @return $this
 	 */
 	public function removePremiumWaitingLine()
@@ -691,6 +705,20 @@ class User implements UserInterface
 		];
 
 		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumFullStorageFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages) && $this->premium_advantages["full_storage"]["end_date"] < $now) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
