@@ -646,7 +646,7 @@ class User implements UserInterface
 	 */
 	public function setPremiumWaitingLine($end_date)
 	{
-		$this->premium_advantages["wainting_line"] = $end_date;
+		$this->premium_advantages["waiting_line"] = $end_date;
 
 		return $this;
 	}
@@ -668,7 +668,7 @@ class User implements UserInterface
 	 */
 	public function hasPremiumWaitingLine(): bool
 	{
-		if (is_array($this->premium_advantages) && array_key_exists("wainting_line", $this->premium_advantages)) {
+		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages)) {
 			return true;
 		}
 
