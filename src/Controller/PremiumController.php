@@ -28,7 +28,8 @@ class PremiumController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user_token")->getToken(),
-			"premium_config" => $premium
+			"premium_config" => $premium,
+			"enabled_advantages" => $session->get("user")->getPremiumAdvantages()
 		]);
 	}
 
