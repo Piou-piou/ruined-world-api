@@ -69,6 +69,12 @@ class User implements UserInterface
     protected $points;
 
 	/**
+	 * @ORM\Column(type="integer")
+	 * @Groups("main")
+	 */
+    protected $premium_money = 0;
+
+	/**
 	 * @ORM\Column(type="json", nullable=true)
 	 * @Groups("main")
 	 */
@@ -327,6 +333,22 @@ class User implements UserInterface
     {
         return $this->points;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getPremiumMoney()
+	{
+		return $this->premium_money;
+	}
+
+	/**
+	 * @param mixed $premium_money
+	 */
+	public function setPremiumMoney($premium_money): void
+	{
+		$this->premium_money = $premium_money;
+	}
 
 	/**
 	 * @return mixed
