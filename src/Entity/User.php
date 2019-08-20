@@ -35,6 +35,11 @@ class User implements UserInterface
 	 * @ORM\Column(type="string", length=255)
 	 */
     protected $mail;
+
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+    protected $nation;
 	
 	/**
 	 * @ORM\Column(type="string", length=200)
@@ -62,6 +67,18 @@ class User implements UserInterface
 	 * @Groups("main")
      */
     protected $points;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 * @Groups("main")
+	 */
+    protected $premium_money = 0;
+
+	/**
+	 * @ORM\Column(type="json", nullable=true)
+	 * @Groups("main")
+	 */
+    protected $premium_advantages;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -190,6 +207,25 @@ class User implements UserInterface
 
 		return $this;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getNation()
+	{
+		return $this->nation;
+	}
+
+	/**
+	 * @param mixed $nation
+	 * @return User
+	 */
+	public function setNation($nation)
+	{
+		$this->nation = $nation;
+
+		return $this;
+	}
 	
 	/**
 	 * @return mixed
@@ -297,6 +333,41 @@ class User implements UserInterface
     {
         return $this->points;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getPremiumMoney()
+	{
+		return $this->premium_money;
+	}
+
+	/**
+	 * @param mixed $premium_money
+	 */
+	public function setPremiumMoney($premium_money): void
+	{
+		$this->premium_money = $premium_money;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPremiumAdvantages()
+	{
+		return $this->premium_advantages;
+	}
+
+	/**
+	 * @param mixed $premium_advantages
+	 * @return User
+	 */
+	public function setPremiumAdvantages($premium_advantages)
+	{
+		$this->premium_advantages = $premium_advantages;
+
+		return $this;
+	}
 	
 	/**
 	 * Set the value of last_connection.
@@ -567,6 +638,228 @@ class User implements UserInterface
 	public function getBasesNumber(): int
 	{
 		return $this->bases->count();
+	}
+
+	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumWaitingLine($end_date)
+	{
+		$this->premium_advantages["waiting_line"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date->format("Y-m-d H:i:s")
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumWaitingLineFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages)) {
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["waiting_line"]["end_date"]);
+			if ($end_date < $now) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumWaitingLine()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages)) {
+			unset($this->premium_advantages["waiting_line"]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * method to test if user has premium waiting line
+	 * @return bool
+	 */
+	public function hasPremiumWaitingLine(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("waiting_line", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumFullStorage($end_date)
+	{
+		$this->premium_advantages["full_storage"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date->format("Y-m-d H:i:s")
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumFullStorageFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages)) {
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["full_storage"]["end_date"]);
+			if ($end_date < $now) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumFullStorage()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages)) {
+			unset($this->premium_advantages["full_storage"]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * method to test if user has premium storage
+	 * @return bool
+	 */
+	public function hasPremiumFullStorage(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("full_storage", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumFavoriteDestination($end_date)
+	{
+		$this->premium_advantages["favorite_destination"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date->format("Y-m-d H:i:s")
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumFavoriteDestinationFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("favorite_destination", $this->premium_advantages)) {
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["favorite_destination"]["end_date"]);
+			if ($end_date < $now) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumFavoriteDestination()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("favorite_destination", $this->premium_advantages)) {
+			unset($this->premium_advantages["favorite_destination"]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasPremiumFavoriteDestination(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("favorite_destination", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumUpgradeBuilding($end_date)
+	{
+		$this->premium_advantages["upgrade_building"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date->format("Y-m-d H:i:s")
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumUpgradeBuildingFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("upgrade_building", $this->premium_advantages)) {
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["upgrade_building"]["end_date"]);
+			if ($end_date < $now) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumUpgradeBuilding()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("upgrade_building", $this->premium_advantages)) {
+			unset($this->premium_advantages["upgrade_building"]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasPremiumUpgradeBuilding(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("upgrade_building", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

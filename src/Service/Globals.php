@@ -164,6 +164,21 @@ class Globals
 	}
 
 	/**
+	 * method to get max building can be put in waiting to build
+	 * @return mixed
+	 */
+	public function getMaxConstructionInConstructionWaiting()
+	{
+		$construction_length = $this->getUserNationConfig()["construction_line_length"];
+
+		if ($this->session->get("user")->hasPremiumWaitingLine()) {
+			$construction_length++;
+		}
+
+		return $construction_length;
+	}
+
+	/**
 	 * method that return the array of the building's config json file
 	 * @return mixed
 	 */
@@ -257,5 +272,36 @@ class Globals
 		$missions = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "missions.json"), true);
 
 		return $missions;
+	}
+
+	/**
+	 * method that return the array of the premium config json file
+	 * @return mixed
+	 */
+	public function getPremiumConfig()
+	{
+		$premium = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "premium.json"), true);
+
+		return $premium;
+	}
+
+	/**
+	 * method that return the array of the premium config json file
+	 * @return mixed
+	 */
+	public function getNationsConfig()
+	{
+		$nations = json_decode(file_get_contents($this->container->getParameter("game_data_directory") . "nations.json"), true);
+
+		return $nations;
+	}
+
+	/**
+	 * method to get nation config for current user
+	 * @return mixed
+	 */
+	public function getUserNationConfig()
+	{
+		return $this->getNationsConfig()[$this->session->get("user")->getNation()];
 	}
 }

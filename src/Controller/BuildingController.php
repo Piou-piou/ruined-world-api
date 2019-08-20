@@ -40,6 +40,8 @@ class BuildingController extends AbstractController
 		$building_config = $globals->getBuildingsConfig()[$infos->array_name];
 		$base = $globals->getCurrentBase();
 		$buildings_in_construction = $em->getRepository(Building::class)->finByBuildingInConstruction($base);
+		/** @var Building $last_construction_building */
+		$last_construction_building = count($buildings_in_construction) ? end($buildings_in_construction) : null;
 		
 		/**
 		 * @var $building Building
@@ -54,10 +56,10 @@ class BuildingController extends AbstractController
 			$building->setBase($base);
 		}
 		
-		if (count($buildings_in_construction) > 0) {
+		if (count($buildings_in_construction) >= $globals->getMaxConstructionInConstructionWaiting()) {
 			return new JsonResponse([
 				"success" => false,
-				"message" => "A building is already in construction in your base.",
+				"error_message" => "La file d'attente des constructions est pleine",
 				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
@@ -65,11 +67,24 @@ class BuildingController extends AbstractController
 		$building->setInConstruction(true);
 		$end_construction = $now->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
 		$building->setEndConstruction($end_construction);
+
+		if ($last_construction_building && $last_construction_building->getArrayName() === $building->getArrayName()) {
+			return new JsonResponse([
+				"success" => false,
+				"error_message" => "Ce batiment est déjà dans la file",
+				"token" => $session->get("user_token")->getToken(),
+			]);
+		} else if ($last_construction_building) {
+			$building->setStartConstruction($last_construction_building->getEndConstruction());
+			$end_construction = clone $last_construction_building->getEndConstruction();
+			$end_construction = $end_construction->add(new DateInterval("PT" . $building_service->getConstructionTime($infos->array_name, $building->getLevel()) . "S"));
+			$building->setEndConstruction($end_construction);
+		}
 		
 		if ($building_service->testWithdrawResourcesToBuild($infos->array_name) === false) {
 			return new JsonResponse([
 				"success" => false,
-				"message" => "You haven't enough resources",
+				"error_message" => "Vous n'avez pas assez de ressouces",
 				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
@@ -107,7 +122,7 @@ class BuildingController extends AbstractController
 		if (!$building) {
 			return new JsonResponse([
 				"success" => false,
-				"message" => "This building doesn't exist in your base.",
+				"error_message" => "Ce bâtiment n'existe pas dans votre base",
 				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
@@ -115,6 +130,7 @@ class BuildingController extends AbstractController
 		$explanation_string = $building_service->getExplanationStringPower($infos->array_name, $building->getLevel());
 
 		return new JsonResponse([
+			"success" => true,
 			"building" => $api->serializeObject($building),
 			"explanation" => $buildings_config[$infos->array_name]["explanation"],
 			"explanation_current_power" => $explanation_string["current"],
@@ -122,6 +138,7 @@ class BuildingController extends AbstractController
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name),
 			"token" => $session->get("user_token")->getToken(),
+			"premium_when_upgrade" => $building_service->getWhenIsPossibleToUpgrade($infos->array_name)
 		]);
 	}
 
@@ -145,6 +162,7 @@ class BuildingController extends AbstractController
 				$return_buildings[] = [
 					"id" => $building->getId(),
 					"name" => $building->getName(),
+					"startConstruction" => $building->getStartConstruction() ? $building->getStartConstruction()->getTimestamp() : null,
 					"endConstruction" => $building->getEndConstruction()->getTimestamp()
 				];
 			}

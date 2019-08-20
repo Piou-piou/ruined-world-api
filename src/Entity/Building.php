@@ -50,6 +50,12 @@ class Building
      */
     protected $in_construction = false;
 
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Groups("main")
+	 */
+    protected $start_construction;
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
 	 * @Groups("main")
@@ -200,6 +206,25 @@ class Building
     {
         return $this->in_construction;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getStartConstruction()
+	{
+		return $this->start_construction;
+	}
+
+	/**
+	 * @param \DateTime $start_construction
+	 * @return Building
+	 */
+	public function setStartConstruction($start_construction)
+	{
+		$this->start_construction = $start_construction;
+
+		return $this;
+	}
 
     /**
      * Set the value of end_construction.

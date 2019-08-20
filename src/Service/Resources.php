@@ -280,4 +280,21 @@ class Resources
 			"water" => $this->getBase()->getWater()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getWater()*((100-$protection)/100))
 		];
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getFullStorageInHour(): array
+	{
+		if (!$this->session->get("user")->hasPremiumFullStorage()) {
+			return [];
+		}
+
+		return [
+			"electricity" => round(($this->getWarehouseCapacity() - $this->getBase()->getElectricity()) / $this->getElectricityProduction(), 1),
+			"fuel" => round(($this->getWarehouseCapacity() - $this->getBase()->getFuel()) / $this->getFuelProduction(), 1),
+			"iron" => round(($this->getWarehouseCapacity() - $this->getBase()->getIron()) / $this->getIronProduction(), 1),
+			"water" => round(($this->getWarehouseCapacity() - $this->getBase()->getWater()) / $this->getWaterProduction(), 1),
+		];
+	}
 }

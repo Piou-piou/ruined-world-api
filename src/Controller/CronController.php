@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Base;
 use App\Entity\User;
+use App\Entity\UserToken;
 use App\Service\Barrack;
 use App\Service\Building;
 use App\Service\Food;
@@ -289,7 +290,7 @@ class CronController extends AbstractController
 		 * @var $user User
 		 */
 		foreach ($users as $user) {
-			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y h:i:s");
+			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y H:i:s");
 			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
 				->setSender("no-reply@anthony-pilloud.fr")
 				->setFrom("no-reply@anthony-pilloud.fr")
@@ -319,6 +320,12 @@ class CronController extends AbstractController
 			$user->setArchived(true);
 			$user->setHolidays(false);
 			$bases = $user->getBases();
+
+			foreach ($user->getTokens() as $token) {
+				$user->removeToken($token);
+				$em->persist($user);
+				$em->remove($token);
+			}
 			
 			/**
 			 * @var $base Base
@@ -447,5 +454,48 @@ class CronController extends AbstractController
 
 			$this->unit_movement->updateUnitMovement($base);
 		}
+	}
+
+	/**
+	 * method to remove unused token
+	 * @throws Exception
+	 */
+	private function removeUnusedTokens()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$user_tokens = $em->getRepository(UserToken::class)->findByExpiredToken($this->getParameter("max_inactivation_days"));
+
+		foreach ($user_tokens as $user_token) {
+			$em->remove($user_token);
+		}
+	}
+
+	/**
+	 * method to disable all finished premium advantages
+	 * @throws Exception
+	 */
+	private function disableFinishedPremiumAdvantages() {
+		$em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository(User::class)->findAll();
+
+		/** @var User $user */
+		foreach ($users as $user) {
+			if ($user->isPremiumFavoriteDestinationFinished()) {
+				$user->removePremiumFavoriteDestination();
+			}
+			if ($user->isPremiumFullStorageFinished()) {
+				$user->removePremiumFullStorage();
+			}
+			if ($user->isPremiumUpgradeBuildingFinished()) {
+				$user->removePremiumUpgradeBuilding();
+			}
+			if ($user->isPremiumWaitingLineFinished()) {
+				$user->removePremiumWaitingLine();
+			}
+
+			$em->persist($user);
+		}
+
+		$em->flush();
 	}
 }
