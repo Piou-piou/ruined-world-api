@@ -137,6 +137,7 @@ class BuildingController extends AbstractController
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name),
 			"token" => $session->get("user_token")->getToken(),
+			"premium_when_upgrade" => $building_service->getWhenIsPossibleToUpgrade($infos->array_name)
 		]);
 	}
 

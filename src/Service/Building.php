@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Building
 {
@@ -20,18 +21,25 @@ class Building
 	 * @var Resources
 	 */
 	private $resources;
-	
+
+	/**
+	 * @var SessionInterface
+	 */
+	private $session;
+
 	/**
 	 * Building constructor.
+	 * @param SessionInterface $session
 	 * @param EntityManagerInterface $em
 	 * @param Globals $globals
 	 * @param Resources $resources
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources)
+	public function __construct(SessionInterface $session, EntityManagerInterface $em, Globals $globals, Resources $resources)
 	{
 		$this->globals = $globals;
 		$this->em = $em;
 		$this->resources = $resources;
+		$this->session = $session;
 	}
 	
 	/**
@@ -96,6 +104,37 @@ class Building
 		} else {
 			return $default_power * $level;
 		}
+	}
+
+	/**
+	 * method to get when is possible to build a building if premium enabled
+	 * @param string $array_name
+	 * @return float|int
+	 */
+	public function getWhenIsPossibleToUpgrade(string $array_name)
+	{
+		if (!$this->session->get("user")->hasPremiumUpgradeBuilding()) {
+			return 0;
+		}
+
+		$base = $this->globals->getCurrentBase(true);
+		$resources_tobuild = $this->resources->getResourcesToBuild($array_name);
+		$resource_name_tocalc_time = "";
+		$resource_tocalc_time = 0;
+
+		foreach ($resources_tobuild as $key => $resource) {
+			$getter = "get".ucfirst($key);
+			$resource_del = $base->$getter() - $resource;
+
+			if ($resource_del < 0 && $resource_del < $resource_tocalc_time) {
+				$resource_name_tocalc_time = $key;
+				$resource_tocalc_time = $resource_del;
+			}
+		}
+
+		$getter_production = "get".ucfirst($resource_name_tocalc_time)."Production";
+
+		return abs($resource_tocalc_time) > 0 ? abs($resource_tocalc_time) / $this->resources->$getter_production() : 0;
 	}
 	
 	/**
