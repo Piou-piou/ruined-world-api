@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Base;
 use App\Service\Api;
+use App\Service\Food;
 use App\Service\Globals;
 use App\Service\Resources;
 use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,11 +52,13 @@ class BaseController extends AbstractController
 	 * @param Globals $globals
 	 * @param Api $api
 	 * @param Resources $resources
+	 * @param Food $food
 	 * @return JsonResponse
 	 * @throws AnnotationException
 	 * @throws ExceptionInterface
+	 * @throws NonUniqueResultException
 	 */
-	public function sendInfosCurrentBase(Session $session, Globals $globals, Api $api, Resources $resources): JsonResponse
+	public function sendInfosCurrentBase(Session $session, Globals $globals, Api $api, Resources $resources, Food $food): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
 		
@@ -63,6 +67,9 @@ class BaseController extends AbstractController
 				"success" => false,
 			]);
 		}
+
+		$food_infos = $food->getFoodStringsInfo();
+		$premium_storage = array_merge($resources->getFullStorageInHour(), $food->getEmptyStorageInHour());
 		
 		return new JsonResponse([
 			"success" => true,
@@ -74,7 +81,10 @@ class BaseController extends AbstractController
 				"iron_production" => $resources->getIronProduction(),
 				"fuel_production" => $resources->getFuelProduction(),
 				"water_production" => $resources->getWaterProduction(),
+				"food_consumption" => $food_infos["food_consumption"],
+				"food_string" => $food_infos["string"],
 			],
+			"premium_storage" => $premium_storage,
 			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
@@ -110,17 +120,23 @@ class BaseController extends AbstractController
 			]);
 		}
 	}
-	
+
 	/**
 	 * method that send actual resources of the base
 	 * @Route("/api/refresh-resources/", name="refresh_resources", methods={"POST"})
 	 * @param Session $session
 	 * @param Globals $globals
+	 * @param Resources $resources
+	 * @param Food $food
 	 * @return JsonResponse
+	 * @throws NonUniqueResultException
 	 */
-	public function sendResources(Session $session, Globals $globals): JsonResponse
+	public function sendResources(Session $session, Globals $globals, Resources $resources, Food $food): JsonResponse
 	{
 		$base = $globals->getCurrentBase();
+
+		$food_infos = $food->getFoodStringsInfo();
+		$premium_storage = array_merge($resources->getFullStorageInHour(), $food->getEmptyStorageInHour());
 		
 		return new JsonResponse([
 			"electricity" => $base->getElectricity(),
@@ -128,6 +144,9 @@ class BaseController extends AbstractController
 			"fuel" => $base->getFuel(),
 			"water" => $base->getWater(),
 			"food" => $base->getFood(),
+			"food_consumption" => $food_infos["food_consumption"],
+			"food_string" => $food_infos["string"],
+			"premium_storage" => $premium_storage,
 			"token" => $session->get("user_token")->getToken(),
 		]);
 	}

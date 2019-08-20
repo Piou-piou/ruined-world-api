@@ -1,0 +1,34 @@
+{
+  "waiting_line": {
+    "array_name": "waiting_line",
+    "title": "Amélioration construction",
+    "description": "Avec ce bonus, recrute pendant un temps un chef des constructions qui pourra ajouter un bâtiment de plus à la file d'attente des constructions.",
+    "cost3": 5,
+    "cost15": 20,
+    "cost30": 30
+  },
+  "full_storage": {
+    "array_name": "full_storage",
+    "title": "Visualisation stockage",
+    "description": "Avec ce bonus tu sauras quand chaque ressource arrivera à son stockage maximal",
+    "cost3": 5,
+    "cost15": 20,
+    "cost30": 30
+  },
+  "favorite_destination": {
+    "array_name": "favorite_destination",
+    "title": "Destinations favorites",
+    "description": "Avec ce bonus tu pourras sauvegarder jusqu'à 3 destinations favorites pour les attaques et pour le marché",
+    "cost3": 8,
+    "cost15": 35,
+    "cost30": 60
+  },
+  "upgrade_building": {
+    "array_name": "upgrade_building",
+    "title": "Afficher quand l'amélioration d'un bâtiment sera disponible",
+    "description": "Avec ce bonus tu pourras voir en cliquant sur un bâtiment quand il sera possible de l'améliorer.",
+    "cost3": 7,
+    "cost15": 30,
+    "cost30": 50
+  }
+}
