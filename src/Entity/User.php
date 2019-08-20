@@ -753,6 +753,116 @@ class User implements UserInterface
 	}
 
 	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumFavoriteDestination($end_date)
+	{
+		$this->premium_advantages["favorite_destination"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date->format("Y-m-d H:i:s")
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumFavoriteDestinationFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("favorite_destination", $this->premium_advantages)) {
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["favorite_destination"]["end_date"]);
+			if ($end_date < $now) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumFavoriteDestination()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("favorite_destination", $this->premium_advantages)) {
+			unset($this->premium_advantages["favorite_destination"]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasPremiumFavoriteDestination(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("favorite_destination", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $end_date
+	 * @return $this
+	 */
+	public function setPremiumUpgradeBuilding($end_date)
+	{
+		$this->premium_advantages["upgrade_building"] = [
+			"timestamp" => $end_date->getTimeStamp(),
+			"end_date" => $end_date->format("Y-m-d H:i:s")
+		];
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function isPremiumUpgradeBuildingFinished()
+	{
+		$now = new DateTime();
+		if (is_array($this->premium_advantages) && array_key_exists("upgrade_building", $this->premium_advantages)) {
+			$end_date = DateTime::createFromFormat("Y-m-d H:i:s", $this->premium_advantages["upgrade_building"]["end_date"]);
+			if ($end_date < $now) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePremiumUpgradeBuilding()
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("upgrade_building", $this->premium_advantages)) {
+			unset($this->premium_advantages["upgrade_building"]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasPremiumUpgradeBuilding(): bool
+	{
+		if (is_array($this->premium_advantages) && array_key_exists("upgrade_building", $this->premium_advantages)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns the roles granted to the user.
 	 *
 	 *     public function getRoles()
