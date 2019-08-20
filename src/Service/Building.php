@@ -134,7 +134,7 @@ class Building
 
 		$getter_production = "get".ucfirst($resource_name_tocalc_time)."Production";
 
-		return abs($resource_tocalc_time) > 0 ? abs($resource_tocalc_time) / $this->resources->$getter_production() : 0;
+		return abs($resource_tocalc_time) > 0 ? round(abs($resource_tocalc_time) / $this->resources->$getter_production(), 1) : 0;
 	}
 	
 	/**
