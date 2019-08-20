@@ -480,8 +480,14 @@ class CronController extends AbstractController
 
 		/** @var User $user */
 		foreach ($users as $user) {
+			if ($user->isPremiumFavoriteDestinationFinished()) {
+				$user->removePremiumFavoriteDestination();
+			}
 			if ($user->isPremiumFullStorageFinished()) {
 				$user->removePremiumFullStorage();
+			}
+			if ($user->isPremiumUpgradeBuildingFinished()) {
+				$user->removePremiumUpgradeBuilding();
 			}
 			if ($user->isPremiumWaitingLineFinished()) {
 				$user->removePremiumWaitingLine();
