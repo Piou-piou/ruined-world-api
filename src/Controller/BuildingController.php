@@ -122,7 +122,7 @@ class BuildingController extends AbstractController
 		if (!$building) {
 			return new JsonResponse([
 				"success" => false,
-				"message" => "This building doesn't exist in your base.",
+				"error_message" => "Ce bâtiment n'existe pas dans votre base",
 				"token" => $session->get("user_token")->getToken(),
 			]);
 		}
@@ -130,6 +130,7 @@ class BuildingController extends AbstractController
 		$explanation_string = $building_service->getExplanationStringPower($infos->array_name, $building->getLevel());
 
 		return new JsonResponse([
+			"success" => true,
 			"building" => $api->serializeObject($building),
 			"explanation" => $buildings_config[$infos->array_name]["explanation"],
 			"explanation_current_power" => $explanation_string["current"],
