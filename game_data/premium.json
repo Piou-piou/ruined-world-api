@@ -22,5 +22,13 @@
     "cost3": 8,
     "cost15": 35,
     "cost30": 60
+  },
+  "upgrade_building": {
+    "array_name": "upgrade_building",
+    "title": "Afficher quand l'amélioration d'un bâtiment sera disponible",
+    "description": "Avec ce bonus tu pourras voir en cliquant sur un bâtiment quand il sera possible de l'améliorer.",
+    "cost3": 7,
+    "cost15": 30,
+    "cost30": 50
   }
 }
