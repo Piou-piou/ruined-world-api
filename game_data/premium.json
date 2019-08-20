@@ -14,5 +14,13 @@
     "cost3": 5,
     "cost15": 20,
     "cost30": 30
+  },
+  "favorite_destination": {
+    "array_name": "favorite_destination",
+    "title": "Destinations favorites",
+    "description": "Avec ce bonus tu pourras sauvegarder jusqu'à 3 destinations favorites pour les attaques et pour le marché",
+    "cost3": 8,
+    "cost15": 35,
+    "cost30": 60
   }
 }
