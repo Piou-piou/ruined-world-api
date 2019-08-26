@@ -292,8 +292,8 @@ class CronController extends AbstractController
 		foreach ($users as $user) {
 			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y H:i:s");
 			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
-				->setSender("no-reply@anthony-pilloud.fr")
-				->setFrom("no-reply@anthony-pilloud.fr")
+				->setSender("no-reply-ruined-world@anthony-pilloud.fr")
+				->setFrom("no-reply-ruined-world@anthony-pilloud.fr")
 				->setTo($user->getMail())
 				->setBody(
 					$this->renderView('before_archive_account.html.twig', ["desactivation_date" => $desactivation_date]),
@@ -339,7 +339,7 @@ class CronController extends AbstractController
 		}
 
 		$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
-			->setFrom("no-reply@anthony-pilloud.fr")
+			->setFrom("no-reply-ruined-world@anthony-pilloud.fr")
 			->setTo("pilloud.anthony@gmail.com")
 			->setBody(
 				$this->renderView('archived_account.html.twig', ["users" => $users]),
