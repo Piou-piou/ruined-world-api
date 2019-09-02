@@ -265,7 +265,7 @@ class Resources
 	 */
 	public function getResourcesToSteal(): array
 	{
-		$building = new Building($this->em, $this->globals, $this);
+		$building = new Building($this->session, $this->em, $this->globals, $this);
 		$bunker = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
 			"base" => $this->getBase(),
 			"array_name" => "bunker",
