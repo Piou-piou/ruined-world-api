@@ -125,7 +125,10 @@ class FightReport
 	 */
 	private function createTextForReport(\App\Entity\UnitMovement $unitMovement, array $attack_units, array $defend_units, string $type): string
 	{
-		$text = $type === "attack" ? "<h2>rapport des unités envoyées</h2>" : "<h2>rapport des unités qui ont attaquées</h2>";
+		$dest_base = $this->em->getRepository(Base::class)->find($unitMovement->getTypeId());
+		$text = $type === "attack" ? "<h1>Attaque de la base ".$dest_base->getName()." de ".$dest_base->getUser()->getPseudo()."</h1>" : "<h1>rapport de l'attaque de la base ". $unitMovement->getBase()->getName() ." de " . $unitMovement->getBase()->getUser()->getPseudo() . "</h1>";
+
+		$text .= $type === "attack" ? "<h2>rapport des unités envoyées</h2>" : "<h2>rapport des unités qui ont attaquées</h2>";
 		foreach ($attack_units as $attack_unit) {
 			$text .= $attack_unit["name"] . " qui ont survécus  : " . $attack_unit["return_number"] . " / " . $attack_unit["number"] . "<br>";
 		}
