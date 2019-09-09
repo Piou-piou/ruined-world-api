@@ -117,11 +117,32 @@
       "water_station": 3
     }
   },
+  "infirmary": {
+    "name": "Infirmary",
+    "array_name": "infirmary",
+    "max_level": 50,
+    "construction_time": 30,
+    "default_power": 50,
+    "power_type": "reduction",
+    "explanation": "L'infirmerie te permets de soigner les unités qui se sont blessées au combat. Chaque amélioration diminue les temps de guérison.",
+    "explanation_current_power": "Le temps de guérison est actuellement réduit de [[to_replace]]%.",
+    "explanation_next_power": "Le temps de guérison sera réduit de : [[to_replace]]% au prochain niveau.",
+    "resources_build": {
+      "electricity": 405,
+      "fuel": 335,
+      "iron": 350,
+      "water": 440
+    },
+    "to_build": {
+      "bunker": 5,
+      "barrack": 10
+    }
+  },
   "iron_station": {
     "name": "Iron station",
     "array_name": "iron_station",
     "max_level": 50,
-    "construction_time": 30,
+    "construction_time": 1200,
     "default_power": 50,
     "power_type": "production",
     "explanation": "La statoin de fer permet l'extraction de fer de la terre. Chaque amélioration augmente sa production par heure.",
