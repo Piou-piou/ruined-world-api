@@ -25,7 +25,8 @@ class InfirmaryController extends AbstractController
 		return new JsonResponse([
 			"success" => true,
 			"token" => $session->get("user_token")->getToken(),
-			"units" => $units
+			"units" => $units,
+			"unit_config" => $globals->getUnitsConfig("units")
 		]);
 	}
 }
