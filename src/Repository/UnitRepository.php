@@ -17,7 +17,8 @@ class UnitRepository extends EntityRepository
 	 * @param Base $base
 	 * @return mixed
 	 */
-	public function findByUnitsInBase(Base $base) {
+	public function findByUnitsInBase(Base $base)
+	{
 		$query = $this->getEntityManager()->createQuery("SELECT u.name, u.array_name, count(u) as number FROM App:Unit u
 			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
 			GROUP BY u.array_name, u.end_recruitment
@@ -33,7 +34,8 @@ class UnitRepository extends EntityRepository
 	 * @return mixed
 	 * @throws NonUniqueResultException
 	 */
-	public function countUnitsInBase(Base $base) {
+	public function countUnitsInBase(Base $base)
+	{
 		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
 			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
 		");
@@ -47,7 +49,8 @@ class UnitRepository extends EntityRepository
 	 * @param Base $base
 	 * @return mixed
 	 */
-	public function findByUnitsInBaseToTreat(Base $base) {
+	public function findByUnitsInBaseToTreat(Base $base)
+	{
 		$query = $this->getEntityManager()->createQuery("SELECT u.name, u.array_name, count(u) as number FROM App:Unit u
 			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL AND u.life < 100
 			GROUP BY u.array_name
@@ -138,7 +141,8 @@ class UnitRepository extends EntityRepository
 	 * @param int $number
 	 * @throws DBALException
 	 */
-	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number) {
+	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number)
+	{
 		$query = $this->getEntityManager()->getConnection()->prepare("UPDATE unit u SET u.unit_movement_id = :movement_id
 			WHERE u.array_name = :array_name AND u.base_id = :base_id AND u.unit_movement_id IS NULL
 			LIMIT :number
