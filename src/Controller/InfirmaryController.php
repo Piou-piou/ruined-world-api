@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Unit;
 use App\Service\Api;
 use App\Service\Globals;
+use App\Service\Infirmary;
 use Doctrine\Common\Annotations\AnnotationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,11 +21,12 @@ class InfirmaryController extends AbstractController
 	 * @param SessionInterface $session
 	 * @param Globals $globals
 	 * @param Api $api
+	 * @param Infirmary $infirmary
 	 * @return JsonResponse
 	 * @throws AnnotationException
 	 * @throws ExceptionInterface
 	 */
-	public function sendUnitsToTreat(SessionInterface $session, Globals $globals, Api $api): JsonResponse
+	public function sendUnitsToTreat(SessionInterface $session, Globals $globals, Api $api, Infirmary $infirmary): JsonResponse
 	{
 		$unit_config = $globals->getUnitsConfig("units");
 		$general_config = $globals->getGeneralConfig();
@@ -43,13 +45,14 @@ class InfirmaryController extends AbstractController
 				$return_units[] = [
 					"unit" => $unit,
 					"resources_to_treat" => [
-						"electricity" => round($config["resources_recruit"]["electricity"]/$general_config["cost_treat_unit_divider"]),
-						"fuel" => round($config["resources_recruit"]["fuel"]/$general_config["cost_treat_unit_divider"]),
-						"iron" => round($config["resources_recruit"]["iron"]/$general_config["cost_treat_unit_divider"]),
-						"water" => round($config["resources_recruit"]["water"]/$general_config["cost_treat_unit_divider"]),
-						"food" => round($general_config["unit_food_consumption_hour"]*$general_config["cost_treat_unit_divider"]),
+						"electricity" => floor($config["resources_recruit"]["electricity"]/$general_config["cost_treat_unit_divider"]),
+						"fuel" => floor($config["resources_recruit"]["fuel"]/$general_config["cost_treat_unit_divider"]),
+						"iron" => floor($config["resources_recruit"]["iron"]/$general_config["cost_treat_unit_divider"]),
+						"water" => floor($config["resources_recruit"]["water"]/$general_config["cost_treat_unit_divider"]),
+						"food" => floor($general_config["unit_food_consumption_hour"]*$general_config["cost_treat_unit_divider"]),
 					],
-					"treatment_time" => round($config["recruitment_time"]/$general_config["cost_treat_unit_divider"])
+					"treatment_time" => $infirmary->getTimeToTreat($unit->getArrayName()),
+					"possible_to_treat" => $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName())
 				];
 			}
 		}
