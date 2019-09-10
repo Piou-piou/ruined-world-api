@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Entity\Unit
@@ -17,46 +18,55 @@ class Unit
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+	 * @Groups("main")
      */
     protected $id;
 
     /**
      * @ORM\Column(name="`name`", type="string", length=45)
+	 * @Groups("main")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", length=45)
+	 * @Groups("main")
      */
     protected $array_name;
 
     /**
      * @ORM\Column(type="integer")
+	 * @Groups("main")
      */
     protected $assault_level;
 
     /**
      * @ORM\Column(type="integer")
+	 * @Groups("main")
      */
     protected $defense_level;
 
 	/**
 	 * @ORM\Column(type="integer", options={"default" : 100})
+	 * @Groups("main")
 	 */
     protected $life = 100;
 
 	/**
 	 * @ORM\Column(type="integer", options={"default" : 0})
+	 * @Groups("main")
 	 */
     protected $armor = 0;
 
 	/**
 	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 * @Groups("main")
 	 */
     protected $in_recruitment;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Groups("main")
 	 */
 	protected $end_recruitment;
 

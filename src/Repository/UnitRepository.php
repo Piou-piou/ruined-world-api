@@ -45,22 +45,6 @@ class UnitRepository extends EntityRepository
 	}
 
 	/**
-	 * method to find units that are currently in base to treat
-	 * @param Base $base
-	 * @return mixed
-	 */
-	public function findByUnitsInBaseToTreat(Base $base)
-	{
-		$query = $this->getEntityManager()->createQuery("SELECT u.name, u.array_name, count(u) as number FROM App:Unit u
-			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL AND u.life < 100
-			GROUP BY u.array_name
-		");
-		$query->setParameter("base", $base, Type::OBJECT);
-
-		return $query->getResult();
-	}
-
-	/**
 	 * method to find units that are currently in recruitment in base
 	 * @param Base $base
 	 * @return array
