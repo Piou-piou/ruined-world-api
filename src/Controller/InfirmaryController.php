@@ -40,20 +40,28 @@ class InfirmaryController extends AbstractController
 		foreach ($units as $unit) {
 			$config = $unit_config[$unit->getArrayName()];
 			$max_life = $config["life"];
+			$number = 1;
 
 			if ($unit->getLife() < $max_life) {
-				$return_units[] = [
-					"unit" => $unit,
-					"resources_to_treat" => [
-						"electricity" => floor($config["resources_recruit"]["electricity"]/$general_config["cost_treat_unit_divider"]),
-						"fuel" => floor($config["resources_recruit"]["fuel"]/$general_config["cost_treat_unit_divider"]),
-						"iron" => floor($config["resources_recruit"]["iron"]/$general_config["cost_treat_unit_divider"]),
-						"water" => floor($config["resources_recruit"]["water"]/$general_config["cost_treat_unit_divider"]),
-						"food" => floor($general_config["unit_food_consumption_hour"]*$general_config["cost_treat_unit_divider"]),
-					],
-					"treatment_time" => $infirmary->getTimeToTreat($unit->getArrayName()),
-					"possible_to_treat" => $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName())
-				];
+				if (isset($return_units[$unit->getArrayName()])) {
+					$number++;
+					$return_units[$unit->getArrayName()]["number_to_treat"] = $number;
+					$return_units[$unit->getArrayName()]["possible_to_treat"] = $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName()) > $number ? $number :  $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName());
+				} else {
+					$return_units[$unit->getArrayName()] = [
+						"unit" => $unit,
+						"number_to_treat" => $number,
+						"resources_to_treat" => [
+							"electricity" => floor($config["resources_recruit"]["electricity"]/$general_config["cost_treat_unit_divider"]),
+							"fuel" => floor($config["resources_recruit"]["fuel"]/$general_config["cost_treat_unit_divider"]),
+							"iron" => floor($config["resources_recruit"]["iron"]/$general_config["cost_treat_unit_divider"]),
+							"water" => floor($config["resources_recruit"]["water"]/$general_config["cost_treat_unit_divider"]),
+							"food" => floor($general_config["unit_food_consumption_hour"]*$general_config["cost_treat_unit_divider"]),
+						],
+						"treatment_time" => $infirmary->getTimeToTreat($unit->getArrayName()),
+						"possible_to_treat" => $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName()) > $number ? $number :  $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName())
+					];
+				}
 			}
 		}
 
