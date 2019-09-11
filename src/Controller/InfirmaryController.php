@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Unit;
 use App\Service\Api;
-use App\Service\Barrack;
 use App\Service\Globals;
 use App\Service\Infirmary;
 use App\Service\Point;
