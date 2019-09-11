@@ -20,7 +20,7 @@ class UnitRepository extends EntityRepository
 	public function findByUnitsInBase(Base $base)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT u.name, u.array_name, count(u) as number FROM App:Unit u
-			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
+			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL AND u.in_treatment = false
 			GROUP BY u.array_name, u.end_recruitment
 		");
 		$query->setParameter("base", $base, Type::OBJECT);
@@ -133,7 +133,8 @@ class UnitRepository extends EntityRepository
 	public function countSameUnitInBase(Base $base, string $array_name)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
-			WHERE u.array_name = :array_name AND u.base = :base AND u.unitMovement IS NULL
+			WHERE u.array_name = :array_name AND u.base = :base AND u.unitMovement IS NULL AND u.in_treatment = false
+			AND u.in_recruitment = 0
 		");
 		$query->setParameter("array_name", $array_name, Type::STRING);
 		$query->setParameter("base", $base, Type::OBJECT);
@@ -158,7 +159,8 @@ class UnitRepository extends EntityRepository
 	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number)
 	{
 		$query = $this->getEntityManager()->getConnection()->prepare("UPDATE unit u SET u.unit_movement_id = :movement_id
-			WHERE u.array_name = :array_name AND u.base_id = :base_id AND u.unit_movement_id IS NULL
+			WHERE u.array_name = :array_name AND u.base_id = :base_id AND u.unit_movement_id IS NULL AND u.in_treatment = 0
+			AND u.in_recruitment = 0
 			LIMIT :number
 		");
 
@@ -178,7 +180,7 @@ class UnitRepository extends EntityRepository
 	public function killRandomUnitBecauseFood(Base $base, int $number)
 	{
 		$query = $this->getEntityManager()->getConnection()->prepare("DELETE FROM unit
-			WHERE base_id = :base_id AND unit_movement_id IS NULL AND in_recruitment = 0
+			WHERE base_id = :base_id AND unit_movement_id IS NULL AND in_recruitment = 0 AND in_treatment = 0
 			ORDER BY RAND()
 			LIMIT :number
 		");
