@@ -94,6 +94,36 @@ class UnitRepository extends EntityRepository
 	}
 
 	/**
+	 * method to find units that are currently in treatment in base
+	 * @param Base $base
+	 * @return array
+	 */
+	public function findByUnitsInTreatment(Base $base): array
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT u.id, u.name, u.array_name, u.end_treatment, count(u) as number FROM App:Unit u
+			WHERE u.base = :base AND u.in_treatment = true
+			GROUP BY u.array_name
+			ORDER BY u.end_treatment DESC
+		");
+		$query->setParameter("base", $base, Type::OBJECT);
+
+		$results = $query->getResult();
+		$return_results = [];
+
+		foreach ($results as $result) {
+			$return_results[] = [
+				"id" => $result["id"],
+				"name" => $result["name"],
+				"array_name" => $result["array_name"],
+				"end_treatment" => $result["end_treatment"]->getTimestamp(),
+				"number" => $result["number"]
+			];
+		}
+
+		return $return_results;
+	}
+
+	/**
 	 * method that count same unit array_name in a base
 	 * @param Base $base
 	 * @param string $array_name

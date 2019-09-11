@@ -132,4 +132,20 @@ class InfirmaryController extends AbstractController
 			]);
 		}
 	}
+
+	/**
+	 * method to send to front current units that are in treatment in base
+	 * @Route("/api/infirmary/units-in-treatment/", name="units_in_treatment", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendUnitsInTreatment(Session $session, Globals $globals): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"units_in_treatment" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInTreatment($globals->getCurrentBase()),
+			"token" => $session->get("user_token")->getToken(),
+		]);
+	}
 }
