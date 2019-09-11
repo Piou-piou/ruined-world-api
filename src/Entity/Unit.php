@@ -70,6 +70,18 @@ class Unit
 	 */
 	protected $end_recruitment;
 
+	/**
+	 * @ORM\Column(type="boolean", options={"default" : 0})
+	 * @Groups("main")
+	 */
+	protected $in_treatment = false;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Groups("main")
+	 */
+	protected $end_treatment;
+
     /**
      * @ORM\ManyToOne(targetEntity="UnitGroup", inversedBy="units")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
@@ -275,6 +287,44 @@ class Unit
 	public function setEndRecruitment($end_recruitment)
 	{
 		$this->end_recruitment = $end_recruitment;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getInTreatment()
+	{
+		return $this->in_treatment;
+	}
+
+	/**
+	 * @param mixed $in_treatment
+	 * @return Unit
+	 */
+	public function setInTreatment($in_treatment)
+	{
+		$this->in_treatment = $in_treatment;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getEndTreatment()
+	{
+		return $this->end_treatment;
+	}
+
+	/**
+	 * @param mixed $end_treatment
+	 * @return Unit
+	 */
+	public function setEndTreatment($end_treatment)
+	{
+		$this->end_treatment = $end_treatment;
 
 		return $this;
 	}
