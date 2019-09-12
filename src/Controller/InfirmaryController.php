@@ -42,10 +42,10 @@ class InfirmaryController extends AbstractController
 		]);
 		$return_units = [];
 
+		$number = 1;
 		foreach ($units as $unit) {
 			$config = $unit_config[$unit->getArrayName()];
 			$max_life = $config["life"];
-			$number = 1;
 
 			if ($unit->getLife() < $max_life) {
 				if (isset($return_units[$unit->getArrayName()])) {
