@@ -9,6 +9,7 @@ use App\Service\Barrack;
 use App\Service\Building;
 use App\Service\Food;
 use App\Service\Globals;
+use App\Service\Infirmary;
 use App\Service\Market;
 use App\Service\Mission;
 use App\Service\Resources;
@@ -83,6 +84,11 @@ class CronController extends AbstractController
 	 * @var Food
 	 */
 	private $food;
+
+	/**
+	 * @var Infirmary
+	 */
+	private $infirmary;
 	
 	private $crons;
 
@@ -100,7 +106,7 @@ class CronController extends AbstractController
 	 * @param UnitMovement $unitMovement
 	 * @param Food $food
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food, Infirmary $infirmary)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -113,6 +119,7 @@ class CronController extends AbstractController
 		$this->unit = $unit;
 		$this->unit_movement = $unitMovement;
 		$this->food = $food;
+		$this->infirmary = $infirmary;
 	}
 	
 	/**
@@ -453,6 +460,22 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->unit_movement->updateUnitMovement($base);
+		}
+	}
+
+	/**
+	 * method to finish all treatments that end date was before current date
+	 */
+	private function endTreatmentUnits()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->infirmary->endTreatmentUnitsInBase();
 		}
 	}
 
