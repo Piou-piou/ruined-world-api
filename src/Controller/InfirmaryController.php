@@ -42,17 +42,17 @@ class InfirmaryController extends AbstractController
 		]);
 		$return_units = [];
 
-		$number = 1;
 		foreach ($units as $unit) {
 			$config = $unit_config[$unit->getArrayName()];
 			$max_life = $config["life"];
 
 			if ($unit->getLife() < $max_life) {
 				if (isset($return_units[$unit->getArrayName()])) {
-					$number++;
-					$return_units[$unit->getArrayName()]["number_to_treat"] = $number;
+					$return_units[$unit->getArrayName()]["number_to_treat"] = $return_units[$unit->getArrayName()]["number_to_treat"] + 1;
+					$number = $return_units[$unit->getArrayName()]["number_to_treat"];
 					$return_units[$unit->getArrayName()]["possible_to_treat"] = $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName()) > $number ? $number :  $infirmary->getMaxNumberOfUnitToTreat($unit->getArrayName());
 				} else {
+					$number = 1;
 					$return_units[$unit->getArrayName()] = [
 						"unit" => $unit,
 						"number_to_treat" => $number,
