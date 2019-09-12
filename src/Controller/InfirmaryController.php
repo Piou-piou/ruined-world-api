@@ -103,7 +103,7 @@ class InfirmaryController extends AbstractController
 				"in_treatment" => false,
 				"in_recruitment" => false,
 				"unitMovement" => null
-			], ["life" => "ASC"]);
+			], ["id" => "ASC", "life" => "ASC"]);
 
 			/** @var Unit $unit */
 			foreach ($units as $unit) {
