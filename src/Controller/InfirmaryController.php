@@ -148,4 +148,24 @@ class InfirmaryController extends AbstractController
 			"token" => $session->get("user_token")->getToken(),
 		]);
 	}
+
+	/**
+	 * method to finish current treatments in base
+	 * @Route("/api/infirmary/end-treatments-base/", name="infirmary_end_recruitments", methods={"POST"})
+	 * @param Session $session
+	 * @param Globals $globals
+	 * @param Infirmary $infirmary
+	 * @return JsonResponse
+	 * @throws Exception
+	 */
+	public function endTreatment(Session $session, Globals $globals, Infirmary $infirmary): JsonResponse
+	{
+		$infirmary->endTreatmentUnitsInBase();
+
+		return new JsonResponse([
+			"success" => true,
+			"units_in_treatment" => $this->getDoctrine()->getRepository(Unit::class)->findByUnitsInTreatment($globals->getCurrentBase()),
+			"token" => $session->get("user_token")->getToken(),
+		]);
+	}
 }

@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Unit;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class Infirmary
 {
@@ -139,5 +141,27 @@ class Infirmary
 		$resources->withdrawResource("food", ($food_remove * $number_to_treat));
 
 		return true;
+	}
+
+	/**
+	 * method that end all treatments that are terminated
+	 * @throws Exception
+	 */
+	public function endTreatmentUnitsInBase()
+	{
+		$units = $this->em->getRepository(Unit::class)->findByTreatmentEnded($this->globals->getCurrentBase());
+		$unit_config = $this->globals->getUnitsConfig("units");
+
+		/**
+		 * @var $unit Unit
+		 */
+		foreach ($units as $unit) {
+			$unit->setInTreatment(false);
+			$unit->setEndTreatment(null);
+			$unit->setLife($unit_config[$unit->getArrayName()]["life"]);
+			$this->em->persist($unit);
+		}
+
+		$this->em->flush();
 	}
 }

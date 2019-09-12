@@ -124,6 +124,25 @@ class UnitRepository extends EntityRepository
 	}
 
 	/**
+	 * method that return all ended treatments units that are in treatment now and must end it
+	 * @param Base $base
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function findByTreatmentEnded(Base $base)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:Unit u
+			JOIN App:Base ba WITH u.base = ba AND u.base = :base
+			WHERE u.in_treatment = true AND u.end_treatment <= :now
+		");
+
+		$query->setParameter("base", $base, Type::OBJECT);
+		$query->setParameter("now", new \DateTime(), Type::DATETIME);
+
+		return $query->getResult();
+	}
+
+	/**
 	 * method that count same unit array_name in a base
 	 * @param Base $base
 	 * @param string $array_name
