@@ -110,7 +110,7 @@ class InfirmaryController extends AbstractController
 				if ($treated_number < $number_to_treat) {
 					$end_treatment = $now->add(new DateInterval("PT" . $infirmary->getTimeToTreat($unit->getArrayName()) . "S"));
 					$unit->setInTreatment(true);
-					$unit->setEndTreatment($end_treatment);
+					$unit->setEndTreatment(clone $end_treatment);
 					$em->persist($unit);
 
 					$treated_number++;

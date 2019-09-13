@@ -103,8 +103,9 @@ class UnitRepository extends EntityRepository
 		$query = $this->getEntityManager()->createQuery("SELECT u.id, u.name, u.array_name, u.end_treatment, count(u) as number FROM App:Unit u
 			WHERE u.base = :base AND u.in_treatment = true
 			GROUP BY u.array_name
-			ORDER BY u.end_treatment DESC
+			ORDER BY u.id ASC
 		");
+		$query->setMaxResults(1);
 		$query->setParameter("base", $base, Type::OBJECT);
 
 		$results = $query->getResult();
