@@ -238,7 +238,8 @@ class Resources
 	 */
 	public function getResourcesToBuild(string $array_name): array
 	{
-		$resource_tobuild = $this->globals->getBuildingsConfig()[$array_name]["resources_build"];
+		$building_config = $this->globals->getBuildingsConfig()[$array_name];
+		$resource_tobuild = $building_config["resources_build"];
 		$coef = $this->globals->getCoefForConstruction();
 		$level = 0;
 		
@@ -250,12 +251,24 @@ class Resources
 		if ($building) {
 			$level = $building->getLevel();
 		}
+
+		if ($building->getLevel() === $building_config["max_level"]) {
+			$electricity = null;
+			$fuel = null;
+			$iron = null;
+			$water = null;
+		} else {
+			$electricity = (int)round($resource_tobuild["electricity"] * ($level + 1) * ((double)$coef[$level+1]));
+			$fuel = (int)round($resource_tobuild["fuel"] * ($level + 1) * ((double)$coef[$level+1]));
+			$iron = (int)round($resource_tobuild["iron"] * ($level + 1) * ((double)$coef[$level+1]));
+			$water = (int)round($resource_tobuild["water"] * ($level + 1) * ((double)$coef[$level+1]));
+		}
 		
 		return [
-			"electricity" => (int)round($resource_tobuild["electricity"] * ($level + 1) * ((double)$coef[$level+1])),
-			"fuel" => (int)round($resource_tobuild["fuel"] * ($level + 1) * ((double)$coef[$level+1])),
-			"iron" => (int)round($resource_tobuild["iron"] * ($level + 1) * ((double)$coef[$level+1])),
-			"water" => (int)round($resource_tobuild["water"] * ($level + 1) * ((double)$coef[$level+1])),
+			"electricity" => $electricity,
+			"fuel" => $fuel,
+			"iron" => $iron,
+			"water" => $water,
 		];
 	}
 
@@ -265,7 +278,7 @@ class Resources
 	 */
 	public function getResourcesToSteal(): array
 	{
-		$building = new Building($this->em, $this->globals, $this);
+		$building = new Building($this->session, $this->em, $this->globals, $this);
 		$bunker = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
 			"base" => $this->getBase(),
 			"array_name" => "bunker",

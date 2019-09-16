@@ -48,7 +48,7 @@
     "construction_time": 0,
     "default_power": 0,
     "power_type": "reduction",
-    "explanation": "",
+    "explanation": "Le centre de commandement est là pour gérer les différentes opération de ta base. Celui-ci avec son radar te permetteras de trouver différentes missions pour tes unités et notamment pour les nourrire",
     "explanation_current_power": "",
     "explanation_next_power": "",
     "resources_build": {
@@ -65,7 +65,7 @@
     "construction_time": 30,
     "default_power": 50,
     "power_type": "production",
-    "explanation": "La statoin électrique permet produire de l'exeltricité et de la tocker dans les batteries. Chaque amélioration augmente sa production par heure.",
+    "explanation": "La station électrique permet produire de l'exeltricité et de la tocker dans les batteries. Chaque amélioration augmente sa production par heure.",
     "explanation_current_power": "La station électrique produit actuellement [[to_replace]] unité par heure.",
     "explanation_next_power": "La station électrique produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
@@ -83,9 +83,9 @@
     "construction_time": 30,
     "default_power": 50,
     "power_type": "production",
-    "explanation": "La statoin de pétrole permet l'extraction du pétrole de la terre. Chaque amélioration augmente sa production par heure.",
-    "explanation_current_power": "La statoin de pétrole produit actuellement [[to_replace]] unité par heure.",
-    "explanation_next_power": "La statoin de pétrole produira [[to_replace]] unité par heure au niveau suivant.",
+    "explanation": "La station de pétrole permet l'extraction du pétrole de la terre. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La station de pétrole produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La station de pétrole produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 150,
       "fuel": 100,
@@ -117,6 +117,27 @@
       "water_station": 3
     }
   },
+  "infirmary": {
+    "name": "Infirmary",
+    "array_name": "infirmary",
+    "max_level": 50,
+    "construction_time": 1200,
+    "default_power": 1,
+    "power_type": "reduction",
+    "explanation": "L'infirmerie te permets de soigner les unités qui se sont blessées au combat. Chaque amélioration diminue les temps de guérison.",
+    "explanation_current_power": "Le temps de guérison est actuellement réduit de [[to_replace]]%.",
+    "explanation_next_power": "Le temps de guérison sera réduit de : [[to_replace]]% au prochain niveau.",
+    "resources_build": {
+      "electricity": 405,
+      "fuel": 335,
+      "iron": 350,
+      "water": 440
+    },
+    "to_build": {
+      "bunker": 5,
+      "barrack": 10
+    }
+  },
   "iron_station": {
     "name": "Iron station",
     "array_name": "iron_station",
@@ -124,9 +145,9 @@
     "construction_time": 30,
     "default_power": 50,
     "power_type": "production",
-    "explanation": "La statoin de fer permet l'extraction de fer de la terre. Chaque amélioration augmente sa production par heure.",
-    "explanation_current_power": "La statoin de fer produit actuellement [[to_replace]] unité par heure.",
-    "explanation_next_power": "La statoin de fer produira [[to_replace]] unité par heure au niveau suivant.",
+    "explanation": "La station de fer permet l'extraction de fer de la terre. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La station de fer produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La station de fer produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 105,
       "fuel": 150,
@@ -163,9 +184,9 @@
     "construction_time": 30,
     "default_power": 50,
     "power_type": "production",
-    "explanation": "La statoin d'eau permet l'extraction de l'eau de la terre. Chaque amélioration augmente sa production par heure.",
-    "explanation_current_power": "La statoin d'eau produit actuellement [[to_replace]] unité par heure.",
-    "explanation_next_power": "La statoin d'eau produira [[to_replace]] unité par heure au niveau suivant.",
+    "explanation": "La station d'eau permet l'extraction de l'eau de la terre. Chaque amélioration augmente sa production par heure.",
+    "explanation_current_power": "La station d'eau produit actuellement [[to_replace]] unité par heure.",
+    "explanation_next_power": "La station d'eau produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
       "electricity": 105,
       "fuel": 165,

@@ -9,6 +9,7 @@ use App\Service\Barrack;
 use App\Service\Building;
 use App\Service\Food;
 use App\Service\Globals;
+use App\Service\Infirmary;
 use App\Service\Market;
 use App\Service\Mission;
 use App\Service\Resources;
@@ -83,6 +84,11 @@ class CronController extends AbstractController
 	 * @var Food
 	 */
 	private $food;
+
+	/**
+	 * @var Infirmary
+	 */
+	private $infirmary;
 	
 	private $crons;
 
@@ -100,7 +106,7 @@ class CronController extends AbstractController
 	 * @param UnitMovement $unitMovement
 	 * @param Food $food
 	 */
-	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food)
+	public function __construct(Swift_Mailer $mailer, Utils $utils, SessionInterface $session, Globals $globals, Building $building, Market $market, Barrack $barrack, Mission $mission, Unit $unit, UnitMovement $unitMovement, Food $food, Infirmary $infirmary)
 	{
 		$this->mailer = $mailer;
 		$this->utils = $utils;
@@ -113,6 +119,7 @@ class CronController extends AbstractController
 		$this->unit = $unit;
 		$this->unit_movement = $unitMovement;
 		$this->food = $food;
+		$this->infirmary = $infirmary;
 	}
 	
 	/**
@@ -292,8 +299,8 @@ class CronController extends AbstractController
 		foreach ($users as $user) {
 			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y H:i:s");
 			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
-				->setSender("no-reply@anthony-pilloud.fr")
-				->setFrom("no-reply@anthony-pilloud.fr")
+				->setSender("no-reply-ruined-world@anthony-pilloud.fr")
+				->setFrom("no-reply-ruined-world@anthony-pilloud.fr")
 				->setTo($user->getMail())
 				->setBody(
 					$this->renderView('before_archive_account.html.twig', ["desactivation_date" => $desactivation_date]),
@@ -339,7 +346,7 @@ class CronController extends AbstractController
 		}
 
 		$message = (new \Swift_Message('Rapport du cron des comptes à archiver'))
-			->setFrom("no-reply@anthony-pilloud.fr")
+			->setFrom("no-reply-ruined-world@anthony-pilloud.fr")
 			->setTo("pilloud.anthony@gmail.com")
 			->setBody(
 				$this->renderView('archived_account.html.twig', ["users" => $users]),
@@ -453,6 +460,22 @@ class CronController extends AbstractController
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->unit_movement->updateUnitMovement($base);
+		}
+	}
+
+	/**
+	 * method to finish all treatments that end date was before current date
+	 */
+	private function endTreatmentUnits()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
+
+		foreach ($bases as $base) {
+			$this->session->set("current_base", $base);
+			$this->session->set("token", $base->getUser()->getToken());
+
+			$this->infirmary->endTreatmentUnitsInBase();
 		}
 	}
 

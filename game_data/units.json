@@ -3,13 +3,14 @@
     "name": "Villager",
     "array_name": "villager",
     "max_level": 10,
-    "attack_power": 5,
+    "attack_power": 2,
     "defense_power": 15,
     "speed": 2,
-    "life": 100,
+    "life": 60,
     "armor": 0,
     "recruitment_time": 60,
-    "explanation": "Le villageois est la plus pour boire de la bière qu'autre chose, néenmoins, il peut s'avérer très p)àratique pour les petites missions de chasse",
+    "treatment_time": 30,
+    "explanation": "Le villageois est la plus pour boire de la bière qu'autre chose, néenmoins, il peut s'avérer très pratique pour les petites missions de chasse",
     "transport_weight": 100,
     "resources_recruit": {
       "electricity": 50,
@@ -31,6 +32,7 @@
     "life": 100,
     "armor": 50,
     "recruitment_time": 90,
+    "treatment_time": 45,
     "explanation": "Le défenseur est une unité bien protégée et lourde qui ne marche pas vite. Il adore se battre chez lui et la défense c'est sa tasse de thé !",
     "transport_weight": 10,
     "resources_recruit": {
@@ -53,6 +55,7 @@
     "life": 100,
     "armor": 50,
     "recruitment_time": 90,
+    "treatment_time": 45,
     "explanation": "L'attaquer est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
     "transport_weight": 10,
     "resources_recruit": {
@@ -75,6 +78,7 @@
     "life": 100,
     "armor": 60,
     "recruitment_time": 330,
+    "treatment_time": 165,
     "explanation": "L'attaquer 1 est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
     "transport_weight": 100,
     "resources_recruit": {
@@ -97,6 +101,7 @@
     "life": 100,
     "armor": 100,
     "recruitment_time": 450,
+    "treatment_time": 225,
     "explanation": "Le Conquieror est l'unité ultime aussi doué pour l'attaque que la défnse. Elle ferait trembler n'importe qui !",
     "transport_weight": 70,
     "resources_recruit": {

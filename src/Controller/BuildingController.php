@@ -55,6 +55,14 @@ class BuildingController extends AbstractController
 			$building->setLocation($infos->case);
 			$building->setBase($base);
 		}
+
+		if ($building->getLevel() === $building_config["max_level"]) {
+			return new JsonResponse([
+				"success" => false,
+				"error_message" => "Ce batiment a atteint son niveau maximum",
+				"token" => $session->get("user_token")->getToken(),
+			]);
+		}
 		
 		if (count($buildings_in_construction) >= $globals->getMaxConstructionInConstructionWaiting()) {
 			return new JsonResponse([
@@ -131,13 +139,14 @@ class BuildingController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
+			"token" => $session->get("user_token")->getToken(),
 			"building" => $api->serializeObject($building),
+			"max_level" => $buildings_config[$infos->array_name]["max_level"],
 			"explanation" => $buildings_config[$infos->array_name]["explanation"],
 			"explanation_current_power" => $explanation_string["current"],
 			"explanation_next_power" => $explanation_string["next"],
 			"construction_time" => $building_service->getConstructionTime($infos->array_name, $building->getLevel()),
 			"resources_build" => $resources->getResourcesToBuild($infos->array_name),
-			"token" => $session->get("user_token")->getToken(),
 			"premium_when_upgrade" => $building_service->getWhenIsPossibleToUpgrade($infos->array_name)
 		]);
 	}
