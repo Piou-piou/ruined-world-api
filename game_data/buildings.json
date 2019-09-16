@@ -48,7 +48,7 @@
     "construction_time": 0,
     "default_power": 0,
     "power_type": "reduction",
-    "explanation": "",
+    "explanation": "Le centre de commandement est là pour gérer les différentes opération de ta base. Celui-ci avec son radar te permetteras de trouver différentes missions pour tes unités et notamment pour les nourrire",
     "explanation_current_power": "",
     "explanation_next_power": "",
     "resources_build": {
