@@ -55,6 +55,14 @@ class BuildingController extends AbstractController
 			$building->setLocation($infos->case);
 			$building->setBase($base);
 		}
+
+		if ($building->getLevel() === $building_config["max_level"]) {
+			return new JsonResponse([
+				"success" => false,
+				"error_message" => "Ce batiment a atteint son niveau maximum",
+				"token" => $session->get("user_token")->getToken(),
+			]);
+		}
 		
 		if (count($buildings_in_construction) >= $globals->getMaxConstructionInConstructionWaiting()) {
 			return new JsonResponse([
