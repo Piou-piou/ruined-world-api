@@ -17,9 +17,10 @@ class UnitRepository extends EntityRepository
 	 * @param Base $base
 	 * @return mixed
 	 */
-	public function findByUnitsInBase(Base $base) {
+	public function findByUnitsInBase(Base $base)
+	{
 		$query = $this->getEntityManager()->createQuery("SELECT u.name, u.array_name, count(u) as number FROM App:Unit u
-			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
+			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL AND u.in_treatment = false
 			GROUP BY u.array_name, u.end_recruitment
 		");
 		$query->setParameter("base", $base, Type::OBJECT);
@@ -33,7 +34,8 @@ class UnitRepository extends EntityRepository
 	 * @return mixed
 	 * @throws NonUniqueResultException
 	 */
-	public function countUnitsInBase(Base $base) {
+	public function countUnitsInBase(Base $base)
+	{
 		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
 			WHERE u.base = :base AND u.in_recruitment = false AND u.unitMovement IS NULL 
 		");
@@ -92,6 +94,56 @@ class UnitRepository extends EntityRepository
 	}
 
 	/**
+	 * method to find units that are currently in treatment in base
+	 * @param Base $base
+	 * @return array
+	 */
+	public function findByUnitsInTreatment(Base $base): array
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT u.id, u.name, u.array_name, u.end_treatment, count(u) as number FROM App:Unit u
+			WHERE u.base = :base AND u.in_treatment = true
+			GROUP BY u.array_name
+			ORDER BY u.id ASC
+		");
+		$query->setMaxResults(1);
+		$query->setParameter("base", $base, Type::OBJECT);
+
+		$results = $query->getResult();
+		$return_results = [];
+
+		foreach ($results as $result) {
+			$return_results[] = [
+				"id" => $result["id"],
+				"name" => $result["name"],
+				"array_name" => $result["array_name"],
+				"end_treatment" => $result["end_treatment"]->getTimestamp(),
+				"number" => $result["number"]
+			];
+		}
+
+		return $return_results;
+	}
+
+	/**
+	 * method that return all ended treatments units that are in treatment now and must end it
+	 * @param Base $base
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function findByTreatmentEnded(Base $base)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:Unit u
+			JOIN App:Base ba WITH u.base = ba AND u.base = :base
+			WHERE u.in_treatment = true AND u.end_treatment <= :now
+		");
+
+		$query->setParameter("base", $base, Type::OBJECT);
+		$query->setParameter("now", new \DateTime(), Type::DATETIME);
+
+		return $query->getResult();
+	}
+
+	/**
 	 * method that count same unit array_name in a base
 	 * @param Base $base
 	 * @param string $array_name
@@ -101,7 +153,8 @@ class UnitRepository extends EntityRepository
 	public function countSameUnitInBase(Base $base, string $array_name)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT count(u) as number FROM App:Unit u
-			WHERE u.array_name = :array_name AND u.base = :base AND u.unitMovement IS NULL
+			WHERE u.array_name = :array_name AND u.base = :base AND u.unitMovement IS NULL AND u.in_treatment = false
+			AND u.in_recruitment = 0
 		");
 		$query->setParameter("array_name", $array_name, Type::STRING);
 		$query->setParameter("base", $base, Type::OBJECT);
@@ -123,9 +176,11 @@ class UnitRepository extends EntityRepository
 	 * @param int $number
 	 * @throws DBALException
 	 */
-	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number) {
+	public function putUnitsInMission(Base $base, UnitMovement $movement, string $array_name, int $number)
+	{
 		$query = $this->getEntityManager()->getConnection()->prepare("UPDATE unit u SET u.unit_movement_id = :movement_id
-			WHERE u.array_name = :array_name AND u.base_id = :base_id AND u.unit_movement_id IS NULL
+			WHERE u.array_name = :array_name AND u.base_id = :base_id AND u.unit_movement_id IS NULL AND u.in_treatment = 0
+			AND u.in_recruitment = 0
 			LIMIT :number
 		");
 
@@ -145,7 +200,7 @@ class UnitRepository extends EntityRepository
 	public function killRandomUnitBecauseFood(Base $base, int $number)
 	{
 		$query = $this->getEntityManager()->getConnection()->prepare("DELETE FROM unit
-			WHERE base_id = :base_id AND unit_movement_id IS NULL AND in_recruitment = 0
+			WHERE base_id = :base_id AND unit_movement_id IS NULL AND in_recruitment = 0 AND in_treatment = 0
 			ORDER BY RAND()
 			LIMIT :number
 		");

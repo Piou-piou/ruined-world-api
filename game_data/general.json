@@ -7,5 +7,6 @@
   "food_kill_divider": 6,
   "seconds_before_show_attack": 120,
   "beginner_fight_protection_days": 15,
-  "rank_user_per_page": 50
+  "rank_user_per_page": 50,
+  "cost_treat_unit_divider": 2
 }
