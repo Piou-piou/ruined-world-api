@@ -36,6 +36,11 @@ class Fight
 	 */
 	private $fight_report;
 
+	/** @var Building */
+	private $building;
+
+	private $defenses_power;
+
 	/**
 	 * Fight constructor.
 	 * @param EntityManagerInterface $em
@@ -44,13 +49,14 @@ class Fight
 	 * @param \App\Service\Unit $unit_service
 	 * @param FightReport $fightReport
 	 */
-	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service, FightReport $fightReport)
+	public function __construct(EntityManagerInterface $em, Globals $globals, Resources $resources, \App\Service\Unit $unit_service, FightReport $fightReport, Building $building)
 	{
 		$this->em = $em;
 		$this->globals = $globals;
 		$this->resources = $resources;
 		$this->unit_service = $unit_service;
 		$this->fight_report = $fightReport;
+		$this->building = $building;
 	}
 
 	/**
@@ -64,6 +70,22 @@ class Fight
 	{
 		$power = $this->unit_service->getPower($unit, $type);
 		$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
+		$use_defenses = $this->defenses_power === 0 ?  0 : rand(0, 1);
+
+		/** to prepare defense building
+		if ($use_defenses === 1 && $type === "attack") {
+			if ($unit_key->getArmor() > 0) {
+				$unit_key->setArmor($unit_key->getArmor() - $this->defenses_power);
+				if ($unit_key->getArmor() < 0) {
+					$life_to_delete = abs($unit_key->getArmor());
+					$unit_key->setArmor(0);
+					$unit_key->setLife($unit_key->getLife() - $life_to_delete);
+				}
+			} else {
+				$unit_key->setLife($unit_key->getLife() - $this->defenses_power);
+			}
+		}
+		 * */
 
 		if ($key !== null) {
 			$unit_key = $units[$key];
@@ -128,6 +150,15 @@ class Fight
 			"in_recruitment" => false,
 			"unitMovement" => null
 		]);
+		$defenses = $this->em->getRepository(\App\Entity\Building::class)->findOneBy([
+			"base" => $attacked_base,
+			"array_name" => "defenses"
+		]);
+		if (!$defenses || $defenses->getLevel() === 0) {
+			$this->defenses_power = 0;
+		} else {
+			$this->defenses_power = $this->building->getCurrentPower($defenses->getArrayName(), $defenses->getLevel());
+		}
 
 		$this->fight_report->setStartAttackUnits($base_attack_units);
 		$this->fight_report->setStartDefendUnits($defend_units);
