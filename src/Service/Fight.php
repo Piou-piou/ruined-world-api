@@ -72,20 +72,22 @@ class Fight
 		$key = count(array_keys($units)) > 0 ? array_keys($units)[0] : null;
 		$use_defenses = $this->defenses_power === 0 ?  0 : rand(0, 1);
 
-		/** to prepare defense building
 		if ($use_defenses === 1 && $type === "attack") {
-			if ($unit_key->getArmor() > 0) {
-				$unit_key->setArmor($unit_key->getArmor() - $this->defenses_power);
-				if ($unit_key->getArmor() < 0) {
-					$life_to_delete = abs($unit_key->getArmor());
-					$unit_key->setArmor(0);
-					$unit_key->setLife($unit_key->getLife() - $life_to_delete);
+			if ($unit->getArmor() > 0) {
+				$unit->setArmor($unit->getArmor() - $this->defenses_power);
+				if ($unit->getArmor() < 0) {
+					$life_to_delete = abs($unit->getArmor());
+					$unit->setArmor(0);
+					$unit->setLife($unit->getLife() - $life_to_delete);
 				}
 			} else {
-				$unit_key->setLife($unit_key->getLife() - $this->defenses_power);
+				$unit->setLife($unit->getLife() - $this->defenses_power);
+			}
+
+			if ($unit->getLife() <= 0) {
+				return $units;
 			}
 		}
-		 * */
 
 		if ($key !== null) {
 			$unit_key = $units[$key];
