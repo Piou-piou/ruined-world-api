@@ -9,6 +9,7 @@ parameters:
     max_inactivation_days: 15
     max_holidays_days: 40
     api_token_duration: 80
+    max_keep_messages: 15
     route_rights_exluded: ["cron", "api_login", "api_test_token", "signup_check_pseudo_used", "signup_check_mail_used", "signup_register"]
     cron:
         updateResources: "* * * * *"
@@ -22,6 +23,7 @@ parameters:
         disableHolidaysMode: "0 5 * * *"
         removeUnusedTokens: "0 5 * * *"
         sendMailBeforeArchiveUser: "0 10 * * *"
+        deleteArchivedMessages: "0 15 * * *"
         updateMissionsForBase: "0 */3 * * *"
 
 services:
