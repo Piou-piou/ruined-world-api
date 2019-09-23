@@ -98,17 +98,26 @@ class FightReport
 		$this->defense_damage = $defense_damage;
 	}
 
-	public function getDefenseDamage()
+	/**
+	 * @return int
+	 */
+	public function getDefenseDamage(): int
 	{
 		return $this->defense_damage;
 	}
 
+	/**
+	 * @param $defense_kill
+	 */
 	public function setDefenseKill($defense_kill)
 	{
 		$this->defense_kill = $defense_kill;
 	}
 
-	public function getDefenseKill()
+	/**
+	 * @return int
+	 */
+	public function getDefenseKill(): int
 	{
 		return $this->defense_kill;
 	}
