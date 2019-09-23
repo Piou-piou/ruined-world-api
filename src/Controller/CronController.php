@@ -329,6 +329,22 @@ class CronController extends AbstractController
 			$user->setHolidays(false);
 			$bases = $user->getBases();
 
+			foreach ($user->getSentMessages() as $message) {
+				$messages_box = $em->getRepository(MessageBox::class)->findBy(["message" => $message]);
+
+				/** @var MessageBox $message_box */
+				foreach ($messages_box as $message_box) {
+					$message_box->setArchivedSent(true);
+					$em->persist($message_box);
+				}
+			}
+
+			/** @var MessageBox $message */
+			foreach ($user->getMessagesBox() as $message) {
+				$message->setArchived(true);
+				$em->persist($message);
+			}
+
 			foreach ($user->getTokens() as $token) {
 				$user->removeToken($token);
 				$em->persist($user);
