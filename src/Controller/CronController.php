@@ -39,17 +39,17 @@ class CronController extends AbstractController
 	 * @var Utils
 	 */
 	private $utils;
-	
+
 	/**
 	 * @var SessionInterface
 	 */
 	private $session;
-	
+
 	/**
 	 * @var Globals
 	 */
 	private $globals;
-	
+
 	/**
 	 * @var Building
 	 */
@@ -89,7 +89,7 @@ class CronController extends AbstractController
 	 * @var Infirmary
 	 */
 	private $infirmary;
-	
+
 	private $crons;
 
 	/**
@@ -121,7 +121,7 @@ class CronController extends AbstractController
 		$this->food = $food;
 		$this->infirmary = $infirmary;
 	}
-	
+
 	/**
 	 * @Route("/cron", name="cron")
 	 * @param Request $request
@@ -132,19 +132,19 @@ class CronController extends AbstractController
 	{
 		$ip = $request->server->get('REMOTE_ADDR');
 		$allowed_ip_external = explode(", ", $_ENV["IP_CRON_EXTERNAL"]);
-		
+
 		if (in_array($ip, $allowed_ip_external) || $ip === $_ENV["IP_CRON_INTERNAL"]) {
 			$this->crons = $this->getParameter("cron");
 			$json_exec = $this->getCronFile();
 			$now = new DateTime();
-			
+
 			// start executing crons
 			foreach ($this->crons as $key => $cron) {
 				if (!array_key_exists($key, $json_exec)) {
 					$this->addJsonEntry($key);
 					$json_exec = $this->getCronFile();
 				}
-				
+
 				$next_exec = $json_exec[$key]["next_execution"];
 				if (method_exists($this, $key)) {
 					if ($next_exec === null || in_array($ip, $allowed_ip_external)) {
@@ -152,7 +152,7 @@ class CronController extends AbstractController
 					} else if ($now >= DateTime::createFromFormat("Y-m-d H:i:s", $next_exec)) {
 						$this->$key();
 					}
-					
+
 					$cron = CronExpression::factory($this->getParameter("cron")[$key]);
 					$this->editJsonEntry($key, $cron->getNextRunDate()->format('Y-m-d H:i:s'));
 				}
@@ -160,10 +160,10 @@ class CronController extends AbstractController
 		} else {
 			throw new AccessDeniedHttpException("You haven't got access to this page");
 		}
-		
+
 		return new Response();
 	}
-	
+
 	/**
 	 * return the json file with all crons in it. If not exist, we create it add put cron like this :
 	 * key => nameOfMethodToExecute
@@ -173,28 +173,28 @@ class CronController extends AbstractController
 	private function getCronFile()
 	{
 		$file = $this->getParameter("data_directory") . "cron/cron.json";
-		
+
 		if (!is_file($file)) {
 			$this->utils->createRecursiveDirFromRoot('data/cron');
 			$fs = new Filesystem();
 			$fs->touch($this->getParameter("data_directory") . "cron/cron.json");
-			
+
 			$crons = [];
-			
+
 			foreach ($this->crons as $key => $cron) {
 				$crons[$key] = [
 					"next_execution" => null,
 				];
 			}
-			
+
 			$fs->appendToFile($file, json_encode($crons));
 		}
-		
+
 		$file = json_decode(file_get_contents($file), true);
-		
+
 		return $file;
 	}
-	
+
 	/**
 	 * method that add new entry in config cron file
 	 * @param string $entry
@@ -203,14 +203,14 @@ class CronController extends AbstractController
 	{
 		$file = $this->getParameter("data_directory") . "cron/cron.json";
 		$crons = json_decode(file_get_contents($file), true);
-		
+
 		$crons[$entry] = [
 			"next_execution" => null,
 		];
-		
+
 		$this->writeJsonCron($crons);
 	}
-	
+
 	/**
 	 * method to edit an entry in json
 	 * @param string $entry
@@ -219,14 +219,14 @@ class CronController extends AbstractController
 	private function editJsonEntry(string $entry, string $next_execution)
 	{
 		$json = $this->getCronFile();
-		
+
 		if (array_key_exists($entry, $json)) {
 			$json[$entry]["next_execution"] = $next_execution;
-			
+
 			$this->writeJsonCron($json);
 		}
 	}
-	
+
 	/**
 	 * method that writes the cron.json when we add or edit an entry
 	 * @param array $json
@@ -235,13 +235,13 @@ class CronController extends AbstractController
 	{
 		$fs = new Filesystem();
 		$file = $this->getParameter("data_directory") . "cron/cron.json";
-		
+
 		$fs->dumpFile($file, json_encode($json));
 	}
-	
-	
+
+
 	// --------------------------------------- UNDER THIS, METHODS OF CRONS ----------------------------------------------------//
-	
+
 	/**
 	 * method that update resources of a base based on resources produced by hour. This method is called every minute
 	 * @throws Exception
@@ -249,36 +249,36 @@ class CronController extends AbstractController
 	private function updateResources()
 	{
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$bases = $em->getRepository(Base::class)->findByBaseUserNotHolidays();
-		
+
 		foreach ($bases as $base) {
 			$this->session->set("current_base", $base);
 			$this->session->set("token", $base->getUser()->getToken());
 
 			$this->food->consumeFood();
-			
+
 			$resources = new Resources($em, $this->session, $this->globals);
-			
+
 			$now = new DateTime();
 			$last_update_resources = $base->getLastUpdateResources();
 			$diff = $now->getTimestamp() - $last_update_resources->getTimestamp();
-			
+
 			$new_elec = round(($resources->getElectricityProduction() / 3600) * $diff);
 			$new_fuel = round(($resources->getFuelProduction() / 3600) * $diff);
 			$new_iron = round(($resources->getIronProduction() / 3600) * $diff);
 			$new_water = round(($resources->getWaterProduction() / 3600) * $diff);
-			
+
 			if ($new_elec > 0 || $new_fuel > 0 || $new_iron > 0 || $new_water > 0) {
 				$resources->addResource("electricity", $new_elec);
 				$resources->addResource("fuel", $new_fuel);
 				$resources->addResource("iron", $new_iron);
 				$resources->addResource("water", $new_water);
-				
+
 				$base->setLastUpdateResources($now);
 				$em->flush();
 			}
-			
+
 			$this->session->remove("current_base");
 			$this->session->remove("token");
 		}
@@ -291,13 +291,13 @@ class CronController extends AbstractController
 	private function sendMailBeforeArchiveUser()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days")-3);
+		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days") - 3);
 
 		/**
 		 * @var $user User
 		 */
 		foreach ($users as $user) {
-			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P".$this->getParameter("max_inactivation_days")."D"))->format("d/m/Y H:i:s");
+			$desactivation_date = $user->getLastConnection()->add(new \DateInterval("P" . $this->getParameter("max_inactivation_days") . "D"))->format("d/m/Y H:i:s");
 			$message = (new \Swift_Message('Ruined World : Ta base tombe en ruine dans 3 jours'))
 				->setSender("no-reply-ruined-world@anthony-pilloud.fr")
 				->setFrom("no-reply-ruined-world@anthony-pilloud.fr")
@@ -309,7 +309,7 @@ class CronController extends AbstractController
 			$this->mailer->send($message);
 		}
 	}
-	
+
 	/**
 	 * method to archive a user that hasn't connected to the game for a certain time
 	 * this will archive all his bases too
@@ -319,7 +319,7 @@ class CronController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$users = $em->getRepository(User::class)->findByUserToArchive($this->getParameter("max_inactivation_days"));
-		
+
 		/**
 		 * @var $user User
 		 */
@@ -333,7 +333,7 @@ class CronController extends AbstractController
 				$em->persist($user);
 				$em->remove($token);
 			}
-			
+
 			/**
 			 * @var $base Base
 			 */
@@ -341,7 +341,7 @@ class CronController extends AbstractController
 				$base->setArchived(true);
 				$em->persist($base);
 			}
-			
+
 			$em->persist($user);
 		}
 
@@ -353,10 +353,10 @@ class CronController extends AbstractController
 				'text/html'
 			);
 		$this->mailer->send($message);
-		
+
 		$em->flush();
 	}
-	
+
 	/**
 	 * method to disable holidays mode of user and set last connection date to today
 	 * @throws Exception
@@ -365,7 +365,7 @@ class CronController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$users = $em->getRepository(User::class)->findByUserEndHolidays($this->getParameter("max_holidays_days"));
-		
+
 		/**
 		 * @var $user User
 		 */
@@ -374,10 +374,10 @@ class CronController extends AbstractController
 			$user->setLastConnection(new DateTime());
 			$em->persist($user);
 		}
-		
+
 		$em->flush();
 	}
-	
+
 	/**
 	 * method to finish all construction that end date was before current date
 	 */
@@ -385,11 +385,11 @@ class CronController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$bases = $em->getRepository(Base::class)->findBy(["archived" => false]);
-		
+
 		foreach ($bases as $base) {
 			$this->session->set("current_base", $base);
 			$this->session->set("token", $base->getUser()->getToken());
-			
+
 			$this->building->endConstructionBuildingsInBase();
 		}
 	}
@@ -497,7 +497,8 @@ class CronController extends AbstractController
 	 * method to disable all finished premium advantages
 	 * @throws Exception
 	 */
-	private function disableFinishedPremiumAdvantages() {
+	private function disableFinishedPremiumAdvantages()
+	{
 		$em = $this->getDoctrine()->getManager();
 		$users = $em->getRepository(User::class)->findAll();
 
