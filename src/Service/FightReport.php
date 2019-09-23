@@ -165,6 +165,10 @@ class FightReport
 			$text .= $defend_unit["name"] . " qui ont survécus  : " . $defend_unit["return_number"] . " / " . $defend_unit["number"] . "<br>";
 		}
 
+		$text .= $type === "attack" ? "<h2>Dégats infligés par les tourelles de défenses enemies</h2>" : "<h2>Dégats infligés par les tourelles de défenses</h2>";
+		$text .= $this->getDefenseDamage() . " dégat(s) infligés " . ($type === "attack" ? "à nos troupes" : "à leurs troupes") ."<br>";
+		$text .= $this->getDefenseKill() . " " .($type === "attack" ? "unité(s) tuée(s) par leurs défenses" : "unité(s) enemie(s) tuée(s) par nos défenses") . "<br>";
+
 		$text .= "<h2>Ressources volées</h2>";
 		$text .= "<ul>";
 		$text .= "<li>Electricité : " . $unitMovement->getElectricity() . "</li>";
