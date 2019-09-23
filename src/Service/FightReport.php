@@ -20,6 +20,10 @@ class FightReport
 
 	private $end_defend_units;
 
+	private $defense_damage = 0;
+
+	private $defense_kill = 0;
+
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -84,6 +88,29 @@ class FightReport
 	public function setEndDefendUnits($defend_units)
 	{
 		$this->end_defend_units = $defend_units;
+	}
+
+	/**
+	 * @param $defense_damage
+	 */
+	public function setDefenseDamage($defense_damage)
+	{
+		$this->defense_damage = $defense_damage;
+	}
+
+	public function getDefenseDamage()
+	{
+		return $this->defense_damage;
+	}
+
+	public function setDefenseKill($defense_kill)
+	{
+		$this->defense_kill = $defense_kill;
+	}
+
+	public function getDefenseKill()
+	{
+		return $this->defense_kill;
 	}
 
 	/**

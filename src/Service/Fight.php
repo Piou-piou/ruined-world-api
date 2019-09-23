@@ -83,8 +83,10 @@ class Fight
 			} else {
 				$unit->setLife($unit->getLife() - $this->defenses_power);
 			}
+			$this->fight_report->setDefenseDamage($this->fight_report->getDefenseDamage() + $this->defenses_power);
 
 			if ($unit->getLife() <= 0) {
+				$this->fight_report->setDefenseKill($this->fight_report->getDefenseKill() + 1);
 				return $units;
 			}
 		}
