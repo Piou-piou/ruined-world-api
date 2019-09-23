@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Base;
+use App\Entity\MessageBox;
 use App\Entity\User;
 use App\Entity\UserToken;
 use App\Service\Barrack;
@@ -518,6 +519,27 @@ class CronController extends AbstractController
 			}
 
 			$em->persist($user);
+		}
+
+		$em->flush();
+	}
+
+	/**
+	 * method to delete archived message (sent and received)
+	 * @throws Exception
+	 */
+	private function deleteArchivedMessages()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$max_keep_messages = $this->getParameter("max_keep_messages");
+		$date = new DateTime();
+		$date->sub(new \DateInterval("P".$max_keep_messages."D"));
+		$messages_box = $em->getRepository(MessageBox::class)->findByArchivedMessages($date);
+
+		/** @var MessageBox $message_box */
+		foreach ($messages_box as $message_box) {
+			$em->remove($message_box->getMessage());
+			$em->remove($message_box);
 		}
 
 		$em->flush();
