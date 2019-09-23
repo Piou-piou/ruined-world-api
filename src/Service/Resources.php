@@ -252,7 +252,7 @@ class Resources
 			$level = $building->getLevel();
 		}
 
-		if ($building->getLevel() === $building_config["max_level"]) {
+		if ($building && ($building->getLevel() === $building_config["max_level"])) {
 			$electricity = null;
 			$fuel = null;
 			$iron = null;
