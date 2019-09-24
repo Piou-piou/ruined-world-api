@@ -541,13 +541,35 @@ class CronController extends AbstractController
 	}
 
 	/**
+	 * method to archive message after a given time
+	 * @throws Exception
+	 */
+	private function archiveMessages()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$max_keep_messages = $this->getParameter("max_keep_messages");
+		$date = new DateTime();
+		$date->sub(new \DateInterval("P".$max_keep_messages."D"));
+		$messages_box = $em->getRepository(MessageBox::class)->findByMessagesToArchive($date);
+
+		/** @var MessageBox $message_box */
+		foreach ($messages_box as $message_box) {
+			$message_box->setArchived(true);
+			$message_box->setArchivedSent(true);
+			$em->persist($message_box);
+		}
+
+		$em->flush();
+	}
+
+	/**
 	 * method to delete archived message (sent and received)
 	 * @throws Exception
 	 */
 	private function deleteArchivedMessages()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$max_keep_messages = $this->getParameter("max_keep_messages");
+		$max_keep_messages = $this->getParameter("max_keep_messages")*2;
 		$date = new DateTime();
 		$date->sub(new \DateInterval("P".$max_keep_messages."D"));
 		$messages_box = $em->getRepository(MessageBox::class)->findByArchivedMessages($date);

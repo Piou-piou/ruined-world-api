@@ -23,7 +23,8 @@ parameters:
         disableHolidaysMode: "0 5 * * *"
         removeUnusedTokens: "0 5 * * *"
         sendMailBeforeArchiveUser: "0 10 * * *"
-        deleteArchivedMessages: "0 15 * * *"
+        archiveMessages: "0 15 * * *"
+        deleteArchivedMessages: "0 20 * * *"
         updateMissionsForBase: "0 */3 * * *"
 
 services:

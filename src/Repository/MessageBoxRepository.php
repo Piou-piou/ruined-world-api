@@ -60,6 +60,22 @@ class MessageBoxRepository extends EntityRepository
 	}
 
 	/**
+	 * method that get all messages to archive
+	 * @param $date_to_archive
+	 * @return mixed
+	 */
+	public function findByMessagesToArchive($date_to_archive)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT mb FROM App:MessageBox mb
+			JOIN App:Message m WITH m = mb.message AND m.send_at < :date_to_archive
+			WHERE mb.archived_sent != true OR mb.archived != true
+		");
+		$query->setParameter("date_to_archive", $date_to_archive, Type::DATETIME);
+
+		return $query->getResult();
+	}
+
+	/**
 	 * method that get all archived message received and sent
 	 * @param $date_to_delete
 	 * @return mixed
