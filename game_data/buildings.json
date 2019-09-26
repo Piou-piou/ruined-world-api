@@ -34,7 +34,7 @@
       "electricity": 950,
       "fuel": 900,
       "iron": 1000,
-      "water": 975
+      "water": 930
     },
     "to_build": {
       "garner": 3,
@@ -77,7 +77,8 @@
     "to_build": {
       "garner": 3,
       "warehouse": 3,
-      "bunker": 1
+      "bunker": 3,
+      "barrack": 2
     }
   },
   "electricity_station": {
@@ -128,7 +129,7 @@
     "explanation_next_power": "Le capacité de stockage sera de [[to_replace]] unités au prochain niveau.",
     "resources_build": {
       "electricity": 240,
-      "fuel": 295,
+      "fuel": 290,
       "iron": 305,
       "water": 340
     },
@@ -151,9 +152,9 @@
     "explanation_next_power": "Le temps de guérison sera réduit de : [[to_replace]]% au prochain niveau.",
     "resources_build": {
       "electricity": 405,
-      "fuel": 335,
+      "fuel": 440,
       "iron": 350,
-      "water": 440
+      "water": 335
     },
     "to_build": {
       "bunker": 5,
@@ -190,9 +191,9 @@
     "explanation_current_power": "Le marché dispose de [[to_replace]] marchands actuellement.",
     "explanation_next_power": "Le marché disposera de [[to_replace]] marchands au niveau suivant.",
     "resources_build": {
-      "electricity": 165,
+      "electricity": 185,
       "fuel": 180,
-      "iron": 150,
+      "iron": 100,
       "water": 200
     },
     "to_build": {
@@ -211,8 +212,8 @@
     "explanation_current_power": "La station d'eau produit actuellement [[to_replace]] unité par heure.",
     "explanation_next_power": "La station d'eau produira [[to_replace]] unité par heure au niveau suivant.",
     "resources_build": {
-      "electricity": 105,
-      "fuel": 165,
+      "electricity": 165,
+      "fuel": 105,
       "iron": 150,
       "water": 100
     },
