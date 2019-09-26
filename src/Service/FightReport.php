@@ -20,6 +20,10 @@ class FightReport
 
 	private $end_defend_units;
 
+	private $defense_damage = 0;
+
+	private $defense_kill = 0;
+
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -87,6 +91,38 @@ class FightReport
 	}
 
 	/**
+	 * @param $defense_damage
+	 */
+	public function setDefenseDamage($defense_damage)
+	{
+		$this->defense_damage = $defense_damage;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDefenseDamage(): int
+	{
+		return $this->defense_damage;
+	}
+
+	/**
+	 * @param $defense_kill
+	 */
+	public function setDefenseKill($defense_kill)
+	{
+		$this->defense_kill = $defense_kill;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDefenseKill(): int
+	{
+		return $this->defense_kill;
+	}
+
+	/**
 	 * method that give the number of unit send and returned after fight grouped by array_name
 	 * @param string $type
 	 * @return array
@@ -126,17 +162,21 @@ class FightReport
 	private function createTextForReport(\App\Entity\UnitMovement $unitMovement, array $attack_units, array $defend_units, string $type): string
 	{
 		$dest_base = $this->em->getRepository(Base::class)->find($unitMovement->getTypeId());
-		$text = $type === "attack" ? "<h1>Attaque de la base ".$dest_base->getName()." de ".$dest_base->getUser()->getPseudo()."</h1>" : "<h1>rapport de l'attaque de la base ". $unitMovement->getBase()->getName() ." de " . $unitMovement->getBase()->getUser()->getPseudo() . "</h1>";
+		$text = $type === "attack" ? "<h1>Attaque de la base ".$dest_base->getName()." de ".$dest_base->getUser()->getPseudo()."</h1>" : "<h1>Rapport de l'attaque de la base ". $unitMovement->getBase()->getName() ." de " . $unitMovement->getBase()->getUser()->getPseudo() . "</h1>";
 
-		$text .= $type === "attack" ? "<h2>rapport des unités envoyées</h2>" : "<h2>rapport des unités qui ont attaquées</h2>";
+		$text .= $type === "attack" ? "<h2>Rapport des unités envoyées</h2>" : "<h2>Rapport des unités qui ont attaquées</h2>";
 		foreach ($attack_units as $attack_unit) {
 			$text .= $attack_unit["name"] . " qui ont survécus  : " . $attack_unit["return_number"] . " / " . $attack_unit["number"] . "<br>";
 		}
 
-		$text .= $type === "attack" ? "<h2>rapport des unités attaquées</h2>" : "<h2>rapport de vos unités</h2>";
+		$text .= $type === "attack" ? "<h2>Rapport des unités attaquées</h2>" : "<h2>Rapport de vos unités</h2>";
 		foreach ($defend_units as $defend_unit) {
 			$text .= $defend_unit["name"] . " qui ont survécus  : " . $defend_unit["return_number"] . " / " . $defend_unit["number"] . "<br>";
 		}
+
+		$text .= $type === "attack" ? "<h2>Dégats infligés par les tourelles de défenses enemies</h2>" : "<h2>Dégats infligés par les tourelles de défenses</h2>";
+		$text .= $this->getDefenseDamage() . " dégat(s) infligés " . ($type === "attack" ? "à nos troupes" : "à leurs troupes") ."<br>";
+		$text .= $this->getDefenseKill() . " " .($type === "attack" ? "unité(s) tuée(s) par leurs défenses" : "unité(s) enemie(s) tuée(s) par nos défenses") . "<br>";
 
 		$text .= "<h2>Ressources volées</h2>";
 		$text .= "<ul>";

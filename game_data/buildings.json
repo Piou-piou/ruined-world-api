@@ -58,6 +58,28 @@
       "water": 0
     }
   },
+  "defenses": {
+    "name": "Defenses",
+    "array_name": "defenses",
+    "max_level": 50,
+    "construction_time": 2300,
+    "default_power": 20,
+    "power_type": "defense",
+    "explanation": "Les défenses te permettes d'avoir un pouvoir de défense sans unité présente dans ta base. Le niveau de puissace s'élève à 20 et finira à 70",
+    "explanation_current_power": "Les défenses ont une puissace de [[to_replace]] sur chaque enemi qui attaque.",
+    "explanation_next_power": "Les défenses auront une puissace de [[to_replace]] sur chaque enemi qui attaque au niveau suivant.",
+    "resources_build": {
+      "electricity": 1000,
+      "fuel": 900,
+      "iron": 950,
+      "water": 975
+    },
+    "to_build": {
+      "garner": 3,
+      "warehouse": 3,
+      "bunker": 1
+    }
+  },
   "electricity_station": {
     "name": "Electricity station",
     "array_name": "electricity_station",
@@ -174,7 +196,8 @@
       "water": 200
     },
     "to_build": {
-      "warehouse": 1
+      "warehouse": 1,
+      "garner": 1
     }
   },
   "water_station": {

@@ -101,6 +101,8 @@ class Building
 		} else if ($building_config["power_type"] === "storage") {
 			$coef = $this->globals->getCoefForStorage()[$level];
 			return (int)round($default_power * $level * (float)$coef);
+		} else if ($building_config["power_type"] === "defense") {
+			return $default_power + $level;
 		} else {
 			return $default_power * $level;
 		}
