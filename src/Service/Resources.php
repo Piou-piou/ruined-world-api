@@ -285,12 +285,14 @@ class Resources
 		]);
 
 		$protection = $bunker ? $building->getCurrentPower($bunker->getArrayName(), $bunker->getLevel()) : 0;
+		$warehouse_storage = $this->getWarehouseCapacity();
+		$max_steal_resource = $warehouse_storage*((100-$protection)/100);
 
 		return [
-			"electricity" => $this->getBase()->getElectricity()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getElectricity()*((100-$protection)/100)),
-			"iron" => $this->getBase()->getIron()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getIron()*((100-$protection)/100)),
-			"fuel" => $this->getBase()->getFuel()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getFuel()*((100-$protection)/100)),
-			"water" => $this->getBase()->getWater()*((100-$protection)/100) < 0 ? 0 : round($this->getBase()->getWater()*((100-$protection)/100))
+			"electricity" => $this->getBase()->getElectricity() > $max_steal_resource ? $this->getBase()->getElectricity() - $max_steal_resource : 0,
+			"fuel" => $this->getBase()->getFuel() > $max_steal_resource ? $this->getBase()->getFuel() - $max_steal_resource : 0,
+			"iron" => $this->getBase()->getIron() > $max_steal_resource ? $this->getBase()->getIron() - $max_steal_resource : 0,
+			"water" => $this->getBase()->getWater() > $max_steal_resource ? $this->getBase()->getWater() - $max_steal_resource : 0
 		];
 	}
 
