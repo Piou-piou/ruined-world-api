@@ -77,7 +77,8 @@
     "to_build": {
       "garner": 3,
       "warehouse": 3,
-      "bunker": 1
+      "bunker": 3,
+      "barrack": 2
     }
   },
   "electricity_station": {
