@@ -82,10 +82,10 @@
     "explanation": "L'attaquer 1 est une unité faite pour l'attaque. Elle est plutôt rapide et elle se battre !",
     "transport_weight": 100,
     "resources_recruit": {
-      "electricity": 425,
+      "electricity": 370,
       "fuel": 350,
       "iron": 380,
-      "water": 500
+      "water": 450
     },
     "to_recruit": {
 
@@ -105,7 +105,7 @@
     "explanation": "Le Conquieror est l'unité ultime aussi doué pour l'attaque que la défnse. Elle ferait trembler n'importe qui !",
     "transport_weight": 70,
     "resources_recruit": {
-      "electricity": 520,
+      "electricity": 445,
       "fuel": 480,
       "iron": 435,
       "water": 380
