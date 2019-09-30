@@ -20,6 +20,21 @@ class SignUpController extends AbstractController
 	private $error_message = "";
 
 	/**
+	 * method to send app version
+	 * @Route("/api/version/", name="app_version", methods={"POST"})
+	 * @param Request $request
+	 * @param Globals $globals
+	 * @return JsonResponse
+	 */
+	public function sendAppVersion(Request $request, Globals $globals): JsonResponse
+	{
+		return new JsonResponse([
+			"success" => true,
+			"app_version" => $globals->getGeneralConfig()["app_version"]
+		]);
+	}
+
+	/**
 	 * method to check if pseudo is available
 	 * @Route("/api/signup/check-pseudo-used/", name="signup_check_pseudo_used", methods={"POST"})
 	 * @Route("/api/signup/check-mail-used/", name="signup_check_mail_used", methods={"POST"})
