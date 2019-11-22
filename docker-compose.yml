@@ -1,0 +1,44 @@
+version: '2'
+
+volumes:
+  datas:
+
+services:
+  web:
+    image: thecodingmachine/php:7.3-v2-apache
+    ports:
+      - 8000:80 
+    environment:
+      DATABASE_URL: mysql://root:root@mysql/ruined-world
+      MAILER_URL: smtp://mailcatcher:1025
+      APACHE_DOCUMENT_ROOT: public/
+      TZ: Europe/Paris
+      PHP_INI_DATE__TIMEZONE: Europe/Paris
+      PHP_INI_UPLOAD_MAX_FILESIZE: 1G
+    volumes:
+      - ./:/var/www/html
+    links:
+      - mysql
+
+  mysql:
+    command: "--default-authentication-plugin=mysql_native_password"
+    image: mysql:5.6
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ruined-world
+    volumes:
+      - datas:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    ports:
+      - 8001:8080
+  
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - 8002:1080
