@@ -15,4 +15,4 @@ jobs:
         command: /home/${{ secrets.DEV_SRV_USER }}/${{ secrets.SCRIPT }}.sh
         hosts: ${{ secrets.DEV_SRV_URL }}
         privateKey: ${{ secrets.SSH_KEY }}
-        debug: true
+        debug: false
