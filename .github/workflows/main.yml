@@ -1,0 +1,17 @@
+name: deploy production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: SSH Execute Commands
+      uses: JimCronqvist/action-ssh@0.1.1
+      with:
+        command: /home/${{ secrets.DEV_SRV_USER }}/${{ secrets.SCRIPT }}.sh
+        hosts: ${{ secrets.DEV_SRV_URL }}
+        privateKey: ${{ secrets.SSH_KEY }}
