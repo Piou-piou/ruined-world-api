@@ -145,6 +145,7 @@ class SignUpController extends AbstractController
 		$user->setCreatedAt($now);
 		$user->setLastConnection($now);
 		$user->setEndToken($now);
+		$user->setNation('united_states');
 		$em->persist($user);
 
 		$pos = $this->getRandomBasePosition($globals);
