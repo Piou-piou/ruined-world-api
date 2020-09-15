@@ -327,6 +327,7 @@ class CronController extends AbstractController
 		foreach ($users as $user) {
 			$user->setArchived(true);
 			$user->setHolidays(false);
+			$user->setMail('archived');
 			$bases = $user->getBases();
 
 			foreach ($user->getSentMessages() as $message) {
