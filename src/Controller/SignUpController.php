@@ -46,10 +46,10 @@ class SignUpController extends AbstractController
 		$user_repo = $this->getDoctrine()->getManager()->getRepository(User::class);
 
 		if ($request->get("pseudo")) {
-			$user = $user_repo->findOneBy(["pseudo" => $request->get("pseudo")]);
+			$user = $user_repo->findOneBy(["pseudo" => $request->get("pseudo"), "archived" => false]);
 			$this->error_message = "Ce pseudo est déjà utilisé";
 		} else if ($request->get("mail")) {
-			$user = $user_repo->findOneBy(["mail" => $request->get("mail")]);
+			$user = $user_repo->findOneBy(["mail" => $request->get("mail"), "archived" => false]);
 			$this->error_message = "Cette adresse email est déjà utilisé";
 		}
 
@@ -117,13 +117,13 @@ class SignUpController extends AbstractController
 				"error_message" => "Les informations du formulaire d'enregistrement ne sont pas correctes"
 			]);
 		}
-		if ($user_repo->findOneBy(["pseudo" => $pseudo])) {
+		if ($user_repo->findOneBy(["pseudo" => $pseudo, "archived" => false])) {
 			return new JsonResponse([
 				"success" => false,
 				"error_message" => "Ce pseudo est déjà utilisé"
 			]);
 		}
-		if ($user_repo->findOneBy(["mail" => $mail])) {
+		if ($user_repo->findOneBy(["mail" => $mail, "archived" => false])) {
 			return new JsonResponse([
 				"success" => false,
 				"error_message" => "Cette adresse email est déjà utilisé"
@@ -175,7 +175,7 @@ class SignUpController extends AbstractController
 
 		return new JsonResponse([
 			"success" => true,
-			"success_message" => "Ton compte a été créé. Tu peux maintenant t'y connecter. Pense également à le valider avec le amil que tu vas recevoir"
+			"success_message" => "Ton compte a été créé. Tu peux maintenant t'y connecter. Pense également à le valider avec le mail que tu vas recevoir"
 		]);
 	}
 }
