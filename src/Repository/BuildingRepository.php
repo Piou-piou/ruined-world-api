@@ -89,7 +89,7 @@ class BuildingRepository extends EntityRepository
 				if ($result["in_construction"] === true) {
 					$level = $level - 1;
 				}
-				if ($level > 0) {
+				if ($level > 0 || $result["in_construction"] === true) {
 					$return_results[$result["array_name"]] = $level;
 				}
 			}
