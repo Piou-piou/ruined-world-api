@@ -72,8 +72,8 @@ class SignUpController extends AbstractController
 	{
 		$map_size = $globals->getGeneralConfig()["map_size"];
 		$center_map = $map_size / 2;
-		$min_center = $center_map / 4;
-		$max_center = $center_map + $min_center;
+		$min_center = $center_map - ($center_map / 5);
+		$max_center = $center_map + ($center_map / 5);
 
 		$posx = rand($min_center, $max_center);
 		$posy = rand($min_center, $max_center);
