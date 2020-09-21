@@ -86,9 +86,7 @@ class BuildingRepository extends EntityRepository
 			$return_results = [];
 			foreach ($results as $result) {
 				$level = $result["level"];
-				if ($result["in_construction"] === true) {
-					$level = $level - 1;
-				}
+
 				if ($level > 0 || $result["in_construction"] === true) {
 					$return_results[$result["array_name"]] = $level;
 				}
