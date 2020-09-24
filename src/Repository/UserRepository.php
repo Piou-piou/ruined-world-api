@@ -69,6 +69,12 @@ class UserRepository extends EntityRepository
 		return $query->getResult();
 	}
 
+	/**
+	 * method to get user for rankin page
+	 * @param $limit
+	 * @param $offset
+	 * @return int|mixed|string
+	 */
 	public function findByRank($limit, $offset)
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:User u WHERE

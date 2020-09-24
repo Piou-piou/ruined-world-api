@@ -22,7 +22,6 @@ class RankingController extends AbstractController
 	 * @param Globals $globals
 	 * @param Api $api
 	 * @return JsonResponse
-	 * @throws NonUniqueResultException
 	 * @throws AnnotationException
 	 * @throws ExceptionInterface
 	 */
