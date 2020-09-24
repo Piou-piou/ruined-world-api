@@ -1,4 +1,26 @@
 {
+  "ambassy": {
+    "name": "Ambassy",
+    "array_name": "ambassy",
+    "max_level": 20,
+    "construction_time": 3600,
+    "default_power": 1,
+    "power_type": "reduction",
+    "explanation": "L'ambassade te permets de créer ou rejoindre une alliance afin de ne plus être seul dans ce monde détruit",
+    "explanation_current_power": "L'ambassade a [[to_replace]] membres.",
+    "explanation_next_power": "L'ambassade pourra avoir [[to_replace]] membres au niveau suivant.",
+    "resources_build": {
+      "electricity": 1250,
+      "fuel": 1120,
+      "iron": 950,
+      "water": 1050
+    },
+    "to_build": {
+      "bunker": 1,
+      "barrack": 1,
+      "warehouse": 3
+    }
+  },
   "barrack": {
     "name": "Barrack",
     "array_name": "barrack",
