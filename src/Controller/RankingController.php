@@ -36,11 +36,7 @@ class RankingController extends AbstractController
 		$page_number = isset($infos->page_number) ? $infos->page_number : $max_pages;
 		$offset = $page_number*$users_per_page;
 
-		$players = $em->getRepository(User::class)->findBy([
-			"archived" => false
-		], [
-			"points" => "DESC"
-		], $users_per_page, $offset);
+		$players = $em->getRepository(User::class)->findByRank($users_per_page, $offset);
 
 		return new JsonResponse([
 			"success" => true,

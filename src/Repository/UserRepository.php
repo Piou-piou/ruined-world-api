@@ -18,6 +18,7 @@ class UserRepository extends EntityRepository
 	{
 		$query = $this->getEntityManager()->createQuery("SELECT count(u) FROM App:User u WHERE
 			u.archived = false
+			AND u.pseudo != 'world-center'
 		");
 
 		return $query->getOneOrNullResult()[1];
@@ -35,9 +36,10 @@ class UserRepository extends EntityRepository
 		$now->sub(new \DateInterval("P" . $max_inactivation_days . "D"));
 		
 		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:User u WHERE
-			u.last_connection < :max_inactivation_days AND
-			u.holidays = false AND
-			u.archived = false
+			u.last_connection < :max_inactivation_days 
+			AND u.holidays = false
+			AND u.archived = false
+			AND u.pseudo != 'world-center'
 		");
 		
 		$query->setParameter("max_inactivation_days", $now, Type::DATETIME);
@@ -56,13 +58,28 @@ class UserRepository extends EntityRepository
 		$now->sub(new \DateInterval("P" . $max_holidays_days . "D"));
 		
 		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:User u WHERE
-			u.last_connection < :max_holidays_days AND
-			u.archived = false AND
-			u.holidays = true
+			u.last_connection < :max_holidays_days
+			AND u.archived = false
+			AND u.holidays = true
+			AND u.pseudo != 'world-center'
 		");
 		
 		$query->setParameter("max_holidays_days", $now, Type::DATETIME);
 		
+		return $query->getResult();
+	}
+
+	public function findByRank($limit, $offset)
+	{
+		$query = $this->getEntityManager()->createQuery("SELECT u FROM App:User u WHERE
+			u.archived = false
+			AND u.pseudo != 'world-center'
+			ORDER BY u.points DESC
+		");
+
+		$query->setMaxResults($limit);
+		$query->setFirstResult($offset);
+
 		return $query->getResult();
 	}
 }
