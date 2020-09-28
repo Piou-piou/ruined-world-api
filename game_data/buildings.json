@@ -2,10 +2,10 @@
   "ambassy": {
     "name": "Ambassy",
     "array_name": "ambassy",
-    "max_level": 20,
+    "max_level": 10,
     "construction_time": 3600,
-    "default_power": 1,
-    "power_type": "reduction",
+    "default_power": 2,
+    "power_type": "default",
     "explanation": "L'ambassade te permets de créer ou rejoindre une alliance afin de ne plus être seul dans ce monde détruit",
     "explanation_current_power": "L'ambassade a [[to_replace]] membres.",
     "explanation_next_power": "L'ambassade pourra avoir [[to_replace]] membres au niveau suivant.",
