@@ -1,7 +1,7 @@
 {
-  "ambassy": {
-    "name": "Ambassy",
-    "array_name": "ambassy",
+  "embassy": {
+    "name": "Embassy",
+    "array_name": "Embassy",
     "max_level": 10,
     "construction_time": 3600,
     "default_power": 2,
