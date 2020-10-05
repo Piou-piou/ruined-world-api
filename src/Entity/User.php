@@ -119,6 +119,12 @@ class User implements UserInterface
     protected $bases;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="League", mappedBy="league")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="leader_id", nullable=true)
+	 */
+	protected $league;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="MessageBox", mappedBy="user")
 	 * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
 	 */
@@ -497,6 +503,25 @@ class User implements UserInterface
     {
         return $this->bases;
     }
+
+	/**
+	 * @return League
+	 */
+	public function getLeague(): League
+	{
+		return $this->league;
+	}
+
+	/**
+	 * @param League $league
+	 * @return User
+	 */
+	public function setLeague(League $league): User
+	{
+		$this->league = $league;
+
+		return $this;
+	}
 
 	/**
 	 * Add MessageBox entity to collection (one to many).
