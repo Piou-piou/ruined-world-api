@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Building;
 use App\Entity\League;
+use App\Entity\User;
 use App\Service\Api;
 use App\Service\Globals;
 use Doctrine\Common\Annotations\AnnotationException;
@@ -28,7 +29,7 @@ class EmbassyController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 
-		$league = $em->getRepository(League::class)->findOneBy(["leader" => $session->get("user")]);
+		$league = $em->getRepository(League::class)->findOneBy(["user" => $session->get("user")]);
 		$embassy = $em->getRepository(Building::class)->findOneBy([
 			"array_name" => "embassy",
 			"base" => $globals->getCurrentBase()
@@ -54,25 +55,62 @@ class EmbassyController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
+		/** @var User $user */
+		$user = $session->get("user");
 
 		if ($infos->league_id) {
 			$league = $em->getRepository(League::class)->findOneBy([
 				"id" => $infos->league_id,
-				"leader" => $session->get("user")
+				"user" => $user
 			]);
 		} else {
 			$league = new League();
-			$league->setLeader($session->get("user"));
+			$league->setUser($user);
 			$league->setPoints(0);
 		}
 
 		$league->setName($infos->name);
-		$em->persist($league);
 		$em->flush();
 
 		return new JsonResponse([
 			"success" => true,
 			"success_message" => "Ton alliance a été créée",
+			"league" => $api->serializeObject($league),
+		]);
+	}
+
+	/**
+	 * @Route("/api/embassy/delete/", name="embassy_delete", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Api $api
+	 * @return JsonResponse
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
+	 */
+	public function deleteLeague(SessionInterface $session, Api $api): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+
+		$league = $em->getRepository(League::class)->findOneBy([
+			"id" => $infos->league_id,
+			"user" => $session->get("user")
+		]);
+
+		if ($league) {
+			$em->remove($league);
+			$em->flush();
+
+			return new JsonResponse([
+				"success" => true,
+				"success_message" => "Ton alliance a été dissoute",
+				"league" => null,
+			]);
+		}
+
+		return new JsonResponse([
+			"success" => false,
+			"success_message" => "Ton alliance ne peut pas être dissoute",
 			"league" => $api->serializeObject($league),
 		]);
 	}

@@ -39,11 +39,11 @@ class League
 	protected $archived = 0;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="User", inversedBy="league", cascade={"persist"})
-	 * @ORM\JoinColumn(name="leader_id", referencedColumnName="id", nullable=false)
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="leagues")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
 	 * @Groups("main")
 	 */
-	protected $leader;
+	protected $user;
 
 	/**
 	 * @return mixed
@@ -112,18 +112,18 @@ class League
 	/**
 	 * @return mixed
 	 */
-	public function getLeader()
+	public function getUser()
 	{
-		return $this->leader;
+		return $this->user;
 	}
 
 	/**
-	 * @param mixed $leader
+	 * @param mixed $user
 	 * @return League
 	 */
-	public function setLeader($leader): League
+	public function setUser($user)
 	{
-		$this->leader = $leader;
+		$this->user = $user;
 
 		return $this;
 	}

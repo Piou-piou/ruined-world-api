@@ -119,10 +119,10 @@ class User implements UserInterface
     protected $bases;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="League", mappedBy="league", cascade={"persist"})
-	 * @ORM\JoinColumn(name="id", referencedColumnName="leader_id", nullable=true)
+	 * @ORM\OneToMany(targetEntity="League", mappedBy="user")
+	 * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
 	 */
-	protected $league;
+	protected $leagues;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="MessageBox", mappedBy="user")
@@ -145,6 +145,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->bases = new ArrayCollection();
+        $this->leagues = new ArrayCollection();
         $this->messages_box = new ArrayCollection();
         $this->sent_messages = new ArrayCollection();
     }
@@ -505,22 +506,37 @@ class User implements UserInterface
     }
 
 	/**
-	 * @return League
-	 */
-	public function getLeague(): League
-	{
-		return $this->league;
-	}
-
-	/**
+	 * Add League entity to collection (one to many).
+	 *
 	 * @param League $league
 	 * @return User
 	 */
-	public function setLeague(League $league): User
+	public function addLeagues(League $league)
 	{
-		$this->league = $league;
+		$this->leagues[] = $league;
 
 		return $this;
+	}
+
+	/**
+	 * Remove League entity from collection (one to many).
+	 *
+	 * @param League $league
+	 * @return User
+	 */
+	public function removeLeagues(League $league)
+	{
+		$this->leagues->removeElement($league);
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLeagues()
+	{
+		return $this->leagues;
 	}
 
 	/**
