@@ -119,7 +119,7 @@ class User implements UserInterface
     protected $bases;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="League", mappedBy="league")
+	 * @ORM\OneToMany(targetEntity="League", mappedBy="league", cascade={"persist"})
 	 * @ORM\JoinColumn(name="id", referencedColumnName="leader_id", nullable=true)
 	 */
 	protected $league;

@@ -41,4 +41,39 @@ class EmbassyController extends AbstractController
 			"embassy" => $api->serializeObject($embassy)
 		]);
 	}
+
+	/**
+	 * @Route("/api/embassy/edit/", name="embassy_edit", methods={"POST"})
+	 * @param SessionInterface $session
+	 * @param Api $api
+	 * @return JsonResponse
+	 * @throws AnnotationException
+	 * @throws ExceptionInterface
+	 */
+	public function editLeague(SessionInterface $session, Api $api): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$infos = $session->get("jwt_infos");
+
+		if ($infos->league_id) {
+			$league = $em->getRepository(League::class)->findOneBy([
+				"id" => $infos->league_id,
+				"leader" => $session->get("user")
+			]);
+		} else {
+			$league = new League();
+			$league->setLeader($session->get("user"));
+			$league->setPoints(0);
+		}
+
+		$league->setName($infos->name);
+		$em->persist($league);
+		$em->flush();
+
+		return new JsonResponse([
+			"success" => true,
+			"success_message" => "Ton alliance a été créée",
+			"league" => $api->serializeObject($league),
+		]);
+	}
 }

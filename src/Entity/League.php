@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -40,7 +39,7 @@ class League
 	protected $archived = 0;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="User", inversedBy="league")
+	 * @ORM\OneToOne(targetEntity="User", inversedBy="league", cascade={"persist"})
 	 * @ORM\JoinColumn(name="leader_id", referencedColumnName="id", nullable=false)
 	 * @Groups("main")
 	 */
