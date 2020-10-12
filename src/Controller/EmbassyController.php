@@ -55,8 +55,7 @@ class EmbassyController extends AbstractController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$infos = $session->get("jwt_infos");
-		/** @var User $user */
-		$user = $session->get("user");
+		$user = $em->getRepository(User::class)->find($session->get("user")->getId());
 
 		if ($infos->league_id) {
 			$league = $em->getRepository(League::class)->findOneBy([
@@ -70,6 +69,7 @@ class EmbassyController extends AbstractController
 		}
 
 		$league->setName($infos->name);
+		$em->persist($league);
 		$em->flush();
 
 		return new JsonResponse([
