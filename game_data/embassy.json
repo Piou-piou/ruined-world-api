@@ -1,0 +1,11 @@
+{
+  "roles": {
+    "INVITE_MEMBERS": "Inviter des membres",
+    "FIRE_MEMBERS": "Virer des membres",
+    "RANK_MEMBERS": "Rangs des membres",
+    "FORUM_MANAGEMENT": "Gestion du forum",
+    "FORUM_POST_MANAGEMENT": "Gestion des posts du forum",
+    "PROFILE_MANAGEMENT": "Gestion du profil",
+    "RELATION_MANAGEMENT": "Gestion des relations"
+  }
+}
